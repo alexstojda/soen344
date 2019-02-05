@@ -1,2 +1,2 @@
-worker: npm run build
+release: npm run build
 web: gunicorn app:app
