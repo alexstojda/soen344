@@ -1,3 +1,6 @@
-dist/
+frontend/dist/
 __pycache__/
 backend/venv
+.idea
+.idea/
+*.pyc
