@@ -1,5 +1,5 @@
 /build/
 /config/
 /dist/
-/*.js
+/.eslintrc.js
 /test/unit/coverage/
