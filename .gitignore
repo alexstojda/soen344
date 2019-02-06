@@ -15,6 +15,7 @@ selenium-debug.log
 *.njsproj
 *.sln
 
+.idea
 __pycache__/
 backend/venv
 *.pyc
