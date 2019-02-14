@@ -1,6 +1,6 @@
 <template>
     <div class="hello">
-        <table id="firstTable">
+        <table id="firstTable" align="center" border="1">
             <thead>
                 <tr>
                     <th>Patient</th>
