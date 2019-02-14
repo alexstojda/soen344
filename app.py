@@ -31,7 +31,7 @@ def catch_all(path):
 def getAppointments():
         connection = mysql.connect()
         cursor = connection.cursor()
-        res = cursor.execute("SELECT * from appointments WHERE id = %s", [1])
+        res = cursor.execute("SELECT * from appointments")
         row_headers = [x[0] for x in cursor.description]  # this will extract row headers
         data = []
         for row in cursor.fetchall():
