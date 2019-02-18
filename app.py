@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from flask_cors import CORS
 from backend.mappers.AppointmentMapper import AppointmentMapper
+from backend.mappers.CartMapper import CartMapper
 
 app = Flask(__name__,
             static_folder="./dist/static",
@@ -8,6 +9,7 @@ app = Flask(__name__,
 
 CORS(app)
 appointment_mapper = AppointmentMapper(app)
+cart_mapper = CartMapper(app)
 
 @app.route('/', defaults={'path': ''})
 
@@ -23,3 +25,12 @@ def get_appointments():
 def add_appointment():
     print(request.json)
     return appointment_mapper.add_appointment(request.get_json())
+
+@app.route('/getCart')
+def get_cart():
+   return cart_mapper.get_cart()
+
+@app.route('/addToCart', methods=['POST'])
+def add_to_cart():
+   print(request.get_json())
+   return cart_mapper.add_to_cart(request.get_json())
