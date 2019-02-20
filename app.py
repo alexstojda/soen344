@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, json
 from flask_cors import CORS
 from backend.mappers.AppointmentMapper import AppointmentMapper
 
@@ -17,9 +17,8 @@ def catch_all(path):
 
 @app.route('/getAppointments')
 def get_appointments():
-    return appointment_mapper.get_appointments()
+    return json.dumps(appointment_mapper.get_appointments())
 
 @app.route('/addAppointment', methods=['POST'])
 def add_appointment():
-    print(request.json)
-    return appointment_mapper.add_appointment(request.get_json())
+    return appointment_mapper.book_appointment(request.get_json())
