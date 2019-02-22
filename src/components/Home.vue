@@ -6,7 +6,7 @@
     <div>
       <p>Home page</p>
       <br/>
-      <!--<helloworld></helloworld>-->
+      <helloworld></helloworld>
       <login></login>
     </div>
   </div>
