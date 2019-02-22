@@ -5,8 +5,9 @@
     </div>
     <div>
         <h1>Your Appointments</h1>
-        <!-- <helloworld id="testApi"></helloworld> -->
         <viewAppointments id="appointmentTable"></viewAppointments>
+        <br/>
+        <helloworld></helloworld>
     </div>
   </div>
 </template>
@@ -15,11 +16,12 @@
     import Navbar from './Navbar.vue';
     import HelloWorld from './HelloWorld.vue';
     import ViewAppointments from './ViewAppointments.vue';
+    
     export default {
         components: {
             'navbar': Navbar,
             'helloworld': HelloWorld,
-            'viewAppointments': ViewAppointments
+            'viewAppointments': ViewAppointments,
         }
     };
 </script>
