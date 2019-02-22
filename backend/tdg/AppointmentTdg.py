@@ -47,9 +47,9 @@ class AppointmentTdg:
     def add_appointment(self, appointment):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        cursor.execute("""INSERT INTO appointment(patient, doctor, date)
-                        VALUES(%s, %s, %s)""", 
-                        (appointment.patient, appointment.doctor, appointment.date))
+        cursor.execute("""INSERT INTO appointment(patient, doctor, room, date)
+                        VALUES(%s, %s, %s, %s)""", 
+                        (appointment.patient, appointment.doctor, appointment.room, appointment.date))
         cursor.execute("SELECT * FROM appointment ORDER BY id DESC")
         result = cursor.fetchone()
         connection.commit()

@@ -1,6 +1,6 @@
 <template>
-    <div class="hello">
-        <table id="firstTable" align="center" border="1">
+    <div>
+        <table align="center" border="1">
             <thead>
                 <tr>
                     <th>Patient</th>
@@ -8,16 +8,17 @@
                     <th>Date</th>
                 </tr>
             </thead>
-        <tbody>
-            <tr v-for="appointment in appointments">
-                <td>{{appointment.patient}}</td>
-                <td>{{appointment.doctor}}</td>
-                <td>{{appointment.date}}</td>
-            </tr>
-        </tbody>
-    </table>
-        <textarea>{{ appointments}} </textarea>
-    </div>
+            <tbody>
+                <tr v-for="appointment in appointments">
+                    <td>{{appointment.patient}}</td>
+                    <td>{{appointment.doctor}}</td>
+                    <td>{{appointment.date}}</td>
+                </tr>
+            </tbody>
+        </table>
+    <br/>
+        <textarea id="testTextArea">{{ appointments}} </textarea>
+    </div> 
 </template>
 
 <script>
@@ -42,27 +43,11 @@
     }
 </script>
 
-<style scoped>
-    h1, h2 {
-        font-weight: normal;
-    }
-
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    li {
-        display: inline-block;
-        margin: 0 10px;
-    }
-
-    a {
-        color: #42b983;
-    }
-
-    textarea {
-        width: 600px;
+<style>
+    #testTextArea {
+        display: block;
+        width: 50%;
         height: 200px;
+        margin: auto;
     }
 </style>

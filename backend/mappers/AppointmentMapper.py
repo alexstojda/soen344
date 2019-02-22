@@ -11,8 +11,9 @@ class AppointmentMapper:
     def book_appointment(self, req):
         patient = req.get('patient')
         doctor = req.get('doctor')
+        room = req.get('room')
         date = req.get('date')
         if(self.appointment_tdg.get_appointment(patient, doctor, date) == None):
-            return self.appointment_tdg.add_appointment(Appointment(patient, doctor, date))
+            return self.appointment_tdg.add_appointment(Appointment(patient, doctor, room, date))
         else:
             return "There is already an appointment with these parameters"
