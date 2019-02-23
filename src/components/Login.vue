@@ -7,6 +7,9 @@
                 <input type="hidden" value="doctor">
                 <input type='submit' name='submit'/>
          </form>
+      <form action='getUsers' method='POST'>
+                <input type='submit' name='submit'/>
+         </form>
     </div>
 </template>
 

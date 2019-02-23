@@ -30,12 +30,12 @@ class LoginTdg:
     else:
       return data
 
-  def add_user(self, user):
+  def add_user(self, code, password):
     connection = self.mysql.connect()
     cursor = connection.cursor()
     cursor.execute("""INSERT INTO user(code, password)
                       VALUES(%s, %s)""",
-                   (user.code, user.password))
+                   (code, password))
     cursor.execute("SELECT * FROM appointment ORDER BY id DESC")
     result = cursor.fetchone()
     connection.commit()
