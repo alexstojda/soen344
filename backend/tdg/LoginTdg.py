@@ -1,7 +1,7 @@
 from flaskext.mysql import MySQL
 from flask import json, jsonify
 from flask import Flask, render_template
-from backend.business_objects.Appointment import Appointment
+from backend.business_objects.User import User
 
 
 class LoginTdg:
@@ -15,6 +15,7 @@ class LoginTdg:
     app.config['MYSQL_DATABASE_HOST'] = 'localhost'
     self.mysql.init_app(app)
 
+  # Checked and works...kinda
   def get_users(self):
     connection = self.mysql.connect()
     cursor = connection.cursor()
@@ -29,7 +30,36 @@ class LoginTdg:
     else:
       return data
 
-  def get_user_login(self, code, password):
+  def add_user(self, user):
+    connection = self.mysql.connect()
+    cursor = connection.cursor()
+    cursor.execute("""INSERT INTO user(code, password)
+                      VALUES(%s, %s)""",
+                   (user.code, user.password))
+    cursor.execute("SELECT * FROM appointment ORDER BY id DESC")
+    result = cursor.fetchone()
+    connection.commit()
+    return jsonify(result)
+
+
+  def is_a_user(self, code):
+    connection = self.mysql.connect()
+    cursor = connection.cursor()
+    res = cursor.execute("SELECT * from user WHERE code = %s",
+                         (code))
+    row_headers = [x[0] for x in cursor.description]  # this will extract row headers
+    data = []
+    for row in cursor.fetchall():
+      data.append(dict(zip(row_headers, row)))
+    cursor.close()
+    print(res)
+    if (res == 0):
+      return False
+    else:
+      return True
+
+
+  def check_user_password(self, code, password):
     connection = self.mysql.connect()
     cursor = connection.cursor()
     res = cursor.execute("SELECT * from user WHERE code = %s AND password = %s",
@@ -39,12 +69,12 @@ class LoginTdg:
     for row in cursor.fetchall():
       data.append(dict(zip(row_headers, row)))
     cursor.close()
-    print("8=================D")
     print(res)
     if (res == 0):
-      return None
+      return False
     else:
-      return data
+      return True
+
 
   # def add_appointment(self, appointment):
   #   connection = self.mysql.connect()

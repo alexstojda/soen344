@@ -1,18 +1,58 @@
+from flask import redirect
+
 from backend.tdg.LoginTdg import LoginTdg
-from backend.business_objects.Login import Login
+from backend.business_objects.User import User
+import flask
 
-class AppointmentMapper:
-    def __init__(self, app):
-        self.appointment_tdg = LoginTdg(app)
+from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
 
-    def get_appointments(self):
-        return self.appointment_tdg.get_appointments()
 
-    # def book_appointment(self, req):
-    #     patient = req.get('patient')
-    #     doctor = req.get('doctor')
-    #     date = req.get('date')
-    #     if(self.appointment_tdg.get_appointment(patient, doctor, date) == None):
-    #         return self.appointment_tdg.add_appointment(Appointment(patient, doctor, date))
-    #     else:
-    #         return "There is already an appointment with these parameters"
+class LoginMapper:
+  def __init__(self, app):
+    self.login_tdg = LoginTdg(app)
+
+  def get_users(self):
+    return self.login_tdg.get_users()
+
+  def register_user(self, req):
+    code = req.get('code')
+    password = req.get('password')
+    if (self.login_tdg.is_a_user(code) == False):
+      self.login_tdg.add_user(User(code, password))
+      return "You in my man"
+    else:
+      return "There is already a user with that code"
+
+  # def login(self,form):
+  #   code = form.get('code')
+  #   password = form.get('password')
+  #
+  #   if (self.login_tdg.check_user_password(code,password)):
+  #     user = User(code,password)
+  #     user.id = code
+  #     flask_login.login_user(user)
+  #     return flask.redirect(flask.url_for('protected'))
+  #
+  #   return 'Bad login'
+
+  def login(self, form):
+    code = form['code']
+    password = form['password']
+    if (self.login_tdg.check_user_password(code, password)):
+
+      user = User(code)
+      login_user(user)
+      return redirect("homePage")
+    else:
+      return "who do you think you is?"
+
+  def load_user(self,userid):
+    return User(userid)
+
+  def user_loader(self,code):
+    if (self.login_tdg.is_a_user(code)==False):
+        return
+
+    user = User(code)
+    user.id = code
+    return user
