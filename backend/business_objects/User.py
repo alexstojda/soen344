@@ -6,7 +6,6 @@ class User(UserMixin):
   def __init__(self, code):
     self.id = code
     self.name = "user"+str(id)
-    self.password = "secret"
 
   def __repr__(self):
     return "%d/%s/%s" % (self.id, self.name, self.password)

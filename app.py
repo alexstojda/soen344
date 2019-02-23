@@ -74,7 +74,7 @@ def register_user():
 def page_not_found(e):
     return Response('<p>Login failed</p>')
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/login", methods=["POST"])
 def login():
   return login_mapper.login(request.form)
 
@@ -104,10 +104,6 @@ class User(flask_login.UserMixin):
 
   print(request.get_json())
   return cart_mapper.add_to_cart(request.get_json())
-#
-# @login_manager.user_loader
-# def load_user(userid):
-#     return LoginMapper.load_user(userid)
 
 @login_manager.user_loader
 def user_loader(code):
