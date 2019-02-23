@@ -38,12 +38,11 @@ class AppointmentTdg:
         for row in cursor.fetchall():
             data.append(dict(zip(row_headers, row)))
         cursor.close()
-        print("8=================D")
-        print(res)
         if(res == 0):
             return None
         else:
             return data
+            
     def add_appointment(self, appointment):
         connection = self.mysql.connect()
         cursor = connection.cursor()

@@ -37,5 +37,4 @@ def get_cart():
 
 @app.route('/addToCart', methods=['POST'])
 def add_to_cart():
-    print(request.get_json())
     return cart_mapper.add_to_cart(request.get_json())
