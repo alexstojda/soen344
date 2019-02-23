@@ -7,21 +7,22 @@
         <h1>Your Appointments</h1>
         <viewAppointments id="appointmentTable"></viewAppointments>
         <br/>
-        <helloworld></helloworld>
+        <addAppointment id="addAppointment"></addAppointment>
+        <br/>
     </div>
   </div>
 </template>
 
 <script>
     import Navbar from './Navbar.vue';
-    import HelloWorld from './HelloWorld.vue';
     import ViewAppointments from './ViewAppointments.vue';
+    import AddAppointment from './AddAppointment.vue';
     
     export default {
         components: {
             'navbar': Navbar,
-            'helloworld': HelloWorld,
             'viewAppointments': ViewAppointments,
+            'addAppointment' : AddAppointment
         }
     };
 </script>
@@ -38,6 +39,13 @@ h1 {
 }
 
 #appointmentTable {
+    width: 75%;
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#addAppointment {
     width: 75%;
     margin-top: 100px;
     margin-left: auto;

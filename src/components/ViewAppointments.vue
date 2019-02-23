@@ -1,5 +1,5 @@
 <template>
-    <div id="appointments" style="width: 75%">
+    <div id="appointments">
         <SortedTable :values="appointments">
             <thead>
                 <tr>
@@ -21,7 +21,7 @@
                     <td>{{ appointment.room }}</td>
                     <td>{{ appointment.date }}</td>
                     <td><button vertical-align="center">Modify</button>
-                        <button v-on:click="cancel(appointment.id)" vertical-align="center">Cancel</button></td>
+                        <button v-on:click="cancelAppointment(appointment.id)" vertical-align="center">Cancel</button></td>
                 </tr>
             </tbody>
         </SortedTable>
@@ -55,7 +55,7 @@ export default {
                 })
             },
 
-            cancel: function(id) {
+            cancelAppointment: function(id) {
                 axios.post('http://127.0.0.1:5000/cancelAppointment', {
                     appointment_id: id
                 }, {'Content-Type': 'application/json; charset=utf-8',
