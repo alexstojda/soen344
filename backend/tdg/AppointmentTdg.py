@@ -54,3 +54,13 @@ class AppointmentTdg:
         result = cursor.fetchone()
         connection.commit()
         return jsonify(result)
+
+        def cancel_appointment(self, id):
+            connection = self.mysql.connect()
+            cursor = connection.cursor()
+            cursor.execute("""DELETE FROM appointment(id)
+                            VALUES(%s)""", 
+                            (id))
+            result = cursor.fetchone()
+            connection.commit()
+            return jsonify(result)

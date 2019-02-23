@@ -27,6 +27,10 @@ def get_appointments():
 def add_appointment():
     return appointment_mapper.book_appointment(request.get_json())
 
+@app.route('/cancelAppointment', methods=['POST'])
+def cancel_appointment():
+    return appointment_mapper.cancel_appointment(request.get_json())
+
 @app.route('/getCart')
 def get_cart():
     return cart_mapper.get_cart()

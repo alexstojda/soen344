@@ -17,3 +17,7 @@ class AppointmentMapper:
             return self.appointment_tdg.add_appointment(Appointment(patient, doctor, room, date))
         else:
             return "There is already an appointment with these parameters"
+    
+    def cancel_appointment(self, req):
+        id = req.get('id')
+        return self.appointment_tdg.cancel_appointment(id)
