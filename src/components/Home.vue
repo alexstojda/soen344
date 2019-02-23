@@ -6,8 +6,9 @@
     <div>
       <p>Home page</p>
       <br/>
-      <helloworld></helloworld>
+      <!--<helloworld></helloworld>-->
       <login></login>
+      <register></register>
     </div>
   </div>
 </template>
@@ -16,11 +17,13 @@
     import Navbar from './Navbar.vue';
     import HelloWorld from './HelloWorld.vue';
     import Login from './Login.vue';
+    import Register from './Register.vue'
     export default {
         components: {
             'navbar': Navbar,
             'helloworld': HelloWorld,
-            'login': Login
+            'login': Login,
+            'register': Register
         }
     };
 </script>
