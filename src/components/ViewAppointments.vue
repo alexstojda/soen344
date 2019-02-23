@@ -39,7 +39,12 @@ export default {
             }
         },
         mounted() {
-            axios.get('http://127.0.0.1:5000/getAppointments')
+            this.getAppointments();
+        },
+
+        methods: {
+            getAppointments: function() {
+                axios.get('http://127.0.0.1:5000/getAppointments')
                 .then(response => {
                     if(response.status == 200) {
                         this.appointments = response.data;
@@ -48,32 +53,21 @@ export default {
                         console.log("Get appointments failed: Response code " + response.status)
                     }
                 })
-        },
+            },
 
-        methods: {
             cancel: function(id) {
-                console.log("8=======D" + id)
                 axios.post('http://127.0.0.1:5000/cancelAppointment', {
                     appointment_id: id
-                }, {'Access-Control-Allow-Origin': '*'}).then(response => {
+                }, {'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': '*'}).then(response => {
                     if(response.status == 200) {
                         console.log("Cancelled appointment : "+ id)
+                        this.getAppointments();
                     } else {
                         console.log("Cancel appointment failed: Response code " + response.status)
                     }
                 })
             }
         }
-        // cancel(id) {
-        //     axios.post('http://127.0.0.1:5000/cancelAppointment', {
-        //         appointment_id: id
-        //     }).then(response => {
-        //         if(response.status == 200) {
-        //             console.log("Cancelled appointment : "+ id)
-        //         } else {
-        //             console.log("Cancel appointment failed: Response code " + response.status)
-        //         }
-        //     })
-        // }
 };
 </script>

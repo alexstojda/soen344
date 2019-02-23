@@ -19,5 +19,6 @@ class AppointmentMapper:
             return "There is already an appointment with these parameters"
     
     def cancel_appointment(self, req):
-        id = req.get('id')
+        print(req.get('appointment_id'))
+        id = req.get('appointment_id')
         return self.appointment_tdg.cancel_appointment(id)
