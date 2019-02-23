@@ -39,7 +39,6 @@ class LoginTdg:
     for row in cursor.fetchall():
       data.append(dict(zip(row_headers, row)))
     cursor.close()
-    print("8=================D")
     print(res)
     if (res == 0):
       return None
