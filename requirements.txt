@@ -1,7 +1,11 @@
 Click==7.0
 Flask==1.0.2
+Flask-Cors==3.0.7
+Flask-MySQL==1.4.0
 gunicorn==19.9.0
 itsdangerous==1.1.0
 Jinja2==2.10
 MarkupSafe==1.1.0
+PyMySQL==0.9.3
+six==1.12.0
 Werkzeug==0.14.1
