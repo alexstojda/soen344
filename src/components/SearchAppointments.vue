@@ -4,10 +4,10 @@
             <thead>
                 <tr>
                     <th scope="col" style="text-align: left; width: 10rem;">
-                        <SortLink name="doctor">Doctor</SortLink>
+                        Doctor
                     </th>
                     <th scope="col" style="text-align: left;">
-                        <SortLink name="availabilities">Availabilities</SortLink>
+                        Availabilities
                     </th>
                 </tr>
             </thead>

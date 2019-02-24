@@ -8,8 +8,6 @@
         <viewAppointments id="appointmentTable"></viewAppointments>
         <br/>
         <addAppointment id="addAppointment"></addAppointment>
-        <br/>
-        <searchAppointments id="searchAppointments"></searchAppointments>
     </div>
   </div>
 </template>
@@ -18,14 +16,12 @@
     import Navbar from './Navbar.vue';
     import ViewAppointments from './ViewAppointments.vue';
     import AddAppointment from './AddAppointment.vue';
-    import SearchAppointments from './SearchAppointments.vue';
     
     export default {
         components: {
             'navbar': Navbar,
             'viewAppointments': ViewAppointments,
             'addAppointment' : AddAppointment,
-            'searchAppointments' : SearchAppointments
         }
     };
 </script>
@@ -49,13 +45,6 @@ h1 {
 }
 
 #addAppointment {
-    width: 75%;
-    margin-top: 100px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-#searchAppointments {
     width: 75%;
     margin-top: 100px;
     margin-left: auto;
