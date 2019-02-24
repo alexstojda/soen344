@@ -14,8 +14,8 @@
             <tbody slot="body" slot-scope="sort">
                 <tr v-for="doctor in sort.values" :key="doctor.permit_number">
                     <td>{{ doctor.first_name }} {{ doctor.last_name }}</td>
-                    <td v-for="availability in filterAvailabilities(doctor.permit_number)" :key="availability.id">
-                        <span>{{availability.time}}</span>
+                    <td style="float: left;" v-for="availability in filterAvailabilities(doctor.permit_number)" :key="availability.id">
+                        <button>{{availability.time}}</button>
                     </td>
                 </tr>
             </tbody>

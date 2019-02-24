@@ -1,7 +1,6 @@
 from backend.tdg.AppointmentTdg import AppointmentTdg
 from backend.business_objects.Appointment import Appointment
 from flask import json, jsonify
-from backend.business_objects.Availability import Availability
 
 class AppointmentMapper:
     def __init__(self, app):
@@ -28,5 +27,5 @@ class AppointmentMapper:
         date = req.get('date')
         data = []
         rows = self.appointment_tdg.get_availabilities(date)
-        data = [{"doctor_id":row[1], "date":str(row[2]), "time":str(row[3])} for row in rows]
+        data = [{"id":row[0], "doctor_id":row[1], "date":str(row[2]), "time":str(row[3])} for row in rows]
         return jsonify(data)
