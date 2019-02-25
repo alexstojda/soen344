@@ -1,5 +1,7 @@
 <template>
-    <div id="appointments">
+    <div>
+        <datepicker v-on:selected=getAvailabilities placeholder="Select Date" format="yyyy-MM-dd"></datepicker>
+        </br>
         <SortedTable :values="doctors">
             <thead>
                 <tr>
@@ -25,18 +27,23 @@
 
 <script>
     import axios from "axios";
+    import Datepicker from 'vuejs-datepicker';
 
 export default {
     name: "SearchAppointments",
         data () {
             return {
-                doctors: "",
-                availabilities: ""
+                doctors: [],
+                availabilities: []
             }
         },
         mounted() {
             this.getDoctors();
             this.getAvailabilities();
+        },
+
+        components: {
+            Datepicker
         },
 
         methods: {
@@ -52,9 +59,9 @@ export default {
                 })
             },
 
-            getAvailabilities: function() {
+            getAvailabilities: function(inDate) {
                 axios.post('http://127.0.0.1:5000/getAvailabilities', {
-                    date: '2019-02-13'
+                    date: this.formatDate(inDate)
                 })
                 .then(response => {
                     if(response.status == 200) {
@@ -68,6 +75,18 @@ export default {
 
             filterAvailabilities: function(permit_number) {
                     return this.availabilities.filter(availability => availability.doctor_id === permit_number)
+            },
+
+            formatDate: function(date) {
+                var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+
+                return [year, month, day].join('-');
             }
         }
 };
