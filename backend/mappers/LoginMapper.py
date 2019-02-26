@@ -28,6 +28,7 @@ class LoginMapper:
     password = form['password']
     if (self.login_tdg.check_user_password(code, password)):
       user = User(code)
+      login_user(user)
       return redirect("homePage")
     else:
       return "who do you think you is?"
