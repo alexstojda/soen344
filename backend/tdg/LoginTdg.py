@@ -36,10 +36,18 @@ class LoginTdg:
     cursor.execute("""INSERT INTO people(code, password)
                       VALUES(%s, %s)""",
                    (code, password))
-    cursor.execute("SELECT * FROM people ORDER BY id DESC")
+
+    cursor.execute("SELECT id from people WHERE code = %s AND password = %s",
+                         (code, password))
     result = cursor.fetchone()
+
+    thing = "put a name here"
+
+    cursor.execute("""INSERT INTO client(id, name)
+                          VALUES(%s, %s)""",
+                   (result, thing))
     connection.commit()
-    return jsonify(result)
+    return
 
 
   def is_a_user(self, code):
