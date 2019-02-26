@@ -22,7 +22,6 @@ app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql = MySQL()
 mysql.init_app(app)
 
-
 app.secret_key='secret_brazzers_code'
 
 CORS(app)

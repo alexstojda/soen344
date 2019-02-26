@@ -9,6 +9,7 @@
       <!--<helloworld></helloworld>-->
       <login></login>
       <register></register>
+      <router-link to="/notHome">Navigate to Page2</router-link>
     </div>
   </div>
 </template>

@@ -33,10 +33,10 @@ class LoginTdg:
   def add_user(self, code, password):
     connection = self.mysql.connect()
     cursor = connection.cursor()
-    cursor.execute("""INSERT INTO user(code, password)
+    cursor.execute("""INSERT INTO people(code, password)
                       VALUES(%s, %s)""",
                    (code, password))
-    cursor.execute("SELECT * FROM appointment ORDER BY id DESC")
+    cursor.execute("SELECT * FROM people ORDER BY id DESC")
     result = cursor.fetchone()
     connection.commit()
     return jsonify(result)
@@ -45,14 +45,14 @@ class LoginTdg:
   def is_a_user(self, code):
     connection = self.mysql.connect()
     cursor = connection.cursor()
-    res = cursor.execute("SELECT * from user WHERE code = %s",
+    res = cursor.execute("SELECT * from people WHERE code = %s",
                          (code))
     row_headers = [x[0] for x in cursor.description]  # this will extract row headers
     data = []
     for row in cursor.fetchall():
       data.append(dict(zip(row_headers, row)))
     cursor.close()
-    print(res)
+    # print(res)
     if (res == 0):
       return False
     else:
@@ -69,7 +69,6 @@ class LoginTdg:
     for row in cursor.fetchall():
       data.append(dict(zip(row_headers, row)))
     cursor.close()
-    print(res)
     if (res == 0):
       return False
     else:

@@ -41,5 +41,5 @@ class LoginMapper:
       return
 
     user = User(code)
-    user.id = code
+    # user.id = code
     return user
