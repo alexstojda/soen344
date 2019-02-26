@@ -9,7 +9,6 @@ app = Flask(__name__,
             static_folder="./dist/static",
             template_folder="./dist")
 
-
 app.secret_key='secret_brazzers_code'
 
 CORS(app)
