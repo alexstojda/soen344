@@ -32,15 +32,15 @@ CREATE TABLE `people` (
   `id` int(11) NOT NULL,
   `code` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role` ENUM(0, 1, 2)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `role` ENUM('client', 'nurse', 'doctor') DEFAULT 'client'
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `poeople`
+-- Indexes for table `people`
 --
 ALTER TABLE `people`
   ADD PRIMARY KEY (`id`);

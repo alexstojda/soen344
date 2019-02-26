@@ -33,7 +33,7 @@ class LoginTdg:
   def add_user(self, code, password):
     connection = self.mysql.connect()
     cursor = connection.cursor()
-    cursor.execute("""INSERT INTO people(id, password)
+    cursor.execute("""INSERT INTO people(code, password)
                       VALUES(%s, %s)""",
                    (code, password))
     cursor.execute("SELECT * FROM people ORDER BY id DESC")
@@ -45,7 +45,7 @@ class LoginTdg:
   def is_a_user(self, code):
     connection = self.mysql.connect()
     cursor = connection.cursor()
-    res = cursor.execute("SELECT * from people WHERE id = %s",
+    res = cursor.execute("SELECT * from people WHERE code = %s",
                          (code))
     row_headers = [x[0] for x in cursor.description]  # this will extract row headers
     data = []
@@ -62,7 +62,7 @@ class LoginTdg:
   def check_user_password(self, code, password):
     connection = self.mysql.connect()
     cursor = connection.cursor()
-    res = cursor.execute("SELECT * from people WHERE id = %s AND password = %s",
+    res = cursor.execute("SELECT * from people WHERE code = %s AND password = %s",
                          (code, password))
     row_headers = [x[0] for x in cursor.description]  # this will extract row headers
     data = []
