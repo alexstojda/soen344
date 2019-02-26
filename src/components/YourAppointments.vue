@@ -8,7 +8,6 @@
         <viewAppointments id="appointmentTable"></viewAppointments>
         <br/>
         <addAppointment id="addAppointment"></addAppointment>
-        <br/>
     </div>
   </div>
 </template>
@@ -22,7 +21,7 @@
         components: {
             'navbar': Navbar,
             'viewAppointments': ViewAppointments,
-            'addAppointment' : AddAppointment
+            'addAppointment' : AddAppointment,
         }
     };
 </script>

@@ -61,3 +61,11 @@ class AppointmentTdg:
         result = cursor.fetchone()
         connection.commit()
         return jsonify(result)
+
+    def get_availabilities(self, date):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        cursor.execute("""SELECT * FROM availability WHERE date = %s""", (date,))
+        result = cursor.fetchall()
+        connection.commit()
+        return result
