@@ -13,9 +13,9 @@ START TRANSACTION;
 SET time_zone = "+00:00";
 
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT = @@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS = @@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION = @@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
 --
@@ -28,32 +28,38 @@ SET time_zone = "+00:00";
 -- Table structure for table `doctor`
 --
 
-CREATE TABLE `doctor` (
-  `permit_number` int(11) NOT NULL,
-  `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) NOT NULL,
-  `specialty` varchar(255) NOT NULL,
-  `city` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+DROP TABLE IF EXISTS `doctor`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+SET character_set_client = utf8mb4;
+CREATE TABLE `doctor`
+(
+    `id`            int(11)      NOT NULL AUTO_INCREMENT,
+    `user_id`       int(11)      NOT NULL,
+    `permit_number` int(7)       NOT NULL,
+    `specialty`     varchar(255) NOT NULL,
+    `city`          varchar(255) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `doctor_id_uindex` (`id`),
+    UNIQUE KEY `doctor_permit_number_uindex` (`permit_number`),
+    KEY `doctor_user_id_fk` (`user_id`),
+    CONSTRAINT `doctor_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 2
+  DEFAULT CHARSET = utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `doctor`
 --
 
-INSERT INTO `doctor` (`permit_number`, `first_name`, `last_name`, `specialty`, `city`) VALUES
-(2345678, 'Philippe', 'Lorange', 'Ligma', 'Montreal');
+/*!40000 ALTER TABLE `doctor`
+    DISABLE KEYS */;
+INSERT INTO `doctor` (`id`, `user_id`, `permit_number`, `specialty`, `city`)
+VALUES (1, 8, 69696, 'Gynecology', 'Montreal');
+/*!40000 ALTER TABLE `doctor`
+    ENABLE KEYS */;
 
---
--- Indexes for dumped tables
---
 
---
--- Indexes for table `doctor`
---
-ALTER TABLE `doctor`
-  ADD PRIMARY KEY (`permit_number`);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_CLIENT = @OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS = @OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION = @OLD_COLLATION_CONNECTION */;

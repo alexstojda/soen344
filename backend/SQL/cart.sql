@@ -13,49 +13,50 @@ START TRANSACTION;
 SET time_zone = "+00:00";
 
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT = @@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS = @@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION = @@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `soen344`
 --
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `appointment`
+-- Table structure for table `cart`
 --
 
-CREATE TABLE `cart` (
-  `id` int(11) NOT NULL,
-  `patient` varchar(255) NOT NULL,
-  `doctor` varchar(255) NOT NULL,
-  `date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+DROP TABLE IF EXISTS `cart`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+SET character_set_client = utf8mb4;
+CREATE TABLE `cart`
+(
+    `id`       int(11) NOT NULL AUTO_INCREMENT,
+    `patient`  int(11) NOT NULL,
+    `doctor`   int(11) NOT NULL,
+    `room`     int(11) NOT NULL,
+    `timeslot` int(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `cart_doctor_id_fk` (`doctor`),
+    KEY `cart_patient_id_fk` (`patient`),
+    KEY `cart_rooms_id_fk` (`room`),
+    CONSTRAINT `cart_doctor_id_fk` FOREIGN KEY (`doctor`) REFERENCES `doctor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `cart_patient_id_fk` FOREIGN KEY (`patient`) REFERENCES `patient` (`id`) ON UPDATE CASCADE,
+    CONSTRAINT `cart_rooms_id_fk` FOREIGN KEY (`room`) REFERENCES `rooms` (`id`) ON UPDATE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Indexes for dumped tables
+-- Dumping data for table `cart`
 --
 
---
--- Indexes for table `appointment`
---
-ALTER TABLE `cart`
-  ADD PRIMARY KEY (`id`);
+/*!40000 ALTER TABLE `cart`
+    DISABLE KEYS */;
+/*!40000 ALTER TABLE `cart`
+    ENABLE KEYS */;
 
---
--- AUTO_INCREMENT for dumped tables
---
 
---
--- AUTO_INCREMENT for table `appointment`
---
-ALTER TABLE `cart`
-  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_CLIENT = @OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS = @OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION = @OLD_COLLATION_CONNECTION */;
