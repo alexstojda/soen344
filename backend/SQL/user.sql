@@ -25,12 +25,14 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Table structure for table `people`
 --
 
 CREATE TABLE `people` (
   `id` int(11) NOT NULL,
-  `password` varchar(255) NOT NULL
+  `code` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` ENUM(0, 1, 2)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -61,7 +63,6 @@ COMMIT;
 
 CREATE TABLE `client` (
   `id` int(11) NOT NULL,
-  `code` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
