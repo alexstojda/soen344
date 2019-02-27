@@ -16,8 +16,11 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "gulp": "^4.0.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
+    "vue-sorted-table": "^1.0.1",
+    "vuejs-datepicker": "^1.5.4",
     "yarn": "^1.13.0"
   },
   "devDependencies": {

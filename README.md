@@ -11,6 +11,8 @@
 - Make sure you are in the (venv) shell when installing
 - Immediately save the new requirements: `pip freeze > requirements.txt`
   - Command should be executed from the project root
+- Setup your local db config in `backend/tdg/AbstractTdg`
+
 
 #### Frontend
 1. `cd frontend`

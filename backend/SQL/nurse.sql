@@ -22,42 +22,37 @@ SET time_zone = "+00:00";
 -- Database: `soen344`
 --
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `user`
+-- Table structure for table `nurse`
 --
 
-DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `nurse`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 SET character_set_client = utf8mb4;
-CREATE TABLE `user`
+CREATE TABLE `nurse`
 (
-    `id`         int(11)      NOT NULL AUTO_INCREMENT,
-    `code`       varchar(255) NOT NULL,
-    `password`   varchar(255) NOT NULL,
-    `first_name` varchar(255) NOT NULL,
-    `last_name`  varchar(255) NOT NULL,
+    `id`      int(11) NOT NULL AUTO_INCREMENT,
+    `user_id` int(11) NOT NULL,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `user_code_uindex` (`code`),
-    UNIQUE KEY `user_id_uindex` (`id`)
+    UNIQUE KEY `nurse_id_uindex` (`id`),
+    KEY `nurse_user_id_fk` (`user_id`),
+    CONSTRAINT `nurse_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 11
-  DEFAULT CHARSET = latin1;
+  AUTO_INCREMENT = 2
+  DEFAULT CHARSET = utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user`
+-- Dumping data for table `nurse`
 --
 
-/*!40000 ALTER TABLE `user`
+/*!40000 ALTER TABLE `nurse`
     DISABLE KEYS */;
-INSERT INTO `user` (`id`, `code`, `password`, `first_name`, `last_name`)
-VALUES (8, 'BYOB1234', 'password', 'Byran', 'Oberson'),
-       (9, 'PBR56790', 'password', 'Patricia', 'Bryiant'),
-       (10, 'DTF69696', 'password', 'Derrick', 'Tfrian');
-/*!40000 ALTER TABLE `user`
+INSERT INTO `nurse` (`id`, `user_id`)
+VALUES (1, 9);
+/*!40000 ALTER TABLE `nurse`
     ENABLE KEYS */;
+
 
 /*!40101 SET CHARACTER_SET_CLIENT = @OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS = @OLD_CHARACTER_SET_RESULTS */;

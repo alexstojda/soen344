@@ -1,43 +1,58 @@
-from flask import Flask, render_template, request, json, Response
-from flask_login import LoginManager, UserMixin,login_required, login_user, logout_user
-
-from flask import Flask, render_template
-from flask import json
-from flask_cors import CORS
-from flaskext.mysql import MySQL
-from flask import Flask, render_template, request
 from flask import Flask, render_template, request, json
 from flask_cors import CORS
 from backend.mappers.AppointmentMapper import AppointmentMapper
 from backend.mappers.CartMapper import CartMapper
-from backend.mappers.LoginMapper import LoginMapper
+from backend.mappers.UserMapper import UserMapper
+
 app = Flask(__name__,
             static_folder="./dist/static",
             template_folder="./dist")
-CORS(app)
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = ''
-app.config['MYSQL_DATABASE_DB'] = 'soen344'
-app.config['MYSQL_DATABASE_HOST'] = 'localhost'
-mysql = MySQL()
-mysql.init_app(app)
-
-app.secret_key='secret_brazzers_code'
 
 CORS(app)
 appointment_mapper = AppointmentMapper(app)
 cart_mapper = CartMapper(app)
+user_mapper = UserMapper(app)
+appointment_mapper = AppointmentMapper(app)
 login_mapper = LoginMapper(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+app.secret_key='secret_brazzers_code'
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
   return render_template("index.html")
 
+
+@app.route('/getDoctors')
+def get_doctors():
+    return json.dumps(user_mapper.get_doctors())
+
+@app.route('/getAppointments')
+def get_appointments():
+    return json.dumps(appointment_mapper.get_appointments())
+
+@app.route('/addAppointment', methods=['POST'])
+def add_appointment():
+    return appointment_mapper.book_appointment(request.get_json())
+
+@app.route('/cancelAppointment', methods=['POST'])
+def cancel_appointment():
+    return appointment_mapper.cancel_appointment(request.get_json())
+
+@app.route('/getAvailabilities', methods=['POST'])
+def get_availabilities():
+    return appointment_mapper.get_availabilities(request.get_json())
+
+@app.route('/getCart')
+def get_cart():
+    return cart_mapper.get_cart()
+
+@app.route('/addToCart', methods=['POST'])
+def add_to_cart():
+    return cart_mapper.add_to_cart(request.get_json())
 @app.route('/getAppointments', methods=['GET'])
 def getAppointments():
         connection = mysql.connect()
