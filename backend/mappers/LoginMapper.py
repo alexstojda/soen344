@@ -27,7 +27,12 @@ class LoginMapper:
     code = form['code']
     password = form['password']
     if (self.login_tdg.check_user_password(code, password)):
-      user = User(code)
+      if(self.login_tdg.is_a_doc(code)):
+        user = User(code,1)
+      elif(self.login_tdg.is_a_nurse(code)):
+        user = User(code,2)
+      else:
+        user = User(code)
       login_user(user)
       return redirect("homePage")
     else:

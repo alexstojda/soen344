@@ -66,6 +66,37 @@ class LoginTdg:
     else:
       return True
 
+  def is_a_doc(self, code):
+    connection = self.mysql.connect()
+    cursor = connection.cursor()
+    res = cursor.execute("SELECT * from doctor WHERE user_id = %s",
+                         (code))
+    row_headers = [x[0] for x in cursor.description]  # this will extract row headers
+    data = []
+    for row in cursor.fetchall():
+      data.append(dict(zip(row_headers, row)))
+    cursor.close()
+    # print(res)
+    if (res == 0):
+      return False
+    else:
+      return True
+
+  def is_a_nurse(self, code):
+    connection = self.mysql.connect()
+    cursor = connection.cursor()
+    res = cursor.execute("SELECT * from nurse WHERE user_id = %s",
+                         (code))
+    row_headers = [x[0] for x in cursor.description]  # this will extract row headers
+    data = []
+    for row in cursor.fetchall():
+      data.append(dict(zip(row_headers, row)))
+    cursor.close()
+    # print(res)
+    if (res == 0):
+      return False
+    else:
+      return True
 
   def check_user_password(self, code, password):
     connection = self.mysql.connect()

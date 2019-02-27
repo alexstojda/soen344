@@ -38,6 +38,35 @@ def home():
     return ("you logged in")
 
 
+@app.route('/getUsers', methods=['POST'])
+def get_users():
+  return json.dumps(login_mapper.get_users())
+
+
+@app.route('/registerUser', methods=['POST'])
+def register_user():
+   return login_mapper.register_user(request.form)
+   # return render_template("index.html")
+
+@app.route("/login", methods=["POST"])
+def login():
+  return login_mapper.login(request.form)
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return Response('<p>Logged out</p>')
+
+@app.errorhandler(401)
+def page_not_found(e):
+    return Response('<p>Login failed</p>')
+
+
+@login_manager.user_loader
+def user_loader(code):
+    return login_mapper.user_loader(code)
+
 @app.route('/getAppointments')
 def get_all_appointments():
     return json.dumps([obj.__dict__ for obj in timeslot_mapper.get_all_appointments()])
@@ -58,8 +87,3 @@ def get_availabilities():
 @app.route('/getCart')
 def get_cart():
     return cart_mapper.get_cart()
-
-
-@login_manager.user_loader
-def user_loader(code):
-    return login_mapper.user_loader(code)
