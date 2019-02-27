@@ -56,6 +56,15 @@ class TimeslotMapper:
     
     def cancel_appointment(self, req):
         id = req.get('id')
+        doctor_id = req.get('doctor_id')
+        print(doctor_id)
+        print([obj for obj in self.timeslots.keys()])
+        print([obj for obj in self.timeslots.values()])
+        for timeslot in self.timeslots.get(int(doctor_id)):
+            if(timeslot.id == id):
+                timeslot.patient_id = None
+                timeslot.room_id = None
+                timeslot.is_booked = False
         return self.timeslot_tdg.cancel_appointment(id)
 
     def get_availabilities(self, req):

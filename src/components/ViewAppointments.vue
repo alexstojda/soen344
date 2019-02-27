@@ -21,7 +21,7 @@
                     <td>{{ appointment.room_id }}</td>
                     <td>{{ appointment.date_time }}</td>
                     <td><button vertical-align="center">Modify</button>
-                        <button v-on:click="cancelAppointment(appointment.id)" vertical-align="center">Cancel</button></td>
+                        <button v-on:click="cancelAppointment(appointment.id, appointment.doctor_id)" vertical-align="center">Cancel</button></td>
                 </tr>
             </tbody>
         </SortedTable>
@@ -55,10 +55,11 @@ export default {
                 })
             },
 
-            cancelAppointment: function(id) {
+            cancelAppointment: function(id, doctor_id) {
                 console.log("VIEEW APPOINTMSNT" + id)
                 axios.post('http://127.0.0.1:5000/cancelAppointment', {
-                    id: id
+                    id: id,
+                    doctor_id: doctor_id
                 }, {'Content-Type': 'application/json; charset=utf-8',
                     'Access-Control-Allow-Origin': '*'}).then(response => {
                     if(response.status == 200) {
