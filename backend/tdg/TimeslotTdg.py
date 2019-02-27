@@ -7,13 +7,7 @@ from backend.business_objects.Timeslot import Timeslot
 class TimeslotTdg:
 
     def __init__(self, app):
-        self.mysql = MySQL()
-
-        app.config['MYSQL_DATABASE_USER'] = 'root'
-        app.config['MYSQL_DATABASE_PASSWORD'] = ''
-        app.config['MYSQL_DATABASE_DB'] = 'soen344'
-        app.config['MYSQL_DATABASE_HOST'] = 'localhost'
-        self.mysql.init_app(app)
+        super().__init__(app)
 
     def get_timeslots(self):
         connection = self.mysql.connect()
