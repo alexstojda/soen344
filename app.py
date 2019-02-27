@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, json
 from flask_cors import CORS
-from backend.mappers.AppointmentMapper import AppointmentMapper
+from backend.mappers.TimeslotMapper import TimeslotMapper
 from backend.mappers.CartMapper import CartMapper
 from backend.mappers.UserMapper import UserMapper
 
@@ -12,7 +12,7 @@ app = Flask(__name__,
             template_folder="./dist")
 
 CORS(app)
-appointment_mapper = AppointmentMapper(app)
+timeslot_mapper = TimeslotMapper(app)
 cart_mapper = CartMapper(app)
 user_mapper = UserMapper(app)
 
@@ -26,20 +26,21 @@ def get_doctors():
     return json.dumps(user_mapper.get_doctors())
 
 @app.route('/getAppointments')
-def get_appointments():
-    return json.dumps(appointment_mapper.get_appointments())
+def get_all_appointments():
+    return json.dumps([obj.__dict__ for obj in timeslot_mapper.get_all_appointments()])
 
 @app.route('/addAppointment', methods=['POST'])
 def add_appointment():
-    return appointment_mapper.book_appointment(request.get_json())
+    return timeslot_mapper.book_appointment(request.get_json())
 
 @app.route('/cancelAppointment', methods=['POST'])
 def cancel_appointment():
-    return appointment_mapper.cancel_appointment(request.get_json())
+    return timeslot_mapper.cancel_appointment(request.get_json())
 
 @app.route('/getAvailabilities', methods=['POST'])
 def get_availabilities():
-    return appointment_mapper.get_availabilities(request.get_json())
+    print([obj.__dict__ for obj in timeslot_mapper.get_availabilities(request.get_json())])
+    return json.dumps([obj.__dict__ for obj in timeslot_mapper.get_availabilities(request.get_json())])
 
 @app.route('/getCart')
 def get_cart():

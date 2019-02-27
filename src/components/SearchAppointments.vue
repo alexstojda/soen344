@@ -17,7 +17,7 @@
                 <tr v-for="doctor in sort.values" :key="doctor.permit_number">
                     <td>{{ doctor.first_name }} {{ doctor.last_name }}</td>
                     <td style="float: left;" v-for="availability in filterAvailabilities(doctor.permit_number)" :key="availability.id">
-                        <button>{{availability.time}}</button>
+                        <button>{{splitDate(availability.date_time)[1]}}</button>
                     </td>
                 </tr>
             </tbody>
@@ -47,6 +47,14 @@ export default {
         },
 
         methods: {
+            splitDate: function(dateString) {
+                var dateTime = dateString.split(" ");
+                var date = dateTime[0] + dateTime[1] + dateTime[2] + dateTime[3];
+                var timeParts = dateTime[4].split(":");
+                var time = timeParts[0] + ":" + timeParts[1];
+                return [date, time];
+            },
+
             getDoctors: function() {
                 axios.get('http://127.0.0.1:5000/getDoctors')
                 .then(response => {
