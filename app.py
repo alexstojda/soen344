@@ -21,7 +21,7 @@ login_mapper = LoginMapper(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-app.secret_key='super_top_secret_memeful_stance_that_unleashes_power_into_the_soil_and absorbs_it_into_your_soul'
+app.secret_key='Nora_is_a_________just_give_us_100_percent'
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
