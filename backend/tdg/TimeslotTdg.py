@@ -2,9 +2,10 @@ from flaskext.mysql import MySQL
 from flask import json, jsonify
 from flask import Flask, render_template
 from backend.business_objects.Timeslot import Timeslot
+from backend.tdg.AbstractTdg import AbstractTdg
 
 
-class TimeslotTdg:
+class TimeslotTdg(AbstractTdg):
 
     def __init__(self, app):
         super().__init__(app)
