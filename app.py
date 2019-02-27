@@ -59,13 +59,10 @@ def cancel_appointment():
 def get_availabilities():
     return appointment_mapper.get_availabilities(request.get_json())
 
-@app.route('/getCart')
-def get_cart():
-    return cart_mapper.get_cart()
-
 @app.route('/addToCart', methods=['POST'])
 def add_to_cart():
     return cart_mapper.add_to_cart(request.get_json())
+
 @app.route('/getAppointments', methods=['GET'])
 def getAppointments():
         connection = mysql.connect()
@@ -80,36 +77,10 @@ def getAppointments():
             return False
         else:
             return json.dumps(data)
-
-@app.route('/addAppointment', methods=['POST'])
-def add_appointment():
-    return appointment_mapper.book_appointment(request.get_json())
-
-
-@app.route('/getUsers', methods=['POST'])
-def get_users():
-  return json.dumps(login_mapper.get_users())
-
-
-@app.route('/registerUser', methods=['POST'])
-def register_user():
-   return login_mapper.register_user(request.form)
-   # return render_template("index.html")
-
-
-@app.errorhandler(401)
-def page_not_found(e):
-    return Response('<p>Login failed</p>')
-
-@app.route("/login", methods=["POST"])
-def login():
-  return login_mapper.login(request.form)
-
-@app.route("/logout")
-@login_required
-def logout():
-    logout_user()
-    return Response('<p>Logged out</p>')
+#
+# @app.route('/addAppointment', methods=['POST'])
+# def add_appointment():
+#     return appointment_mapper.book_appointment(request.get_json())
 
 
 @app.route('/getUsers', methods=['POST'])
@@ -136,15 +107,15 @@ def login():
 def logout():
     logout_user()
     return Response('<p>Logged out</p>')
+
+@app.errorhandler(401)
+def page_not_found(e):
+    return Response('<p>Login failed</p>')
 
 @app.route('/getCart')
 def get_cart():
   return cart_mapper.get_cart()
 
-@app.route('/addToCart', methods=['POST'])
-def add_to_cart():
-   print(request.get_json())
-   return cart_mapper.add_to_cart(request.get_json())
 
 @login_manager.user_loader
 def user_loader(code):

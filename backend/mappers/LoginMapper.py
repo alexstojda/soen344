@@ -39,7 +39,6 @@ class LoginMapper:
   def user_loader(self, code):
     if (self.login_tdg.is_a_user(code) == False):
       return
-
     user = User(code)
     # user.id = code
     return user

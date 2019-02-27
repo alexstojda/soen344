@@ -19,7 +19,7 @@ class LoginTdg:
   def get_users(self):
     connection = self.mysql.connect()
     cursor = connection.cursor()
-    res = cursor.execute("SELECT * from people")
+    res = cursor.execute("SELECT * from user")
     row_headers = [x[0] for x in cursor.description]  # this will extract row headers
     data = []
     for row in cursor.fetchall():
@@ -33,17 +33,17 @@ class LoginTdg:
   def add_user(self, code, password):
     connection = self.mysql.connect()
     cursor = connection.cursor()
-    cursor.execute("""INSERT INTO people(code, password)
+    cursor.execute("""INSERT INTO user(code, password)
                       VALUES(%s, %s)""",
                    (code, password))
 
-    cursor.execute("SELECT id from people WHERE code = %s AND password = %s",
+    cursor.execute("SELECT id from user WHERE code = %s AND password = %s",
                          (code, password))
     result = cursor.fetchone()
 
-    thing = "put a name here"
+    thing = "put a email here"
 
-    cursor.execute("""INSERT INTO client(id, name)
+    cursor.execute("""INSERT INTO patient(user_id, email)
                           VALUES(%s, %s)""",
                    (result, thing))
     connection.commit()
@@ -53,7 +53,7 @@ class LoginTdg:
   def is_a_user(self, code):
     connection = self.mysql.connect()
     cursor = connection.cursor()
-    res = cursor.execute("SELECT * from people WHERE code = %s",
+    res = cursor.execute("SELECT * from user WHERE code = %s",
                          (code))
     row_headers = [x[0] for x in cursor.description]  # this will extract row headers
     data = []
@@ -70,7 +70,7 @@ class LoginTdg:
   def check_user_password(self, code, password):
     connection = self.mysql.connect()
     cursor = connection.cursor()
-    res = cursor.execute("SELECT * from people WHERE code = %s AND password = %s",
+    res = cursor.execute("SELECT * from user WHERE code = %s AND password = %s",
                          (code, password))
     row_headers = [x[0] for x in cursor.description]  # this will extract row headers
     data = []
