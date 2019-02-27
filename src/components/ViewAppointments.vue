@@ -4,10 +4,10 @@
             <thead>
                 <tr>
                     <th scope="col" style="text-align: left; width: 10rem;">
-                        <SortLink name="doctor">Doctor</SortLink>
+                        <SortLink name="doctor">Doctor ID</SortLink>
                     </th>
                     <th scope="col" style="text-align: left; width: 10rem;">
-                        <SortLink name="room">Room</SortLink>
+                        <SortLink name="room">Room ID</SortLink>
                     </th>
                     <th scope="col" style="text-align: left; width: 10rem;">
                         <SortLink name="date">Date</SortLink>
@@ -17,9 +17,9 @@
             </thead>
             <tbody slot="body" slot-scope="sort">
                 <tr v-for="appointment in sort.values" :key="appointment.id">
-                    <td>{{ appointment.doctor }}</td>
-                    <td>{{ appointment.room }}</td>
-                    <td>{{ appointment.date }}</td>
+                    <td>{{ appointment.doctor_id }}</td>
+                    <td>{{ appointment.room_id }}</td>
+                    <td>{{ appointment.date_time }}</td>
                     <td><button vertical-align="center">Modify</button>
                         <button v-on:click="cancelAppointment(appointment.id)" vertical-align="center">Cancel</button></td>
                 </tr>
@@ -56,8 +56,9 @@ export default {
             },
 
             cancelAppointment: function(id) {
+                console.log("VIEEW APPOINTMSNT" + id)
                 axios.post('http://127.0.0.1:5000/cancelAppointment', {
-                    appointment_id: id
+                    id: id
                 }, {'Content-Type': 'application/json; charset=utf-8',
                     'Access-Control-Allow-Origin': '*'}).then(response => {
                     if(response.status == 200) {
