@@ -5,6 +5,14 @@ import itertools
 import datetime
 
 class TimeslotMapper:
+    __instance = None
+
+    def get_instance(app):
+        if TimeslotMapper.__instance is None:
+            TimeslotMapper.__instance = TimeslotMapper(app)
+        else:
+            print("Mapper instance already initialized!")
+        return TimeslotMapper.__instance
 
     timeslots = {}
 

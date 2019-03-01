@@ -5,10 +5,10 @@ from backend.mappers.UserMapper import UserMapper
 class MapperFactory:
     def getMapper(app, type):
         if(type == "Cart"):
-            return CartMapper(app)
+            return CartMapper.get_instance(app)
         if(type == "Timeslot"):
-            return TimeslotMapper(app)
+            return TimeslotMapper.get_instance(app)
         if(type == "User"):
-            return UserMapper(app)
+            return UserMapper.get_instance(app)
 
     getMapper = staticmethod(getMapper)
