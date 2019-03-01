@@ -55,10 +55,11 @@ export default {
             },
 
             getDoctors: function() {
+                var self = this
                 axios.get('http://127.0.0.1:5000/getDoctors')
                 .then(response => {
                     if(response.status == 200) {
-                        this.doctors = response.data;
+                        self.doctors = response.data;
                         console.log("getDoctors " + response)
                     } else {
                         console.log("getDoctors failed: Response code " + response.status)
@@ -67,13 +68,13 @@ export default {
             },
 
             getAvailabilities: function(inDate) {
+                var self = this
                 axios.post('http://127.0.0.1:5000/getAvailabilities', {
-                    date: this.formatDate(inDate)
+                    date: self.formatDate(inDate)
                 })
                 .then(response => {
                     if(response.status == 200) {
-                        this.availabilities = response.data;
-                        console.log("getAvailabilities" + response)
+                        self.availabilities = response.data;
                     } else {
                         console.log("Get availabilities failed: Response code " + response.status)
                     }
@@ -81,7 +82,7 @@ export default {
             },
 
             filterAvailabilities: function(permit_number) {
-                    return this.availabilities.filter(availability => availability.doctor_id === permit_number)
+                    return this.availabilities.filter(availability => availability.doctor_id == permit_number)
             },
 
             formatDate: function(date) {
