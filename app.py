@@ -35,9 +35,12 @@ def add_appointment():
 def cancel_appointment():
     return timeslot_mapper.cancel_appointment(request.get_json())
 
+@app.route('/addAvailability', methods=['POST'])
+def add_availability():
+    return timeslot_mapper.add_availability(request.get_json())
+
 @app.route('/getAvailabilities', methods=['POST'])
 def get_availabilities():
-    print([obj.__dict__ for obj in timeslot_mapper.get_availabilities(request.get_json())])
     return json.dumps([obj.__dict__ for obj in timeslot_mapper.get_availabilities(request.get_json())])
 
 @app.route('/getCart')

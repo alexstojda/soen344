@@ -47,3 +47,12 @@ class TimeslotTdg(AbstractTdg):
         result = cursor.fetchone()
         connection.commit()
         return jsonify(result)
+
+    def create_timeslot(self, doctor_id, date_time):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        cursor.execute("""INSERT INTO `timeslot` (`doctor_id`, `patient_id`, `date_time`, `room_id`, `is_booked`)
+                        VALUES (%s, NULL, %s, NULL, 0)""", (doctor_id, date_time))
+        result = cursor.lastrowid
+        connection.commit()
+        return result

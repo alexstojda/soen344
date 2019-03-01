@@ -10,7 +10,8 @@ class UserTdg(AbstractTdg):
     def get_doctors(self):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        res = cursor.execute("SELECT * from doctor")
+        res = cursor.execute("""SELECT u.first_name, u.last_name, doctor.* FROM doctor
+                                LEFT OUTER JOIN user u on doctor.user_id = u.id""")
         row_headers = [x[0] for x in cursor.description]  # this will extract row headers
         data = []
         for row in cursor.fetchall():

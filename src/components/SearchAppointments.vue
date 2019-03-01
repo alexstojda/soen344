@@ -39,7 +39,6 @@ export default {
         },
         mounted() {
             this.getDoctors();
-            this.getAvailabilities();
         },
 
         components: {

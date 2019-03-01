@@ -57,9 +57,6 @@ class TimeslotMapper:
     def cancel_appointment(self, req):
         id = req.get('id')
         doctor_id = req.get('doctor_id')
-        print(doctor_id)
-        print([obj for obj in self.timeslots.keys()])
-        print([obj for obj in self.timeslots.values()])
         for timeslot in self.timeslots.get(int(doctor_id)):
             if(timeslot.id == id):
                 timeslot.patient_id = None
@@ -72,3 +69,17 @@ class TimeslotMapper:
         print(reqDate)
         print([x.date_time for x in itertools.chain.from_iterable(self.timeslots.values())])
         return list(filter(lambda x: (not x.is_booked and (x.date_time.date() == reqDate)), itertools.chain.from_iterable(self.timeslots.values())))
+
+    def add_availability(self, req):
+        date_time = datetime.datetime.combine(\
+        datetime.datetime.strptime(req.get('date'), '%Y-%m-%d').date(), \
+        datetime.datetime.strptime(req.get('time'), '%H:%M:%S').time())
+
+        doctor_id = req.get('doctor_id')
+        for timeslot in self.timeslots.get(int(doctor_id)):
+            if(timeslot.doctor_id == doctor_id and timeslot.date_time == date_time):
+                print("Doctor and timeslot already added!")
+                return "There is already a timeslot with these parameters"
+
+        id = self.timeslot_tdg.create_timeslot(doctor_id, date_time.strftime("%Y-%m-%d %H:%M:%S"))
+        self.timeslots[doctor_id].append(Timeslot(id, doctor_id, None, date_time, None, False))

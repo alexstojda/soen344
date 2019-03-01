@@ -25,3 +25,9 @@ class Timeslot:
 
     def getDate(self):
         return self.date_time.date()
+
+    def verifyOneHour(self, nextTimeslot, nextNextTimeslot):
+        if(not nextTimeslot.is_booked or not nextNextTimeslot.is_booked):
+            self.is_free_for_one_hour = False
+        else:
+            self.is_free_for_one_hour = True
