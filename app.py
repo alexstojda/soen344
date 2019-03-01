@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, json
 
 from flask_cors import CORS
+from backend.mappers.MapperFactory import MapperFactory
 from backend.mappers.TimeslotMapper import TimeslotMapper
 from backend.mappers.CartMapper import CartMapper
 from backend.mappers.UserMapper import UserMapper
@@ -10,9 +11,9 @@ app = Flask(__name__,
             template_folder="./dist")
 
 CORS(app)
-timeslot_mapper = TimeslotMapper(app)
-cart_mapper = CartMapper(app)
-user_mapper = UserMapper(app)
+timeslot_mapper = MapperFactory.getMapper(app, "Timeslot")
+cart_mapper = MapperFactory.getMapper(app, "Cart")
+user_mapper = MapperFactory.getMapper(app, "User")
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
