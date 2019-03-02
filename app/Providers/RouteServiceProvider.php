@@ -39,7 +39,49 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
+        $this->mapDoctorRoutes();
+
+        $this->mapNurseRoutes();
+
         //
+    }
+
+    /**
+     * Define the "nurse" routes for the application.
+     *
+     * These routes all receive session state, CSRF protection, etc.
+     *
+     * @return void
+     */
+    protected function mapNurseRoutes()
+    {
+        Route::group([
+            'middleware' => ['web', 'nurse', 'auth:nurse'],
+            'prefix' => 'nurse',
+            'as' => 'nurse.',
+            'namespace' => $this->namespace,
+        ], function ($router) {
+            require base_path('routes/nurse.php');
+        });
+    }
+
+    /**
+     * Define the "doctor" routes for the application.
+     *
+     * These routes all receive session state, CSRF protection, etc.
+     *
+     * @return void
+     */
+    protected function mapDoctorRoutes()
+    {
+        Route::group([
+            'middleware' => ['web', 'doctor', 'auth:doctor'],
+            'prefix' => 'doctor',
+            'as' => 'doctor.',
+            'namespace' => $this->namespace,
+        ], function ($router) {
+            require base_path('routes/doctor.php');
+        });
     }
 
     /**

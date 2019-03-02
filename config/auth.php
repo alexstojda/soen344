@@ -36,6 +36,16 @@ return [
     */
 
     'guards' => [
+        'doctor' => [
+            'driver' => 'session',
+            'provider' => 'doctors',
+        ],
+
+        'nurse' => [
+            'driver' => 'session',
+            'provider' => 'nurses',
+        ],
+
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
@@ -66,6 +76,16 @@ return [
     */
 
     'providers' => [
+        'doctors' => [
+            'driver' => 'eloquent',
+            'model' => App\Doctor::class,
+        ],
+
+        'nurses' => [
+            'driver' => 'eloquent',
+            'model' => App\Nurse::class,
+        ],
+
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
@@ -93,6 +113,18 @@ return [
     */
 
     'passwords' => [
+        'doctors' => [
+            'provider' => 'doctors',
+            'table' => 'doctor_password_resets',
+            'expire' => 60,
+        ],
+
+        'nurses' => [
+            'provider' => 'nurses',
+            'table' => 'nurse_password_resets',
+            'expire' => 60,
+        ],
+
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
