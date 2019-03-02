@@ -1,0 +1,6 @@
+/build/
+/config/
+/dist/
+/old/.eslintrc.js
+/old/test/unit/coverage/
+*
