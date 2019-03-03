@@ -19,6 +19,10 @@ Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');
 
+Route::group(['prefix' => 'api'], function () {
+    Route::apiResource('/availabilities','AvailabilityController');
+});
+
 Route::group(['prefix' => 'nurse'], function () {
   Route::get('/login', 'NurseAuth\LoginController@showLoginForm')->name('login');
   Route::post('/login', 'NurseAuth\LoginController@login');

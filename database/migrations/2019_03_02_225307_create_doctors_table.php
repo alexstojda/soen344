@@ -20,6 +20,7 @@ class CreateDoctorsTable extends Migration
             $table->string('speciality')->default('None');
             $table->string('city')->default('Montreal');
             $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

@@ -11,10 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
-
-        factory(\App\Doctor::class, 7)->create();
-        factory(\App\Nurse::class, 14)->create();
-        factory(\App\User::class,  20)->create();
+        $this->call(SystemUsersSeeder::class);
+        $this->call(RoomsSeeder::class);
+        //Seed doctor availabilities
+        $this->call(DoctorAvailabilitiesSeeder::class);
     }
 }
