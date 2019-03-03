@@ -21,6 +21,11 @@ Auth::routes();
 
 Route::group(['prefix' => 'api'], function () {
     Route::apiResource('/availabilities','AvailabilityController');
+    Route::apiResource('/appointments','AppointmentController');
+    Route::group(['prefix' => 'appointments'], function () {
+        Route::get('/{from}/{to}');
+        Route::get('/{scope}');
+    });
 });
 
 Route::group(['prefix' => 'nurse'], function () {

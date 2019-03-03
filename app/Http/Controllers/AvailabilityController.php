@@ -56,6 +56,7 @@ class AvailabilityController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Availability  $availability
+     * @return AvailabilityResource
      */
     public function show(Availability $availability)
     {

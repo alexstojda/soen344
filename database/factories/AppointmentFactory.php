@@ -11,7 +11,7 @@ $factory->define(App\Appointment::class, function (Faker $faker) {
         'room_id' => \App\Room::all()->random(),
         'start' => $availability->start,
         'end' => $availability->end,
-        'type' => $faker->randomElement(['walk-in', 'annual checkup']),
+        'type' => $faker->randomElement(['walk-in', 'annual checkup', 'regular', 'urgent']),
         'status' => $faker->randomElement(['active', 'cancelled', 'complete']),
     ];
 });

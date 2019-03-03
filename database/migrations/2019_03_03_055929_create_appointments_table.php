@@ -21,7 +21,7 @@ class CreateAppointmentsTable extends Migration
             $table->dateTime('start');
             $table->dateTime('end');
             // TODO: move enums to separate tables
-            $table->enum('type', ['walk-in', 'annual checkup']);
+            $table->enum('type', ['walk-in', 'annual checkup', 'regular', 'urgent']);
             $table->enum('status', ['active', 'cancelled', 'complete']);
             $table->timestamps();
         });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Appointment;
+use App\Http\Resources\Appointment as AppointmentResource;
 use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
@@ -10,11 +11,11 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return AvailabilityResource|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
     {
-        //
+        return AppointmentResource::collection(Appointment::paginate($request->perPage ?? 50));
     }
 
     /**
@@ -31,22 +32,35 @@ class AppointmentController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return AppointmentResource|\Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $appointment = Appointment::create([
+                'doctor_id' => $request->doctor_id,
+                'patient_id' => $request->doctor_id,
+                'room_id' => $request->room_id, // or find available room
+                'start' => $request->start,
+                'end' => $request->end,
+                'type' => $request->type,
+                'status' => $request->status,
+            ]);
+            return new AppointmentResource($appointment);
+        }catch (\Exception $e){
+            return response()->json($e);
+        }
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Appointment  $appointment
-     * @return \Illuminate\Http\Response
+     * @return AppointmentResource
      */
     public function show(Appointment $appointment)
     {
-        //
+        return new AppointmentResource($appointment);
     }
 
     /**
@@ -65,11 +79,25 @@ class AppointmentController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Appointment  $appointment
-     * @return \Illuminate\Http\Response
+     * @return AppointmentResource|\Illuminate\Http\Response
      */
     public function update(Request $request, Appointment $appointment)
     {
-        //
+        $validated = $request->validate([
+            //rules go here
+        ]);
+        // if it's not valid the code will stop here and throw the error with required fields
+
+        !isset($validated['doctor_id']) ?: $appointment->doctor_id = $validated['doctor_id'];
+        !isset($validated['patient_id']) ?: $appointment->patient_id = $validated['patient_id'];
+        !isset($validated['room_id']) ?: $appointment->room_id = $validated['room_id'];
+        !isset($validated['start']) ?: $appointment->start = $validated['start'];
+        !isset($validated['end']) ?: $appointment->end = $validated['end'];
+        !isset($validated['type']) ?: $appointment->type = $validated['type'];
+        !isset($validated['status']) ?: $appointment->status = $validated['status'];
+
+        $appointment->save();
+        return new AppointmentResource($appointment);
     }
 
     /**
@@ -80,6 +108,10 @@ class AppointmentController extends Controller
      */
     public function destroy(Appointment $appointment)
     {
-        //
+        try {
+            return response()->json(['success' => $appointment->delete()], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'failed', 'error' => $e->getMessage()], 400);
+        }
     }
 }
