@@ -18,6 +18,9 @@ mix.js('resources/js/app.js', 'public/js')
    .tailwind();
 
 
-if (mix.inProduction()) {
-    mix.sourceMaps().version();
+if (!mix.inProduction()) {
+    mix.webpackConfig({
+        devtool: 'source-map'
+    }).sourceMaps().
+    version();
 }
