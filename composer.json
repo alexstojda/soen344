@@ -17,11 +17,12 @@
         "ext-openssl": "*",
         "ext-tokenizer": "*",
         "ext-xml": "*",
-        "beyondcode/laravel-self-diagnosis": "^1.0",
+
         "fideloper/proxy": "^4.0",
-        "hesto/multi-auth": "^2.0",
         "laravel/framework": "5.8.*",
-        "laravel/tinker": "^1.0"
+        "laravel/tinker": "^1.0",
+        "beyondcode/laravel-self-diagnosis": "^1.0",
+        "hesto/multi-auth": "^2.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",
@@ -32,9 +33,10 @@
         "nunomaduro/collision": "^2.0",
         "phpunit/phpunit": "^7.5",
         "ajthinking/tinx": "^2.1",
-        "barryvdh/laravel-debugbar": "^3.1",
+        "laracasts/generators": "^1.1",
+        "doctrine/dbal": "^2.5",
         "barryvdh/laravel-ide-helper": "^2.5",
-        "laracasts/generators": "^1.1"
+        "barryvdh/laravel-debugbar": "^3.1"
     },
     "config": {
         "optimize-autoloader": true,
@@ -102,8 +104,17 @@
             "@composer reset:lock",
             "@composer check:env",
             "@composer install",
-            "@composer ide:min",
-            "@php artisan key:generate --ansi"
+            "@composer frontend",
+            "@php artisan key:generate --ansi",
+            "@composer ide:min"
+        ],
+        "frontend": [
+            "yarn",
+            "yarn prod"
+        ],
+        "frontend:hard": [
+            "@composer reset:npm",
+            "@composer frontend"
         ],
         "fix": [
             "@composer reset",
@@ -116,20 +127,13 @@
             "@composer reset",
             "@composer mfs"
         ],
-        "frontend": [
-            "yarn",
-            "yarn prod"
-        ],
-        "frontend:hard": [
-            "@composer reset:npm",
-            "@composer frontend"
-        ],
         "test": [
             "@php 'vendor/phpunit/phpunit/phpunit' --bootstrap 'vendor/autoload.php' --configuration 'phpunit.xml' --testsuite 'Unit'",
             "@php 'vendor/phpunit/phpunit/phpunit' --bootstrap 'vendor/autoload.php' --configuration 'phpunit.xml' --testsuite 'Feature'"
         ],
         "post-install-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postInstall"
+            "Illuminate\\Foundation\\ComposerScripts::postInstall",
+            "@php artisan storage:link"
         ],
         "install:all": [
             "@composer install",

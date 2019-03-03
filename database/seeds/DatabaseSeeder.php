@@ -11,9 +11,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(SystemUsersSeeder::class);
-        $this->call(RoomsSeeder::class);
-        //Seed doctor availabilities
-        $this->call(DoctorAvailabilitiesSeeder::class);
+        // Base system seeder
+        $this->call([
+            SystemUsersSeeder::class,
+            RoomsSeeder::class
+        ]);
+
+        if(env('SEED_SCHEDULE', true)) {
+            //Seed doctor availabilities / schedule appointments
+            $this->call([
+                DoctorAvailabilitiesSeeder::class,
+                AppointmentsSeeder::class
+            ]);
+        }
     }
 }

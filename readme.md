@@ -1,71 +1,44 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# Bon Matin - SOEN 344
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+Basically a walk-in clinic appointment reservation web app.
 
-## About Laravel
+## Installation
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Pre-requisites
+- `composer` executable
+- `yarn` & `npm`, _ps: we'll use yarn_
+- A MySQL DB & Apache. Use any XAMPP like service _I recommended `laragon` on pc or `valet`/`valet+` on mac_
+- PHP >= 7.1.3, preferable 7.2
+- PHP extensions you might not have be default: `bcmath`
+- `xdebug` is always a plus
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### First Setup Steps
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. once you clone the repo run `composer reset`, it will run a batch of the starter commands.
+1. Open the `.env` and configure it to work with what you need, _namely the DB connection_
+1. Create a mysql database matching the connection details in your `.env`
+1. Create the db schema and seed it with random values with `composer mfs`
+1. verify your setup is functional with alias `composer diag` or the actual 
+   command `php artisan self-diagnosis`
+1. Access the web app through your preferred local web server setup
+(_I like valet+ on macs & laragon on PC, ghetto way: php artisan serve + manual MySQL install _)
 
-## Learning Laravel
+### Bonus Commands
+- Quickly recreate the db tables and seed it with random data with `composer mfs`
+- When everything goes to hell run `composer fix` or `composer install:hard` if you don't want to rerun migrations
+- Regenerate the frontend resources with `composer frontend` (requires yarn) if you're working with vue or scss
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost you and your team's skills by digging into our comprehensive video library.
+## Usage
 
-## Laravel Sponsors
+### Website
+Open the site, select one of the different login types. _(Only Doc/Nurse work for now)_
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### API
+Look at the `api` route group in the `routes/web.php` file for a quick view of whats available at the moment.
+I heavily use `Postman` since I haven't redone much UI yet, holler at me if you want a copy of my half-baked collection.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Console
+Tinker is the primary tool for testing queries, php logic, and debugging weird code, 
+open with `php artisan tinx`. Basically an interactive php shell that makes it easy to test stuff like
+observer creation rules without having to build out the Resource/Model Controller
