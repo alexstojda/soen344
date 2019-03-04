@@ -19,8 +19,13 @@ Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');
 
+
+Route::get('/createAppointment', 'AvailabilityController@showCreateAppointmentPage');
+Route::get('/viewAppointments', 'AvailabilityController@showViewAppointmentsPage');
+
 Route::group(['prefix' => 'api'], function () {
     Route::apiResource('/availabilities','AvailabilityController');
+    Route::apiResource('/cart','CartController');
     Route::apiResource('/appointments','AppointmentController');
     Route::group(['prefix' => 'appointments'], function () {
         Route::get('/{from}/{to}');

@@ -64,6 +64,26 @@ class AvailabilityController extends Controller
     }
 
     /**
+     * Redirect to appointment page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showCreateAppointmentPage()
+    {
+        return view('appointment.appointment');
+    }
+
+    /**
+     * Redirect to appointment page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showViewAppointmentsPage()
+    {
+        return view('appointment.viewAppointments');
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Availability  $availability
