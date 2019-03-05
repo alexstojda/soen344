@@ -6,11 +6,11 @@
       <div class="card-body">
         <form @submit.prevent="submit">
           <div class="form-group row">
-            <label for="identification" class="col-md-4 col-form-label text-md-right">{{id}}</label>
+            <label for="identification" class="col-md-4 col-form-label text-md-right">{{role}} id</label>
 
             <div class="col-md-6">
               <input
-                v-if="id == 'patient'"
+                v-if="role == 'patient'"
                 id="identification"
                 class="form-control"
                 name="identification"
@@ -18,7 +18,7 @@
                 required
               >
               <input
-                v-if="id == 'doctor'"
+                v-if="role == 'doctor'"
                 id="identification"
                 class="form-control"
                 name="identification"
@@ -26,7 +26,7 @@
                 required
               >
               <input
-                v-if="id == 'nurse'"
+                v-if="role == 'nurse'"
                 id="identification"
                 class="form-control"
                 name="identification"
@@ -35,7 +35,7 @@
               >
               <!-- TODO: change access_id with whatever user logs in with -->
               <div v-if="errors &&  errors.permit_id" class="text-danger">{{ errors.permit_id[0] }}</div>
-              <div v-if="errors &&  errors.access_id" class="text-danger">{{ errors.permit_id[0] }}</div>
+              <div v-if="errors &&  errors.access_id" class="text-danger">{{ errors.access_id[0] }}</div>
               <!-- TODO: add error for user -->
             </div>
           </div>
@@ -78,7 +78,7 @@
 
 <script>
 export default {
-  props: ["title", "id"],
+  props: ["title", "role"],
   mounted() {
     console.log("Component mounted.");
   },
@@ -93,7 +93,7 @@ export default {
     submit() {
       this.errors = {};
       var postTo;
-      switch (this.id) {
+      switch (this.role) {
         case "patient":
           postTo = "./login";
           break;
@@ -110,7 +110,7 @@ export default {
       axios
         .post(postTo, this.fields)
         .then(response => {
-          alert("Message sent!");
+          alert("success. Logged in as " + this.role);
         })
         .catch(error => {
           if (error.response.status === 422) {

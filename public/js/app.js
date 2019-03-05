@@ -1875,7 +1875,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["title", "id"],
+  props: ["title", "role"],
   mounted: function mounted() {
     console.log("Component mounted.");
   },
@@ -1892,7 +1892,7 @@ __webpack_require__.r(__webpack_exports__);
       this.errors = {};
       var postTo;
 
-      switch (this.id) {
+      switch (this.role) {
         case "patient":
           postTo = "./login";
           break;
@@ -1911,7 +1911,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       axios.post(postTo, this.fields).then(function (response) {
-        alert("Message sent!");
+        alert("success. Logged in as " + _this.role);
       }).catch(function (error) {
         if (error.response.status === 422) {
           _this.errors = error.response.data.errors || {};
@@ -37035,11 +37035,11 @@ var render = function() {
                   staticClass: "col-md-4 col-form-label text-md-right",
                   attrs: { for: "identification" }
                 },
-                [_vm._v(_vm._s(_vm.id))]
+                [_vm._v(_vm._s(_vm.role) + " id")]
               ),
               _vm._v(" "),
               _c("div", { staticClass: "col-md-6" }, [
-                _vm.id == "patient"
+                _vm.role == "patient"
                   ? _c("input", {
                       directives: [
                         {
@@ -37067,7 +37067,7 @@ var render = function() {
                     })
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.id == "doctor"
+                _vm.role == "doctor"
                   ? _c("input", {
                       directives: [
                         {
@@ -37095,7 +37095,7 @@ var render = function() {
                     })
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.id == "nurse"
+                _vm.role == "nurse"
                   ? _c("input", {
                       directives: [
                         {
@@ -37131,7 +37131,7 @@ var render = function() {
                 _vm._v(" "),
                 _vm.errors && _vm.errors.access_id
                   ? _c("div", { staticClass: "text-danger" }, [
-                      _vm._v(_vm._s(_vm.errors.permit_id[0]))
+                      _vm._v(_vm._s(_vm.errors.access_id[0]))
                     ])
                   : _vm._e()
               ])

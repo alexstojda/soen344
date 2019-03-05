@@ -7,19 +7,19 @@
 @switch(app('request')->input('user'))
 
     @case("patient")
-    <login-component :title="'{{ __('auth.login') }}'" :id="'patient'"></login-component>
+    <login-component :title="'{{ __('auth.login') }}'" :role="'patient'"></login-component>
     @break
 
     @case("doctor")
-    <login-component :title="'{{ __('auth.login_doctor') }}'" :id="'doctor'"></login-component>
+    <login-component :title="'{{ __('auth.login_doctor') }}'" :role="'doctor'"></login-component>
     @break
 
     @case("nurse")
-    <login-component :title="'{{ __('auth.login_nurse') }}'" :id="'nurse'"></login-component>
+    <login-component :title="'{{ __('auth.login_nurse') }}'" :role="'nurse'"></login-component>
     @break
 
     @default
-    <login-component :title="'{{ __('auth.login') }}'" :id="'patient'"></login-component>
+    <login-component :title="'{{ __('auth.login') }}'" :role="'patient'"></login-component>
 @endswitch
 
        
