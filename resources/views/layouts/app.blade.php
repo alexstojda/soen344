@@ -47,9 +47,9 @@
                                 Login As <span class="caret"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarLoginDropdown">
-                                <a class="dropdown-item" href="{{ url('/login') }}">{{ __('Patient') }}</a>
-                                <a class="dropdown-item" href="{{ url('/doctor/login') }}">{{ __('Doctor') }}</a>
-                                <a class="dropdown-item" href="{{ url('/nurse/login') }}">{{ __('Nurse') }}</a>
+                                <a class="dropdown-item" href="{{ url('login') . '?' . http_build_query(['user' => 'patient'])}}">{{ __('Patient') }}</a>
+                                <a class="dropdown-item" href="{{ url('login') . '?' . http_build_query(['user' => 'doctor'])}}">{{ __('Doctor') }}</a>
+                                <a class="dropdown-item" href="{{ url('login') . '?' . http_build_query(['user' => 'nurse'])}}">{{ __('Nurse') }}</a>
                             </div>
                         </li>
                         @if (Route::has('register'))

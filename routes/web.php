@@ -41,7 +41,6 @@ Route::group(['prefix' => 'api'], function () {
 });
 
 Route::group(['prefix' => 'nurse'], function () {
-  Route::get('/login', 'NurseAuth\LoginController@showLoginForm')->name('login');
   Route::post('/login', 'NurseAuth\LoginController@login');
   Route::post('/logout', 'NurseAuth\LoginController@logout')->name('logout');
 
@@ -55,7 +54,6 @@ Route::group(['prefix' => 'nurse'], function () {
 });
 
 Route::group(['prefix' => 'doctor'], function () {
-  Route::get('/login', 'DoctorAuth\LoginController@showLoginForm')->name('login');
   Route::post('/login', 'DoctorAuth\LoginController@login');
   Route::post('/logout', 'DoctorAuth\LoginController@logout')->name('logout');
 
