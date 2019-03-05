@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Appointment;
+use App\Doctor;
+use App\Room;
 use App\Http\Resources\Appointment as AppointmentResource;
 use Illuminate\Http\Request;
 
@@ -16,6 +18,26 @@ class AppointmentController extends Controller
     public function index()
     {
         return AppointmentResource::collection(Appointment::paginate($request->perPage ?? 50));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Doctor
+     */
+    public function getDoctor($id)
+    {
+        return Doctor::whereId($id);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Room
+     */
+    public function getRoom($id)
+    {
+        return Room::whereId($id);
     }
 
     /**
@@ -61,6 +83,26 @@ class AppointmentController extends Controller
     public function show(Appointment $appointment)
     {
         return new AppointmentResource($appointment);
+    }
+
+    /**
+     * Redirect to appointment page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showCreateAppointmentPage()
+    {
+        return view('appointment.appointment');
+    }
+
+    /**
+     * Redirect to appointment page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showViewAppointmentsPage()
+    {
+        return view('appointment.viewAppointments');
     }
 
     /**
