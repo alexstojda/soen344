@@ -21,7 +21,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Checkout</button>
+                        <a href="/api/checkout" class="btn btn-info" role="button">Checkout</a>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
             getCart(){
                 axios({ method: "GET", "url": "/api/cart" }).then(result => {
                     console.log(result)
-                    this.cart = result.data;
+                    this.cart = result.data.data;
                 }, error => {
                     console.error(error);
                 });

@@ -33,9 +33,12 @@ if (process.env.NODE_ENV !== 'production') {
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.component('cart', require('./components/Cart.vue').default);
+Vue.component('cart-line', require('./components/CartLine.vue').default);
+Vue.component('checkout', require('./components/Checkout.vue').default);
 Vue.component('search-appointment', require('./components/SearchAppointment.vue').default);
-Vue.component('view-appointment', require('./components/ViewAppointments.vue').default);
+Vue.component('view-appointments', require('./components/ViewAppointments.vue').default);
 Vue.component('add-appointment', require('./components/AddAppointment.vue').default);
+Vue.component('add-availability', require('./components/AddAvailability.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

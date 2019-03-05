@@ -21,6 +21,19 @@ class AvailabilityController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     *
+     * @return AvailabilityResource|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function selectDate(Request $request)
+    {
+        $date = $request->input();
+        return AvailabilityResource::collection(Availability::whereStart($date));
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -68,19 +81,9 @@ class AvailabilityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function showCreateAppointmentPage()
+    public function showAddAvailabilityPage()
     {
-        return view('appointment.appointment');
-    }
-
-    /**
-     * Redirect to appointment page.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function showViewAppointmentsPage()
-    {
-        return view('appointment.viewAppointments');
+        return view('doctor.addAvailability');
     }
 
     /**

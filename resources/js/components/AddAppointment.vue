@@ -25,6 +25,11 @@
         </div>
 
         <div class="input">
+            <input v-model="type" placeholder="Type">
+            <p>Type of appointment: {{ type }}</p>
+        </div>
+
+        <div class="input">
             <button v-on:click="addAppointment()">Add appointment</button>
         </div>
     </div>
@@ -39,20 +44,24 @@
                 patient_id: "",
                 doctor_id: "",
                 room_id: "",
-                date: "",
-                time: ""
+                start: "",
+                end: "",
+                type: "",
+                status: ""
             }
         },
         mounted() {
         },
         methods: {
             addAppointment: function() {
-                axios.post('/api/createAppointment', {
+                axios.post('/api/createAnAppointment', {
                     patient_id: this.patient_id,
                     doctor_id: this.doctor_id,
                     room_id: this.room_id,
-                    date: this.date,
-                    time: this.time
+                    start: this.date + this.time,
+                    end: this.date + this.time + 20,
+                    type: this.type,
+                    status: 'active'
                 }).then(response => {
                     if(response.status == 200) {
                         console.log("Added appointment")

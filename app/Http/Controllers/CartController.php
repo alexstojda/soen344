@@ -64,6 +64,16 @@ class CartController extends Controller
     }
 
     /**
+     * Redirect to checkout page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showCheckoutPage()
+    {
+        return view('appointment.checkout');
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\cart  $cart

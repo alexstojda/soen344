@@ -1,8 +1,9 @@
 <template>
     <div>
+        Select Date of Appointment
         <datepicker v-on:selected=getAvailabilities placeholder="Select Date" format="yyyy-MM-dd"></datepicker>
         <br />
-        <SortedTable :values="doctors">
+        <Table :values="doctors">
             <thead>
             <tr>
                 <th scope="col" style="text-align: left; width: 10rem;">
@@ -14,29 +15,28 @@
             </tr>
             </thead>
             <tbody slot="body" slot-scope="sort">
-            <tr v-for="doctor in sort.values" :key="doctor.permit_number">
+            <tr v-for="doctor in availabilities" v-bind:class="availabilities">
                 <td>{{ doctor.first_name }} {{ doctor.last_name }}</td>
                 <td style="float: left;" v-for="availability in filterAvailabilities(doctor.permit_number)" :key="availability.id">
                     <button>{{splitDate(availability.date_time)[1]}}</button>
                 </td>
             </tr>
             </tbody>
-        </SortedTable>
+        </Table>
     </div>
 </template>
 
 <script>
     import axios from "axios";
+    import { SortedTable, SortLink } from "vue-sorted-table";
     import Datepicker from 'vuejs-datepicker';
     export default {
         name: "SearchAppointments",
         data () {
             return {
-                availabilities: []
+                availabilities: [],
+                doctors: []
             }
-        },
-        mounted() {
-            this.getAvailabilities();
         },
         components: {
             Datepicker
@@ -50,15 +50,15 @@
                 return [date, time];
             },
             getAvailabilities: function(inDate) {
-                axios.post('/api/availabilities', {
-                    date: this.formatDate(inDate)
-                })
+                axios.get('/api/availabilitiesByDate',
+                    this.formatDate(inDate)
+                )
                     .then(response => {
                         if(response.status == 200) {
-                            this.availabilities = response.data;
-                            console.log("getAvailabilities" + response)
+                            this.availabilities = response.data.data;
+                            console.log("getAvailabilitiesByDate " + response.data)
                         } else {
-                            console.log("Get availabilities failed: Response code " + response.status)
+                            console.log("GetAvailabilitiesByDate failed: Response code " + response.status)
                         }
                     })
             },

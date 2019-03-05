@@ -59,6 +59,10 @@
                         @endif
                     @else
                         <li class="nav-item">
+                            <a class="nav-link" href="/doctor/addAvailability">Add Availability <span class="sr-only">(current)</span></a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link" href="/viewAppointments">View Appointments <span class="sr-only">(current)</span></a>
                         </li>
 

@@ -30,11 +30,12 @@
 
 <script>
     import axios from "axios";
+    import { SortedTable, SortLink } from "vue-sorted-table";
     export default {
         name: "ViewAppointments",
         data () {
             return {
-                appointments: ""
+                appointments: {}
             }
         },
         mounted() {
@@ -45,7 +46,7 @@
                 axios.get('/api/appointments')
                     .then(response => {
                         if(response.status == 200) {
-                            this.appointments = response.data;
+                            this.appointments = response.data.data;
                             console.log("getAppointments" + response)
                         } else {
                             console.log("Get appointments failed: Response code " + response.status)

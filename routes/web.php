@@ -19,14 +19,21 @@ Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');
 
-
-Route::get('/createAppointment', 'AvailabilityController@showCreateAppointmentPage');
-Route::get('/viewAppointments', 'AvailabilityController@showViewAppointmentsPage');
+Route::get('/createAppointment', 'AppointmentController@showCreateAppointmentPage');
+Route::get('/viewAppointments', 'AppointmentController@showViewAppointmentsPage');
 
 Route::group(['prefix' => 'api'], function () {
     Route::apiResource('/availabilities','AvailabilityController');
-    Route::apiResource('/cart','CartController');
+    Route::get('/availabilitiesByDate', 'AvailabilityController@selectDate');
+
+    Route::apiResource('/cart','CartController@index');
+    Route::post('/createAnAppointment', 'CartController@store');
+    Route::get('/checkout', 'CartController@showCheckoutPage');
+
     Route::apiResource('/appointments','AppointmentController');
+    Route::get('/doctor/{id}', 'AppointmentController@getDoctor');
+    Route::get('/room/{id}', 'AppointmentController@getRoom');
+    Route::post('/processAppointments', 'AppointmentController@store');
     Route::group(['prefix' => 'appointments'], function () {
         Route::get('/{from}/{to}');
         Route::get('/{scope}');
@@ -54,6 +61,9 @@ Route::group(['prefix' => 'doctor'], function () {
 
   Route::get('/register', 'DoctorAuth\RegisterController@showRegistrationForm')->name('register');
   Route::post('/register', 'DoctorAuth\RegisterController@register');
+
+  Route::get('/addAvailability', 'AvailabilityController@showAddAvailabilityPage');
+  Route::post('/api/addAvailability', 'AvailabilityController@store');
 
   Route::post('/password/email', 'DoctorAuth\ForgotPasswordController@sendResetLinkEmail')->name('password.request');
   Route::post('/password/reset', 'DoctorAuth\ResetPasswordController@reset')->name('password.email');
