@@ -16,4 +16,7 @@ return [
     'failed' => 'These credentials do not match our records.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
+    'login' => 'Login as a patient',
+    'login_doctor' => 'Login as a nurse',
+    'login_nurse' => 'Login as a doctor',
 ];
