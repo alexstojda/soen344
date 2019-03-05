@@ -10,14 +10,33 @@
 
             <div class="col-md-6">
               <input
+                v-if="id == 'patient'"
                 id="identification"
                 class="form-control"
                 name="identification"
                 v-model="fields.permit_id"
                 required
-                autofocus
               >
+              <input
+                v-if="id == 'doctor'"
+                id="identification"
+                class="form-control"
+                name="identification"
+                v-model="fields.permit_id"
+                required
+              >
+              <input
+                v-if="id == 'nurse'"
+                id="identification"
+                class="form-control"
+                name="identification"
+                v-model="fields.access_id"
+                required
+              >
+              <!-- TODO: change access_id with whatever user logs in with -->
               <div v-if="errors &&  errors.permit_id" class="text-danger">{{ errors.permit_id[0] }}</div>
+              <div v-if="errors &&  errors.access_id" class="text-danger">{{ errors.permit_id[0] }}</div>
+              <!-- TODO: add error for user -->
             </div>
           </div>
 
@@ -62,7 +81,6 @@ export default {
   props: ["title", "id"],
   mounted() {
     console.log("Component mounted.");
-    console.log(this.$route);
   },
 
   data() {
@@ -74,8 +92,23 @@ export default {
   methods: {
     submit() {
       this.errors = {};
+      var postTo;
+      switch (this.id) {
+        case "patient":
+          postTo = "./login";
+          break;
+        case "doctor":
+          postTo = "./doctor/login";
+          break;
+        case "nurse":
+          postTo = "./nurse/login";
+          break;
+        default:
+          postTo = "./login";
+          break;
+      }
       axios
-        .post("./doctor/login", this.fields)
+        .post(postTo, this.fields)
         .then(response => {
           alert("Message sent!");
         })

@@ -1855,11 +1855,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["title", "id"],
   mounted: function mounted() {
     console.log("Component mounted.");
-    console.log(this.$route);
   },
   data: function data() {
     return {
@@ -1872,7 +1890,27 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.errors = {};
-      axios.post("./doctor/login", this.fields).then(function (response) {
+      var postTo;
+
+      switch (this.id) {
+        case "patient":
+          postTo = "./login";
+          break;
+
+        case "doctor":
+          postTo = "./doctor/login";
+          break;
+
+        case "nurse":
+          postTo = "./nurse/login";
+          break;
+
+        default:
+          postTo = "./login";
+          break;
+      }
+
+      axios.post(postTo, this.fields).then(function (response) {
         alert("Message sent!");
       }).catch(function (error) {
         if (error.response.status === 422) {
@@ -37001,34 +37039,97 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("div", { staticClass: "col-md-6" }, [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.fields.permit_id,
-                      expression: "fields.permit_id"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: {
-                    id: "identification",
-                    name: "identification",
-                    required: "",
-                    autofocus: ""
-                  },
-                  domProps: { value: _vm.fields.permit_id },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+                _vm.id == "patient"
+                  ? _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.fields.permit_id,
+                          expression: "fields.permit_id"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        id: "identification",
+                        name: "identification",
+                        required: ""
+                      },
+                      domProps: { value: _vm.fields.permit_id },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.fields, "permit_id", $event.target.value)
+                        }
                       }
-                      _vm.$set(_vm.fields, "permit_id", $event.target.value)
-                    }
-                  }
-                }),
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.id == "doctor"
+                  ? _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.fields.permit_id,
+                          expression: "fields.permit_id"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        id: "identification",
+                        name: "identification",
+                        required: ""
+                      },
+                      domProps: { value: _vm.fields.permit_id },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.fields, "permit_id", $event.target.value)
+                        }
+                      }
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.id == "nurse"
+                  ? _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.fields.access_id,
+                          expression: "fields.access_id"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        id: "identification",
+                        name: "identification",
+                        required: ""
+                      },
+                      domProps: { value: _vm.fields.access_id },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.fields, "access_id", $event.target.value)
+                        }
+                      }
+                    })
+                  : _vm._e(),
                 _vm._v(" "),
                 _vm.errors && _vm.errors.permit_id
+                  ? _c("div", { staticClass: "text-danger" }, [
+                      _vm._v(_vm._s(_vm.errors.permit_id[0]))
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.errors && _vm.errors.access_id
                   ? _c("div", { staticClass: "text-danger" }, [
                       _vm._v(_vm._s(_vm.errors.permit_id[0]))
                     ])
