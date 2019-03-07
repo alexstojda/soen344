@@ -3,16 +3,16 @@
         <SortedTable :values="appointments">
             <thead>
             <tr>
-                <th scope="col" style="text-align: left; width: 10rem;">
+                <th scope="col">
                     <SortLink name="doctor">Doctor ID</SortLink>
                 </th>
-                <th scope="col" style="text-align: left; width: 10rem;">
+                <th scope="col" >
                     <SortLink name="room">Room ID</SortLink>
                 </th>
-                <th scope="col" style="text-align: left; width: 10rem;">
+                <th scope="col" >
                     <SortLink name="date">Date</SortLink>
                 </th>
-                <th scope="col" style="text-align: left; width: 10rem;"/>
+                <th scope="col" />
             </tr>
             </thead>
             <tbody slot="body" slot-scope="sort">
@@ -20,8 +20,8 @@
                 <td>{{ appointment.doctor_id }}</td>
                 <td>{{ appointment.room_id }}</td>
                 <td>{{ dateFormatter(appointment.start) }}</td>
-                <td><button vertical-align="center">Modify</button>
-                    <button v-on:click="cancelAppointment(appointment.id, appointment.doctor_id)" vertical-align="center">Cancel</button></td>
+                <td><button type="button" class="btn btn-warning" vertical-align="center">Modify</button>
+                    <button type="button" class="btn btn-danger" v-on:click="cancelAppointment(appointment.id, appointment.doctor_id)" vertical-align="center">Cancel</button></td>
             </tr>
             </tbody>
         </SortedTable>

@@ -56908,14 +56908,24 @@ var render = function() {
                       _c("td", [
                         _c(
                           "button",
-                          { attrs: { "vertical-align": "center" } },
+                          {
+                            staticClass: "btn btn-warning",
+                            attrs: {
+                              type: "button",
+                              "vertical-align": "center"
+                            }
+                          },
                           [_vm._v("Modify")]
                         ),
                         _vm._v(" "),
                         _c(
                           "button",
                           {
-                            attrs: { "vertical-align": "center" },
+                            staticClass: "btn btn-danger",
+                            attrs: {
+                              type: "button",
+                              "vertical-align": "center"
+                            },
                             on: {
                               click: function($event) {
                                 return _vm.cancelAppointment(
@@ -56941,10 +56951,7 @@ var render = function() {
             _c("tr", [
               _c(
                 "th",
-                {
-                  staticStyle: { "text-align": "left", width: "10rem" },
-                  attrs: { scope: "col" }
-                },
+                { attrs: { scope: "col" } },
                 [
                   _c("SortLink", { attrs: { name: "doctor" } }, [
                     _vm._v("Doctor ID")
@@ -56955,10 +56962,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "th",
-                {
-                  staticStyle: { "text-align": "left", width: "10rem" },
-                  attrs: { scope: "col" }
-                },
+                { attrs: { scope: "col" } },
                 [
                   _c("SortLink", { attrs: { name: "room" } }, [
                     _vm._v("Room ID")
@@ -56969,18 +56973,12 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "th",
-                {
-                  staticStyle: { "text-align": "left", width: "10rem" },
-                  attrs: { scope: "col" }
-                },
+                { attrs: { scope: "col" } },
                 [_c("SortLink", { attrs: { name: "date" } }, [_vm._v("Date")])],
                 1
               ),
               _vm._v(" "),
-              _c("th", {
-                staticStyle: { "text-align": "left", width: "10rem" },
-                attrs: { scope: "col" }
-              })
+              _c("th", { attrs: { scope: "col" } })
             ])
           ])
         ]

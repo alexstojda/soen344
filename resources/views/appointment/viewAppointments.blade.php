@@ -5,15 +5,8 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <br/>
-
-                    <div>
-                        <h2>View Appointments</h2>
-                    </div>
-
-                    <hr/>
-
-                    <div>
+                    <div class="card-body">
+                        <h2 class="card-title">View Appointments</h2><br>
                         <view-appointments></view-appointments>
                     </div>
                 </div>
