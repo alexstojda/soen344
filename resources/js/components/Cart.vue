@@ -44,12 +44,16 @@
         },
         methods: {
             getCart(){
-                axios({ method: "GET", "url": "/api/cart" }).then(result => {
-                    console.log(result)
-                    this.cart = result.data.data;
-                }, error => {
-                    console.error(error);
-                });
+                axios({ method: "GET", "url": "/api/cart" })
+                    .then(result => {
+                        console.log(result)
+                        this.cart = result.data.data;
+                    }, error => {
+                        console.error(error);
+                    })
+                    .catch(error => {
+                    console.log(error.response)
+                })
             },
         }
     }

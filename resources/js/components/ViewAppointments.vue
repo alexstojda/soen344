@@ -19,7 +19,7 @@
             <tr v-for="appointment in sort.values" :key="appointment.id">
                 <td>{{ appointment.doctor_id }}</td>
                 <td>{{ appointment.room_id }}</td>
-                <td>{{ appointment.date_time }}</td>
+                <td>{{ dateFormatter(appointment.start) }}</td>
                 <td><button vertical-align="center">Modify</button>
                     <button v-on:click="cancelAppointment(appointment.id, appointment.doctor_id)" vertical-align="center">Cancel</button></td>
             </tr>
@@ -30,6 +30,7 @@
 
 <script>
     import axios from "axios";
+    import moment from "moment";
     import { SortedTable, SortLink } from "vue-sorted-table";
     export default {
         name: "ViewAppointments",
@@ -65,6 +66,9 @@
                         console.log("Cancel appointment failed: Response code " + response.status)
                     }
                 })
+            },
+            dateFormatter: function(date) {
+                return moment(date).format("DD/MM/YY");
             }
         }
     };

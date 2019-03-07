@@ -56,10 +56,14 @@
         },
         methods: {
             getCart () {
-                axios('/api/cart').then(result => {
-                    this.cart = result.data.data
-                }, error => {
-                    console.error(error)
+                axios.get('/api/cart')
+                    .then(result => {
+                        this.cart = result.data.data
+                    }, error => {
+                        console.error(error)
+                    })
+                    .catch(error => {
+                        console.log(error.response)
                 })
             },
             checkoutCart () {

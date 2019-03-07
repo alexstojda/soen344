@@ -30,6 +30,7 @@
     },
     "dependencies": {
         "composer": "^4.1.0",
+        "moment": "^2.24.0",
         "vue-sorted-table": "^1.0.1",
         "vuejs-datepicker": "^1.5.4"
     }
