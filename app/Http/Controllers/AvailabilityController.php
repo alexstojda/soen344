@@ -29,8 +29,8 @@ class AvailabilityController extends Controller
      */
     public function selectDate(Request $request)
     {
-        $date = $request->input();
-        return AvailabilityResource::collection(Availability::whereStart($date));
+        $date = $request->get('date');
+        return AvailabilityResource::collection(Availability::where('start','=', $date)->get());
     }
 
     /**

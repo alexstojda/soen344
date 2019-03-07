@@ -28,6 +28,7 @@
 
 <script>
     import axios from "axios";
+    import moment from 'moment'
     import { SortedTable, SortLink } from "vue-sorted-table";
     import Datepicker from 'vuejs-datepicker';
     export default {
@@ -50,16 +51,22 @@
                 return [date, time];
             },
             getAvailabilities: function(inDate) {
-                axios.get('/api/availabilitiesByDate',
-                    this.formatDate(inDate)
+                axios.get('/api/availabilitiesByDate', {
+                        params: {
+                            date: moment(inDate).format('YYYY/MM/DD HH:mm:ss')
+                        }
+                    }
                 )
                     .then(response => {
                         if(response.status == 200) {
                             this.availabilities = response.data.data;
-                            console.log("getAvailabilitiesByDate " + response.data)
+                            console.log("getAvailabilitiesByDate " + response.data.data)
                         } else {
                             console.log("GetAvailabilitiesByDate failed: Response code " + response.status)
                         }
+                    })
+                    .catch(error => {
+                        console.log(error.response)
                     })
             },
             filterAvailabilities: function(permit_number) {
