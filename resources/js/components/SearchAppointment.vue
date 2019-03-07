@@ -3,7 +3,7 @@
         Select Date of Appointment
         <datepicker v-on:selected=getAvailabilities placeholder="Select Date" format="yyyy-MM-dd"></datepicker>
         <br />
-        <Table :values="doctors">
+        <table :values="doctors">
             <thead>
             <tr>
                 <th scope="col" style="text-align: left; width: 10rem;">
@@ -15,14 +15,14 @@
             </tr>
             </thead>
             <tbody slot="body" slot-scope="sort">
-            <tr v-for="doctor in availabilities" v-bind:class="availabilities">
-                <td>{{ doctor.first_name }} {{ doctor.last_name }}</td>
-                <td style="float: left;" v-for="availability in filterAvailabilities(doctor.permit_number)" :key="availability.id">
-                    <button>{{splitDate(availability.date_time)[1]}}</button>
-                </td>
-            </tr>
+                <tr v-for="doctor in availabilities" v-bind:class="availabilities" :key="doctor.id">
+                    <td>{{ doctor.first_name }} {{ doctor.last_name }}</td>
+                    <td style="float: left;" v-for="availability in filterAvailabilities(doctor.permit_number)" :key="availability.id">
+                        <button>{{splitDate(availability.date_time)[1]}}</button>
+                    </td>
+                </tr>
             </tbody>
-        </Table>
+        </table>
     </div>
 </template>
 

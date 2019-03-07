@@ -1,10 +1,16 @@
 ### VisualStudioCode
+.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
 
+### Python backend folder
+backend
+
+### Python cache
+__pycache__
 
 ### JetBrains
 # User-specific stuff

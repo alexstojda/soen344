@@ -1,36 +1,51 @@
 <template>
     <div id="appointments">
-        <div class="input">
-            <input v-model="patient_id" placeholder="Patient ID">
-            <p>Patient ID is: {{ patient_id }}</p>
+        <div class="form-group row">
+            <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">Patient ID</label>
+            <div class="col-sm-9 col-md-7 col-lg-8">
+                <input v-model="patient_id" type="text" class="form-control" placeholder="Patient ID">
+            </div>
         </div>
 
-        <div class="input">
-            <input v-model="doctor_id" placeholder="Doctor ID">
-            <p>Doctor ID is: {{ doctor_id }}</p>
+        <div class="form-group row">
+            <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">Doctor ID</label>
+            <div class="col-sm-9 col-md-7 col-lg-8">
+                <input v-model="doctor_id" type="text" class="form-control" placeholder="Doctor ID">
+            </div>
         </div>
 
-        <div class="input">
-            <input v-model="room_id" placeholder="Room ID">
-            <p>Room ID is: {{ room_id }}</p>
+        <div class="form-group row">
+            <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">Room ID</label>
+            <div class="col-sm-9 col-md-7 col-lg-8">
+                <input v-model="room_id" type="text" class="form-control" placeholder="Room ID">
+            </div>
         </div>
 
-        <div class="input">
-            <input v-model="date" placeholder="Date">
-            <p>Date is: {{ date }}</p>
-        </div>
-        <div class="input">
-            <input v-model="time" placeholder="Time">
-            <p>Time is: {{ time }}</p>
+        <div class="form-group row">
+            <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">Date</label>
+            <div class="col-sm-9 col-md-7 col-lg-8">
+                <input v-model="date" type="text" class="form-control" placeholder="Date">
+            </div>
         </div>
 
-        <div class="input">
-            <input v-model="type" placeholder="Type">
-            <p>Type of appointment: {{ type }}</p>
+        <div class="form-group row">
+            <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">Time</label>
+            <div class="col-sm-9 col-md-7 col-lg-8">
+                <input v-model="time" type="text" class="form-control" placeholder="Time">
+            </div>
         </div>
 
-        <div class="input">
-            <button v-on:click="addAppointment()">Add appointment</button>
+        <div class="form-group row">
+            <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">Type</label>
+            <div class="col-sm-9 col-md-7 col-lg-8">
+                <input v-model="type" type="text" class="form-control" placeholder="Type">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1 text-right">
+                <button v-on:click="addAppointment()" type="button" class="btn btn-success btn-lg">Add Appointment</button>
+            </div>
         </div>
     </div>
 </template>
@@ -74,9 +89,3 @@
     };
 </script>
 
-<style>
-    .input {
-        display: inline-block;
-        padding: 10px;
-    }
-</style>
