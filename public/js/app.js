@@ -2128,6 +2128,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Checkout',
@@ -56410,11 +56412,9 @@ var render = function() {
       _vm._v(" "),
       _c("br"),
       _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
       _c(
         "table",
-        { attrs: { width: "50%" } },
+        { staticClass: "table", attrs: { width: "50%" } },
         [
           _vm._m(0),
           _vm._v(" "),
@@ -56432,30 +56432,37 @@ var render = function() {
       _vm._v(" "),
       _c("br"),
       _vm._v(" "),
-      _vm._m(1),
-      _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
-      _vm._m(2),
-      _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
-      _vm._m(3),
-      _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
-      _c("div", { staticClass: "btn btn-primary" }, [
-        _c(
-          "button",
-          {
-            on: {
-              click: function($event) {
-                return _vm.checkoutCart()
-              }
-            }
-          },
-          [_vm._v("Checkout")]
-        )
+      _c("div", { staticClass: "container" }, [
+        _vm._m(1),
+        _vm._v(" "),
+        _vm._m(2),
+        _vm._v(" "),
+        _vm._m(3),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group row" }, [
+          _c(
+            "div",
+            {
+              staticClass:
+                "col-lg-10 offset-lg-1 col-md-10 offset-md-1 text-right"
+            },
+            [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-success btn-lg",
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      return _vm.checkoutCart()
+                    }
+                  }
+                },
+                [_vm._v("Checkout")]
+              )
+            ]
+          )
+        ])
       ])
     ])
   ])
@@ -56465,41 +56472,77 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("tr", [
-      _c("th", [
-        _vm._v("\n                    Appointment Time\n                ")
-      ]),
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Appointment Time")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Doctor")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Location")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group row" }, [
+      _c(
+        "label",
+        {
+          staticClass: "col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label"
+        },
+        [_vm._v("Credit Card")]
+      ),
       _vm._v(" "),
-      _c("th", [_vm._v("\n                    Doctor\n                ")]),
+      _c("div", { staticClass: "col-sm-9 col-md-7 col-lg-8" }, [
+        _c("input", {
+          staticClass: "form-control",
+          attrs: { type: "text", placeholder: "XXXX-XXXX-XXXX-XXXX" }
+        })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group row" }, [
+      _c(
+        "label",
+        {
+          staticClass: "col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label"
+        },
+        [_vm._v("Expiry Date")]
+      ),
       _vm._v(" "),
-      _c("th", [_vm._v("\n                    Location\n                ")])
+      _c("div", { staticClass: "col-sm-9 col-md-7 col-lg-8" }, [
+        _c("input", {
+          staticClass: "form-control",
+          attrs: { type: "text", placeholder: "MM/YYYY" }
+        })
+      ])
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input" }, [
-      _vm._v("\n                Credit Card:\n                "),
-      _c("input", { attrs: { placeholder: "XXXX-XXXX-XXXX-XXXX" } })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input" }, [
-      _vm._v("\n                CVV:\n                "),
-      _c("input", { attrs: { placeholder: "XXX" } })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input" }, [
-      _vm._v("\n                MM/YYYY\n                "),
-      _c("input", { attrs: { placeholder: "MM/YYYY" } })
+    return _c("div", { staticClass: "form-group row" }, [
+      _c(
+        "label",
+        {
+          staticClass: "col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label"
+        },
+        [_vm._v("CVV")]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-sm-9 col-md-7 col-lg-8" }, [
+        _c("input", {
+          staticClass: "form-control",
+          attrs: { type: "text", placeholder: "XXX" }
+        })
+      ])
     ])
   }
 ]

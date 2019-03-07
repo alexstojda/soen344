@@ -3,41 +3,43 @@
         <div class="container padded">
             <h1 class="mt-5">Checkout</h1>
             <br>
-            <br>
-            <table width="50%">
-                <tr>
-                    <th>
-                        Appointment Time
-                    </th>
-                    <th>
-                        Doctor
-                    </th>
-                    <th>
-                        Location
-                    </th>
-                </tr>
+            <table width="50%" class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Appointment Time</th>
+                        <th scope="col">Doctor</th>
+                        <th scope="col">Location</th>
+                    </tr>
+                </thead>
                 <cart-line v-for="cartItem in cart" v-bind:cart-line="cartItem" :key="cartItem.id"></cart-line>
             </table>
             <br/>
             <br/>
-                <div class="input">
-                    Credit Card:
-                    <input placeholder="XXXX-XXXX-XXXX-XXXX">
+            <div class="container">
+                <div class="form-group row">
+                    <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">Credit Card</label>
+                    <div class="col-sm-9 col-md-7 col-lg-8">
+                        <input type="text" class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX">
+                    </div>
                 </div>
-            <br/>
-                <div class="input">
-                    CVV:
-                    <input placeholder="XXX">
+                <div class="form-group row">
+                    <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">Expiry Date</label>
+                    <div class="col-sm-9 col-md-7 col-lg-8">
+                        <input type="text" class="form-control" placeholder="MM/YYYY">
+                    </div>
                 </div>
-            <br/>
-                <div class="input">
-                    MM/YYYY
-                    <input placeholder="MM/YYYY">
+                <div class="form-group row">
+                    <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">CVV</label>
+                    <div class="col-sm-9 col-md-7 col-lg-8">
+                        <input type="text" class="form-control" placeholder="XXX">
+                    </div>
                 </div>
-            <br>
-                <div class="btn btn-primary">
-                    <button v-on:click="checkoutCart()">Checkout</button>
+                <div class="form-group row">
+                    <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1 text-right">
+                        <button v-on:click="checkoutCart()" type="button" class="btn btn-success btn-lg">Checkout</button>
+                    </div>
                 </div>
+            </div>
         </div>
     </div>
 </template>
@@ -69,13 +71,13 @@
             checkoutCart () {
                 axios('/api/processAppointments',{
                    cart: this.cart
-            }).then(response => {
-        if(response.status == 200) {
-            console.log("Added appointment")
-        } else {
-            console.log("Add appointment failed: Response code " + response.status)
-        }
-    })
+                }).then(response => {
+                    if(response.status == 200) {
+                        console.log("Added appointment")
+                    } else {
+                        console.log("Add appointment failed: Response code " + response.status)
+                    }
+                })
             }
         }
     }
