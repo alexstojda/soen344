@@ -110,7 +110,7 @@ export default {
       axios
         .post(postTo, this.fields)
         .then(response => {
-          alert("success. Logged in as " + this.role);
+          window.location.href = location.origin + "/" + this.role + "/home";
         })
         .catch(error => {
           if (error.response.status === 422) {
