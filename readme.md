@@ -78,6 +78,7 @@ on laravel design patterns.
 - [X] Provider Pattern _ex: Auth or App where we register observers_
 - [X] Observer pattern _ex: appointment on save rules_
 - [X] Dispatcher Pattern _ex: email notification code_
+- [ ] Command pattern _setup command to check appointments and set to complete if end time has passed_
 - [ ] SOLID Patterns (just need to give examples)
 - [ ] Domain Driven Design
 - [ ] Builder Pattern _extend Support/Manager_

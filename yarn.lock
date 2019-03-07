@@ -3766,6 +3766,11 @@ mkdirp@0.5.x, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkdirp@~0.5.1:
   dependencies:
     minimist "0.0.8"
 
+moment@^2.24.0:
+  version "2.24.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
+  integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -5900,6 +5905,13 @@ vue-loader@^15.4.2:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-sorted-table@^1.0.1:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/vue-sorted-table/-/vue-sorted-table-1.1.0.tgz#7e612d00cd982ac775660a1039c92a548e60e01c"
+  integrity sha512-FJF4Prf1iXPLb/RQiiyYqC3nredHkvZ1Iqsm2vt2GKYpyvLI0ITBsQK4qHGas1kgheHuslgnvsin9sp8I4WORQ==
+  dependencies:
+    vue "^2.6.8"
+
 vue-style-loader@^4.1.0:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-4.1.2.tgz#dedf349806f25ceb4e64f3ad7c0a44fba735fcf8"
@@ -5918,9 +5930,15 @@ vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
 
-vue@^2.5.17:
+vue@^2.6.8:
   version "2.6.8"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.8.tgz#f21cbc536bfc14f7d1d792a137bb12f69e60ea91"
+  integrity sha512-+vp9lEC2Kt3yom673pzg1J7T1NVGuGzO9j8Wxno+rQN2WYVBX2pyo/RGQ3fXCLh2Pk76Skw/laAPCuBuEQ4diw==
+
+vuejs-datepicker@^1.5.4:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/vuejs-datepicker/-/vuejs-datepicker-1.5.4.tgz#dacdb5eb5ef44342c67cb59b93a0d5da9c1809b3"
+  integrity sha512-AVzgu3pb/fF/Sj3qu8YPnp7KhtsXkm8TSnBEcyYsWb1bMJr5FdPCxuIzISgw5kq0It7HkVJUGXQ4CiCwq9hhww==
 
 watchpack@^1.5.0:
   version "1.6.0"

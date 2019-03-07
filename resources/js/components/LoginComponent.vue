@@ -6,11 +6,23 @@
       <div class="card-body">
         <form @submit.prevent="submit">
           <div class="form-group row">
-            <label for="identification" class="col-md-4 col-form-label text-md-right">{{role}} id</label>
+            <label for="identification" class="col-md-4 col-form-label text-md-right">
+              <span v-if="role === 'doctor'">Doctor Permit ID</span>
+              <span v-else-if="role === 'nurse'">Nurse Access Code</span>
+              <span v-else>Email Address</span>
+            </label>
 
             <div class="col-md-6">
               <input
-                v-if="role == 'patient'"
+                v-if="role === 'patient'"
+                id="identification"
+                class="form-control"
+                name="identification"
+                v-model="fields.email"
+                required
+              >
+              <input
+                v-if="role === 'doctor'"
                 id="identification"
                 class="form-control"
                 name="identification"
@@ -18,15 +30,7 @@
                 required
               >
               <input
-                v-if="role == 'doctor'"
-                id="identification"
-                class="form-control"
-                name="identification"
-                v-model="fields.permit_id"
-                required
-              >
-              <input
-                v-if="role == 'nurse'"
+                v-if="role === 'nurse'"
                 id="identification"
                 class="form-control"
                 name="identification"
@@ -34,6 +38,7 @@
                 required
               >
               <!-- TODO: change access_id with whatever user logs in with -->
+              <div v-if="errors &&  errors.email" class="text-danger">{{ errors.email[0] }}</div>
               <div v-if="errors &&  errors.permit_id" class="text-danger">{{ errors.permit_id[0] }}</div>
               <div v-if="errors &&  errors.access_id" class="text-danger">{{ errors.access_id[0] }}</div>
               <!-- TODO: add error for user -->
@@ -41,7 +46,7 @@
           </div>
 
           <div class="form-group row">
-            <label for="password" class="col-md-4 col-form-label text-md-right">password</label>
+            <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
 
             <div class="col-md-6">
               <input
@@ -79,9 +84,6 @@
 <script>
 export default {
   props: ["title", "role"],
-  mounted() {
-    console.log("Component mounted.");
-  },
 
   data() {
     return {
@@ -92,25 +94,9 @@ export default {
   methods: {
     submit() {
       this.errors = {};
-      var postTo;
-      switch (this.role) {
-        case "patient":
-          postTo = "./login";
-          break;
-        case "doctor":
-          postTo = "./doctor/login";
-          break;
-        case "nurse":
-          postTo = "./nurse/login";
-          break;
-        default:
-          postTo = "./login";
-          break;
-      }
-      axios
-        .post(postTo, this.fields)
+      axios.post('./login', this.fields)
         .then(response => {
-          window.location.href = location.origin + "/" + this.role + "/home";
+          window.location.href = location.origin + "/home";
         })
         .catch(error => {
           if (error.response.status === 422) {
