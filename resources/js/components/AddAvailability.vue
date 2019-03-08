@@ -9,7 +9,8 @@
         <div class="form-group row">
             <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">Date</label>
             <div class="col-sm-9 col-md-7 col-lg-8">
-                <input v-model="date" type="text" class="form-control" placeholder="Patient ID">
+                <datepicker class="form-control" v-model="date" placeholder="Select Date" format="yyyy-MM-dd"></datepicker>
+                <!-- <input v-model="date" type="text" class="form-control" placeholder="Date"> -->
             </div>
         </div>
         <div class="form-group row">
@@ -34,6 +35,7 @@
 
 <script>
     import axios from "axios";
+    import Datepicker from 'vuejs-datepicker';
     export default {
         name: "AddAvailability",
         data () {
@@ -44,17 +46,21 @@
                 endTime: ""
             }
         },
+        components: {
+            Datepicker
+        },
         mounted() {
         },
         methods: {
             addAvailability: function() {
                 axios.post('api/addAvailability', {
                     doctor_id: this.doctor_id,
-                    start: this.date + this.start,
-                    end: this.time + this.end
+                    start: this.date + this.startTime,
+                    end: this.date + this.endTime
                 }).then(response => {
-                    if(response.status == 200) {
+                    if(response.status == 200 || response.status == 201) {
                         console.log("Added availability")
+                        console.log(response);
                     } else {
                         console.log("Add availability failed: Response code " + response.status)
                     }

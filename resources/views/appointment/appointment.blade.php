@@ -9,7 +9,7 @@
                     <div class="container">
                         <div class="card">
                             <div class="card-body">
-                                <h2 class="card-title">Schedule an Appointment</h2>
+                                <h2 class="card-title text-center">Schedule an Appointment</h2>
                                 <search-appointment></search-appointment>
                             </div>
                         </div>

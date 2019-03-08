@@ -36,7 +36,7 @@
         name: "ViewAppointments",
         data () {
             return {
-                appointments: {}
+                appointments: []
             }
         },
         mounted() {
@@ -56,11 +56,11 @@
             },
             cancelAppointment: function(id, doctor_id) {
                 axios.post('/api/deleteAppointment', {
-                    id: id,
+                    appointment_id: id,
                     doctor_id: doctor_id
                 }).then(response => {
                     if(response.status == 200) {
-                        console.log("Cancelled appointment : "+ id)
+                        console.log("Cancelled appointment : " + id)
                         this.getAppointments();
                     } else {
                         console.log("Cancel appointment failed: Response code " + response.status)

@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::apiResource('/availabilities','AvailabilityController');
 Route::get('/availabilitiesByDate', 'AvailabilityController@selectDate');
 
-Route::apiResource('/cart','CartController@index');
+Route::apiResource('/cart','CartController');
 Route::post('/createAnAppointment', 'CartController@store');
 Route::get('/checkout', 'CartController@showCheckoutPage');
 
@@ -28,6 +28,7 @@ Route::apiResource('/appointments','AppointmentController');
 Route::get('/doctor/{id}', 'AppointmentController@getDoctor');
 Route::get('/room/{id}', 'AppointmentController@getRoom');
 Route::post('/processAppointments', 'AppointmentController@store');
+Route::post('/deleteAppointment', 'AppointmentController@destroy');
 Route::group(['prefix' => 'appointments'], function () {
     Route::get('/{from}/{to}');
     Route::get('/{scope}');

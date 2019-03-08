@@ -24,7 +24,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <form action="/api/checkout" method="get">
-                            <button type="submit" class="btn btn-success">Checkout</button>
+                            <button type="submit" class="btn btn-success" v-on:click="removeFromCart(appointment.id, appointment.doctor_id)">Checkout</button>
                         </form>
                     </div>
                 </div>
@@ -51,6 +51,7 @@
                     .then(result => {
                         console.log(result)
                         this.cart = result.data.data;
+                        console.log(this.cart);
                     }, error => {
                         console.error(error);
                     })
@@ -58,6 +59,9 @@
                     console.log(error.response)
                 })
             },
+            removeFromCart() {
+
+            }
         }
     }
 </script>

@@ -59,8 +59,8 @@
                 patient_id: "",
                 doctor_id: "",
                 room_id: "",
-                start: "",
-                end: "",
+                date: "",
+                time: "",
                 type: "",
                 status: ""
             }

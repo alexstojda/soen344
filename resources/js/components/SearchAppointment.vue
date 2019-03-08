@@ -1,7 +1,11 @@
 <template>
     <div>
-        Select Date of Appointment
-        <datepicker v-on:selected=getAvailabilities placeholder="Select Date" format="yyyy-MM-dd"></datepicker>
+        <div class="form-group row">
+            <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">Select Date</label>
+            <div class="col-sm-9 col-md-7 col-lg-8">
+                <datepicker v-on:selected=getAvailabilities class="form-control" placeholder="Select Date" format="yyyy-MM-dd"></datepicker>
+            </div>
+        </div>
         <br />
         <table :values="doctors">
             <thead>
