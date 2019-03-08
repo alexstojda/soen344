@@ -2266,11 +2266,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["title", "role"],
-  mounted: function mounted() {
-    console.log("Component mounted.");
-  },
   data: function data() {
     return {
       fields: {},
@@ -2282,28 +2284,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.errors = {};
-      var postTo;
-
-      switch (this.role) {
-        case "patient":
-          postTo = "./login";
-          break;
-
-        case "doctor":
-          postTo = "./doctor/login";
-          break;
-
-        case "nurse":
-          postTo = "./nurse/login";
-          break;
-
-        default:
-          postTo = "./login";
-          break;
-      }
-
-      axios.post(postTo, this.fields).then(function (response) {
-        window.location.href = location.origin + "/" + _this.role + "/home";
+      axios.post('./login', this.fields).then(function (response) {
+        window.location.href = location.origin + "/home";
       }).catch(function (error) {
         if (error.response.status === 422) {
           _this.errors = error.response.data.errors || {};
@@ -55973,11 +55955,45 @@ var render = function() {
                   staticClass: "col-md-4 col-form-label text-md-right",
                   attrs: { for: "identification" }
                 },
-                [_vm._v(_vm._s(_vm.role) + " id")]
+                [
+                  _vm.role === "doctor"
+                    ? _c("span", [_vm._v("Doctor Permit ID")])
+                    : _vm.role === "nurse"
+                    ? _c("span", [_vm._v("Nurse Access Code")])
+                    : _c("span", [_vm._v("Email Address")])
+                ]
               ),
               _vm._v(" "),
               _c("div", { staticClass: "col-md-6" }, [
-                _vm.role == "patient"
+                _vm.role === "patient"
+                  ? _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.fields.email,
+                          expression: "fields.email"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        id: "identification",
+                        name: "identification",
+                        required: ""
+                      },
+                      domProps: { value: _vm.fields.email },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.fields, "email", $event.target.value)
+                        }
+                      }
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.role === "doctor"
                   ? _c("input", {
                       directives: [
                         {
@@ -56005,35 +56021,7 @@ var render = function() {
                     })
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.role == "doctor"
-                  ? _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.fields.permit_id,
-                          expression: "fields.permit_id"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: {
-                        id: "identification",
-                        name: "identification",
-                        required: ""
-                      },
-                      domProps: { value: _vm.fields.permit_id },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.fields, "permit_id", $event.target.value)
-                        }
-                      }
-                    })
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.role == "nurse"
+                _vm.role === "nurse"
                   ? _c("input", {
                       directives: [
                         {
@@ -56061,6 +56049,12 @@ var render = function() {
                     })
                   : _vm._e(),
                 _vm._v(" "),
+                _vm.errors && _vm.errors.email
+                  ? _c("div", { staticClass: "text-danger" }, [
+                      _vm._v(_vm._s(_vm.errors.email[0]))
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
                 _vm.errors && _vm.errors.permit_id
                   ? _c("div", { staticClass: "text-danger" }, [
                       _vm._v(_vm._s(_vm.errors.permit_id[0]))
@@ -56082,7 +56076,7 @@ var render = function() {
                   staticClass: "col-md-4 col-form-label text-md-right",
                   attrs: { for: "password" }
                 },
-                [_vm._v("password")]
+                [_vm._v("Password")]
               ),
               _vm._v(" "),
               _c("div", { staticClass: "col-md-6" }, [

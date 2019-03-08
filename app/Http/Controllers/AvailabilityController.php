@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class AvailabilityController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:doctor')->only('showAddAvailabilityPage');
+    }
+
     /**
      * Display a listing of the resource.
      *

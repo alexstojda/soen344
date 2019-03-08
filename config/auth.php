@@ -36,6 +36,11 @@ return [
     */
 
     'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+
         'doctor' => [
             'driver' => 'session',
             'provider' => 'doctors',
@@ -44,11 +49,6 @@ return [
         'nurse' => [
             'driver' => 'session',
             'provider' => 'nurses',
-        ],
-
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
         ],
 
         'api' => [
