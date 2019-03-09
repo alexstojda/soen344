@@ -61,7 +61,7 @@ class AvailabilityController extends Controller
                 'doctor_id' => $request->doctor_id,
                 'start' => $request->start,
                 'end' => $request->end,
-                'is_available' => $request->is_available,
+                'is_available' => $request->is_available ?? 1,
                 'reason_of_unavailability' => $request->reason_of_unavailability ?? null
             ]);
             return new AvailabilityResource($availability);

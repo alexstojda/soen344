@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\cart;
+use App\Appointment;
 use App\Http\Resources\Cart as CartResource;
 use Illuminate\Http\Request;
 
@@ -116,10 +117,18 @@ class CartController extends Controller
      * @param  \App\cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function destroy(cart $cart)
+    public function destroy(Request $request)
     {
+        $patient_id = $request->patient_id;
+        $doctor_id = $request->doctor_id;
+        $start = $request->start;
+
         try {
-            return response()->json(['success' => $cart->delete()], 200);
+            return Cart::where([
+                ['patient_id', '=', $patient_id],
+                ['doctor_id', '=', $doctor_id],
+                ['start', '=', $start],
+            ])->delete();
         } catch (\Exception $e) {
             return response()->json(['status' => 'failed', 'error' => $e->getMessage()], 400);
         }

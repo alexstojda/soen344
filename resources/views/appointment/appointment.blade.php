@@ -5,32 +5,24 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <br/>
-
-                    <div>
-                        <h2>Schedule an Appointment</h2>
+                    <br>
+                    <div class="container">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="card-title text-center">Schedule an Appointment</h2>
+                                <search-appointment></search-appointment>
+                            </div>
+                        </div>
                     </div>
-
-                    <hr/>
-
-                    <div>
-                        <search-appointment></search-appointment>
+                    <br>
+                    <div class="container">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="card-title text-center">Add Appointment</h2><br>
+                                <add-appointment></add-appointment>
+                            </div>
+                        </div>
                     </div>
-
-                    <br/>
-                    <hr/>
-                    <br/>
-
-                    <div>
-                        <h2>Add Appointment</h2>
-                    </div>
-
-                    <hr/>
-
-                    <div>
-                        <add-appointment></add-appointment>
-                    </div>
-
                     <br/>
                 </div>
             </div>

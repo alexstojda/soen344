@@ -153,10 +153,16 @@ class AppointmentController extends Controller
      * @param  \App\Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Appointment $appointment)
+    public function destroy(Request $request)
     {
+        $appoitment_id = $request->appointment_id;
+        $doctor_id = $request->doctor_id;
+
         try {
-            return response()->json(['success' => $appointment->delete()], 200);
+            return Appointment::where([
+                ['id', '=', $appoitment_id],
+                ['doctor_id', '=', $doctor_id],
+            ])->delete();
         } catch (\Exception $e) {
             return response()->json(['status' => 'failed', 'error' => $e->getMessage()], 400);
         }

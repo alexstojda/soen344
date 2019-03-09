@@ -1,28 +1,43 @@
 <template>
     <div>
-
         <button type="button" class="btn" data-toggle="modal" data-target="#modal">
             <i class="fa fa-shopping-cart"
                style="font-size:20px;color:grey;"></i>
         </button>
 
-        <div class="modal" id="modal">
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLongTitle">Your Cart</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
-
                     <div class="modal-body">
-                        <div v-bind:class="cart" v-for="appointment in cart">
-                            Appointment with {{appointment.doctor}} on {{appointment.date}}
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Remove</button>
-                            <br/>
-                        </div>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th scope="col">Doctor ID</th>
+                                <th scope="col">Date and Time</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="appointment in cart" :key="appointment.id">
+                                    <td>{{ appointment.doctor_id }}</td>
+                                    <td>{{ dateFormatter(appointment.start) }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-secondary" v-on:click="removeFromCart(appointment)">Remove</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="modal-footer">
-                        <a href="/api/checkout" class="btn btn-info" role="button">Checkout</a>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <form action="/api/checkout" method="get">
+                            <button type="submit" class="btn btn-success">Checkout</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -32,6 +47,7 @@
 
 <script>
     import axios from "axios";
+    import moment from "moment";
     export default {
         name: 'Cart',
         data () {
@@ -48,6 +64,7 @@
                     .then(result => {
                         console.log(result)
                         this.cart = result.data.data;
+                        console.log(this.cart);
                     }, error => {
                         console.error(error);
                     })
@@ -55,27 +72,27 @@
                     console.log(error.response)
                 })
             },
+            dateTimeFormatter: function(date) {
+                return moment(date).format('YYYY-MM-DD HH:mm:ss');
+            },
+            dateFormatter: function(date) {
+                return moment(date).format('MMMM Do YYYY, HH:mm:ss');
+            },
+            removeFromCart: function(appointment) {
+                console.log(appointment);
+                axios.post('/api/removeFromCart', {
+                    patient_id: appointment.patient_id,
+                    doctor_id: appointment.doctor_id,
+                    start: this.dateTimeFormatter(appointment.start)
+                }).then(response => {
+                    if(response.status === 200) {
+                        console.log("Removed appointment from the cart")
+                    } else {
+                        console.log(appointment);
+                        console.log("Removing appointment from cart failed: " + response.status)
+                    }
+                })
+            }
         }
     }
 </script>
-
-<style scoped>
-    h1, h2 {
-        font-weight: normal;
-    }
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
-    li {
-        display: inline-block;
-        margin: 0 10px;
-    }
-    a {
-        color: #42b983;
-    }
-    textarea {
-        width: 600px;
-        height: 200px;
-    }
-</style>
