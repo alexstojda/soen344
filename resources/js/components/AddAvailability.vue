@@ -1,12 +1,6 @@
 <template>
     <div>
         <div class="form-group row">
-            <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">Doctor ID</label>
-            <div class="col-sm-9 col-md-7 col-lg-8">
-                <input v-model="doctor_id" type="text" class="form-control" placeholder="Doctor ID">
-            </div>
-        </div>
-        <div class="form-group row">
             <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">Date</label>
             <div class="col-sm-9 col-md-7 col-lg-8">
                 <datepicker class="form-control" v-model="date" placeholder="Select Date" format="yyyy-MM-dd"></datepicker>
@@ -40,7 +34,6 @@
         name: "AddAvailability",
         data () {
             return {
-                doctor_id: "",
                 date: "",
                 startTime: {
                     HH: "",
@@ -56,12 +49,15 @@
             Datepicker,
             VueTimepicker
         },
+        props: {
+            doctorId: String ,
+        },
         mounted() {
         },
         methods: {
             addAvailability: function() {
                 axios.post('api/addAvailability', {
-                    doctor_id: this.doctor_id,
+                    doctor_id: this.doctorId,
                     start: this.setDate(this.date, this.startTime),
                     end: this.setDate(this.date, this.endTime)
                 }).then(response => {

@@ -1897,12 +1897,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 
@@ -1910,7 +1904,6 @@ __webpack_require__.r(__webpack_exports__);
   name: "AddAvailability",
   data: function data() {
     return {
-      doctor_id: "",
       date: "",
       startTime: {
         HH: "",
@@ -1926,11 +1919,14 @@ __webpack_require__.r(__webpack_exports__);
     Datepicker: vuejs_datepicker__WEBPACK_IMPORTED_MODULE_1__["default"],
     VueTimepicker: vuejs_timepicker__WEBPACK_IMPORTED_MODULE_2___default.a
   },
+  props: {
+    doctorId: String
+  },
   mounted: function mounted() {},
   methods: {
     addAvailability: function addAvailability() {
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('api/addAvailability', {
-        doctor_id: this.doctor_id,
+        doctor_id: this.doctorId,
         start: this.setDate(this.date, this.startTime),
         end: this.setDate(this.date, this.endTime)
       }).then(function (response) {
@@ -55459,40 +55455,6 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "form-group row" }, [
-      _c(
-        "label",
-        {
-          staticClass: "col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label"
-        },
-        [_vm._v("Doctor ID")]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-sm-9 col-md-7 col-lg-8" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.doctor_id,
-              expression: "doctor_id"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: { type: "text", placeholder: "Doctor ID" },
-          domProps: { value: _vm.doctor_id },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.doctor_id = $event.target.value
-            }
-          }
-        })
-      ])
-    ]),
-    _vm._v(" "),
     _c("div", { staticClass: "form-group row" }, [
       _c(
         "label",

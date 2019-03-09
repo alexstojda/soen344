@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h2 class="card-title text-center">Add Availability</h2><br>
-                        <add-availability></add-availability>
+                        <add-availability :doctor-id={{ Auth('doctor')->id() }}></add-availability>
                     </div>
                 </div>
             </div>
