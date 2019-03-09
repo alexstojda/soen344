@@ -22,6 +22,7 @@ Route::get('/availabilitiesByDate', 'AvailabilityController@selectDate');
 
 Route::apiResource('/cart','CartController');
 Route::post('/createAnAppointment', 'CartController@store');
+Route::post('/removeFromCart', 'CartController@destroy');
 Route::get('/checkout', 'CartController@showCheckoutPage');
 
 Route::apiResource('/appointments','AppointmentController');
