@@ -68,7 +68,7 @@
                 })
             },
             dateFormatter: function(date) {
-                return moment(date).format("DD/MM/YY");
+                return moment(date).format("YYYY-MM-DD");
             }
         }
     };

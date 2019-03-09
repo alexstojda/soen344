@@ -17,16 +17,20 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->middleware('auth:doctor')->name('home');
+Route::get('/home', 'HomeController@index')->middleware('auth:web')->name('home');
+Route::get('/checkout', 'CartController@showCheckoutPage')->middleware('auth:web');
 
-Route::get('/createAppointment', 'AppointmentController@showCreateAppointmentPage');
-Route::get('/viewAppointments', 'AppointmentController@showViewAppointmentsPage');
+Route::get('/createAppointment', 'AppointmentController@showCreateAppointmentPage')->middleware('auth:web');
+Route::get('/viewAppointments', 'AppointmentController@showViewAppointmentsPage')->middleware('auth:web');
 
 Route::group(['prefix' => 'nurse'], function () {
-
+    Route::get('/createAppointment', 'AppointmentController@showCreateAppointmentPage')->middleware('auth:nurse');
+    Route::get('/checkout', 'CartController@showCheckoutPage')->middleware('auth:nurse');
 });
 
 Route::group(['prefix' => 'doctor'], function () {
   Route::get('/addAvailability', 'AvailabilityController@showAddAvailabilityPage')->middleware('auth:doctor');
   Route::post('/api/addAvailability', 'AvailabilityController@store');
+  Route::get('/viewAppointments', 'AppointmentController@showViewAppointmentsPage')->middleware('auth:doctor');
+  Route::get('/checkout', 'CartController@showCheckoutPage')->middleware('auth:doctor');
 });
