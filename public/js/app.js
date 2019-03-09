@@ -1765,6 +1765,13 @@ module.exports = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
+/* harmony import */ var vuejs_timepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuejs-timepicker */ "./node_modules/vuejs-timepicker/dist/vue2-timepicker.min.js");
+/* harmony import */ var vuejs_timepicker__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuejs_timepicker__WEBPACK_IMPORTED_MODULE_2__);
+//
+//
+//
+//
 //
 //
 //
@@ -1818,6 +1825,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "AddAppointment",
   data: function data() {
@@ -1826,10 +1835,17 @@ __webpack_require__.r(__webpack_exports__);
       doctor_id: "",
       room_id: "",
       date: "",
-      time: "",
+      time: {
+        HH: "",
+        mm: ""
+      },
       type: "",
       status: ""
     };
+  },
+  components: {
+    Datepicker: vuejs_datepicker__WEBPACK_IMPORTED_MODULE_1__["default"],
+    VueTimepicker: vuejs_timepicker__WEBPACK_IMPORTED_MODULE_2___default.a
   },
   mounted: function mounted() {},
   methods: {
@@ -1838,8 +1854,8 @@ __webpack_require__.r(__webpack_exports__);
         patient_id: this.patient_id,
         doctor_id: this.doctor_id,
         room_id: this.room_id,
-        start: this.date + this.time,
-        end: this.date + this.time + 20,
+        start: this.setDate(this.date, this.time),
+        end: this.setDate(this.date, this.time, this.type),
         type: this.type,
         status: 'active'
       }).then(function (response) {
@@ -1849,6 +1865,20 @@ __webpack_require__.r(__webpack_exports__);
           console.log("Add appointment failed: Response code " + response.status);
         }
       });
+    },
+    setDate: function setDate(date, time) {
+      var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+      var dateMaker = new Date(date);
+      dateMaker.setHours(time.HH);
+      dateMaker.setMinutes(time.MM);
+
+      if (type.equals("walk-in")) {
+        dateMaker.setMinutes(dateMaker.getMinutes() + 20);
+      } else if (type.equals("annual checkup")) {
+        dateMaker.setHours(dateMaker.getHours() + 1);
+      }
+
+      return date;
     }
   }
 });
@@ -55314,29 +55344,24 @@ var render = function() {
         [_vm._v("Date")]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "col-sm-9 col-md-7 col-lg-8" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
+      _c(
+        "div",
+        { staticClass: "col-sm-9 col-md-7 col-lg-8" },
+        [
+          _c("datepicker", {
+            staticClass: "form-control",
+            attrs: { placeholder: "Select Date", format: "yyyy-MM-dd" },
+            model: {
               value: _vm.date,
+              callback: function($$v) {
+                _vm.date = $$v
+              },
               expression: "date"
             }
-          ],
-          staticClass: "form-control",
-          attrs: { type: "text", placeholder: "Date" },
-          domProps: { value: _vm.date },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.date = $event.target.value
-            }
-          }
-        })
-      ])
+          })
+        ],
+        1
+      )
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "form-group row" }, [
@@ -55348,29 +55373,23 @@ var render = function() {
         [_vm._v("Time")]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "col-sm-9 col-md-7 col-lg-8" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
+      _c(
+        "div",
+        { staticClass: "col-sm-9 col-md-7 col-lg-8" },
+        [
+          _c("vue-timepicker", {
+            attrs: { placeholder: "Set Time" },
+            model: {
               value: _vm.time,
+              callback: function($$v) {
+                _vm.time = $$v
+              },
               expression: "time"
             }
-          ],
-          staticClass: "form-control",
-          attrs: { type: "text", placeholder: "Time" },
-          domProps: { value: _vm.time },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.time = $event.target.value
-            }
-          }
-        })
-      ])
+          })
+        ],
+        1
+      )
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "form-group row" }, [
@@ -55383,27 +55402,46 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("div", { staticClass: "col-sm-9 col-md-7 col-lg-8" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.type,
-              expression: "type"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: { type: "text", placeholder: "Type" },
-          domProps: { value: _vm.type },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.type,
+                expression: "type"
               }
-              _vm.type = $event.target.value
+            ],
+            staticClass: "form-control",
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.type = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0]
+              }
             }
-          }
-        })
+          },
+          [
+            _c("option", { attrs: { value: "", disabled: "", selected: "" } }, [
+              _vm._v("Select Type")
+            ]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "walk-in" } }, [_vm._v("Walk-in")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "annual checkup" } }, [
+              _vm._v("Annual Checkup")
+            ])
+          ]
+        )
       ])
     ]),
     _vm._v(" "),
