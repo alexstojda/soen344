@@ -10,7 +10,6 @@
             <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">Date</label>
             <div class="col-sm-9 col-md-7 col-lg-8">
                 <datepicker class="form-control" v-model="date" placeholder="Select Date" format="yyyy-MM-dd"></datepicker>
-                <!-- <input v-model="date" type="text" class="form-control" placeholder="Date"> -->
             </div>
         </div>
         <div class="form-group row">
