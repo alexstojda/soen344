@@ -39,19 +39,30 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/doctor/addAvailability">Add Availability <span class="sr-only">(current)</span></a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/doctor/viewAppointments">View Appointments <span class="sr-only">(current)</span></a>
+                    </li>
                     @endif
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/viewAppointments">View Appointments <span class="sr-only">(current)</span></a>
-                    </li>
-
                     @if(!Auth('doctor')->user())
-                    <li class="nav-item">
-                        <a class="nav-link" href="/createAppointment">Schedule an Appointment</a>
-                    </li>
+                        @if(Auth('nurse')->user())
+                            <li class="nav-item">
+                                <a class="nav-link" href="/nurse/createAppointment">Schedule an Appointment</a>
+                            </li>
+                        @else
+                            <li class="nav-item">
+                                <a class="nav-link" href="/viewAppointments">View Appointments <span class="sr-only">(current)</span></a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/createAppointment">Schedule an Appointment</a>
+                            </li>
+                        @endif
 
                     <li class="nav-item">
                         <cart></cart>
+                        {{--:user-type={{ Auth::guard()->getName() }}--}}
                     </li>
                     @endif
 

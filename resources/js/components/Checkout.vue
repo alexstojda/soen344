@@ -11,7 +11,11 @@
                         <th scope="col">Location</th>
                     </tr>
                 </thead>
-                <cart-line v-for="cartItem in cart" v-bind:cart-line="cartItem" :key="cartItem.id"></cart-line>
+                <tr v-for="cartItem in cart" v-bind:cart-line="cartItem">
+                    <td>{{ dateFormatter(cartItem.start) }}</td>
+                    <td>{{ cartItem.doctor_id }}</td>
+                    <td>Room #{{ cartItem.room_id }}</td>
+                </tr>
             </table>
             <br/>
             <br/>
@@ -45,7 +49,8 @@
 </template>
 
 <script>
-    import * as axios from 'axios'
+    import * as axios from 'axios';
+    import moment from "moment";
     export default {
         name: 'Checkout',
         data () {
@@ -78,6 +83,8 @@
                         console.log("Add appointment failed: Response code " + response.status)
                     }
                 })
+            },            dateFormatter: function(date) {
+                return moment(date).format("YYYY-MM-DD");
             }
         }
     }

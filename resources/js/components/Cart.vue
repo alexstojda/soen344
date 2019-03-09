@@ -35,9 +35,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <form action="/api/checkout" method="get">
-                            <button type="submit" class="btn btn-success">Checkout</button>
-                        </form>
+                        <a class="nav-link btn btn-success" href="/checkout"  type="button">Checkout</a>
+                            <!--v-on:click="getCheckout()"-->
                     </div>
                 </div>
             </div>
@@ -55,6 +54,9 @@
                 cart: [],
             }
         },
+        // props: {
+        //     userType: String,
+        // },
         mounted() {
             this.getCart();
         },
@@ -71,6 +73,60 @@
                     .catch(error => {
                     console.log(error.response)
                 })
+            },
+            getCheckout(){
+                axios({method: "GET", "url": "/checkout"})
+                    .then(result => {
+                        console.log(result)
+                        this.cart = result.data.data;
+                        console.log(this.cart);
+                    }, error => {
+                        console.error(error);
+                    })
+                    .catch(error => {
+                        console.log(error.response)
+                    })
+                // if(this.userType.equals("web")) {
+                //     axios({method: "GET", "url": "/checkout"})
+                //         .then(result => {
+                //             console.log(result)
+                //             this.cart = result.data.data;
+                //             console.log(this.cart);
+                //         }, error => {
+                //             console.error(error);
+                //         })
+                //         .catch(error => {
+                //             console.log(error.response)
+                //         })
+                // }
+                // else if(this.userType.equals("doctor"))
+                // {
+                //     axios({method: "GET", "url": "/doctor/checkout"})
+                //         .then(result => {
+                //             console.log(result)
+                //             this.cart = result.data.data;
+                //             console.log(this.cart);
+                //         }, error => {
+                //             console.error(error);
+                //         })
+                //         .catch(error => {
+                //             console.log(error.response)
+                //         })
+                // }
+                // else if(this.userType.equals("nurse"))
+                // {
+                //     axios({method: "GET", "url": "/nurse/checkout"})
+                //         .then(result => {
+                //             console.log(result)
+                //             this.cart = result.data.data;
+                //             console.log(this.cart);
+                //         }, error => {
+                //             console.error(error);
+                //         })
+                //         .catch(error => {
+                //             console.log(error.response)
+                //         })
+                // }
             },
             dateTimeFormatter: function(date) {
                 return moment(date).format('YYYY-MM-DD HH:mm:ss');
