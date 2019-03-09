@@ -18,7 +18,14 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            return redirect('/home');
+            switch ($guard) {
+                case 'doctor':
+                    return redirect()->route('doctor.dashboard');
+                case 'nurse':
+                    return redirect()->route('nurse.dashboard');
+                case 'patient': default:
+                    return redirect()->route('home');
+            }
         }
 
         return $next($request);

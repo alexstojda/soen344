@@ -115,13 +115,13 @@ return [
     'passwords' => [
         'doctors' => [
             'provider' => 'doctors',
-            'table' => 'doctor_password_resets',
+            'table' => 'password_resets',
             'expire' => 60,
         ],
 
         'nurses' => [
             'provider' => 'nurses',
-            'table' => 'nurse_password_resets',
+            'table' => 'password_resets',
             'expire' => 60,
         ],
 

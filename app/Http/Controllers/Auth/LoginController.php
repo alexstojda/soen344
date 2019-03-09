@@ -51,11 +51,11 @@ class LoginController extends Controller
     {
         $authenticatable = $this->guard()->user();
         if ($authenticatable instanceof Doctor) {
-            return '/doctor/home';
+            return '/doctor/dashboard';
         }
 
         if($authenticatable instanceof Nurse) {
-            return '/nurse/home';
+            return '/nurse/dashboard';
         }
 
         return '/home';
@@ -243,7 +243,7 @@ class LoginController extends Controller
      */
     protected function loggedOut(Request $request)
     {
-        dd('logged out');
+        //dd('logged out');
     }
 
     /**
