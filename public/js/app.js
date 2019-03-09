@@ -1825,8 +1825,8 @@ __webpack_require__.r(__webpack_exports__);
       patient_id: "",
       doctor_id: "",
       room_id: "",
-      start: "",
-      end: "",
+      date: "",
+      time: "",
       type: "",
       status: ""
     };
@@ -1866,6 +1866,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
 //
 //
 //
@@ -1901,6 +1902,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "AddAvailability",
   data: function data() {
@@ -1911,16 +1913,20 @@ __webpack_require__.r(__webpack_exports__);
       endTime: ""
     };
   },
+  components: {
+    Datepicker: vuejs_datepicker__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
   mounted: function mounted() {},
   methods: {
     addAvailability: function addAvailability() {
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('api/addAvailability', {
         doctor_id: this.doctor_id,
-        start: this.date + this.start,
-        end: this.time + this.end
+        start: this.date + this.startTime,
+        end: this.date + this.endTime
       }).then(function (response) {
-        if (response.status == 200) {
+        if (response.status == 200 || response.status == 201) {
           console.log("Added availability");
+          console.log(response);
         } else {
           console.log("Add availability failed: Response code " + response.status);
         }
@@ -1942,6 +1948,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
 //
 //
 //
@@ -1977,6 +1985,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Cart',
@@ -1998,10 +2019,32 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (result) {
         console.log(result);
         _this.cart = result.data.data;
+        console.log(_this.cart);
       }, function (error) {
         console.error(error);
       }).catch(function (error) {
         console.log(error.response);
+      });
+    },
+    dateTimeFormatter: function dateTimeFormatter(date) {
+      return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format('YYYY-MM-DD HH:mm:ss');
+    },
+    dateFormatter: function dateFormatter(date) {
+      return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format('MMMM Do YYYY, HH:mm:ss');
+    },
+    removeFromCart: function removeFromCart(appointment) {
+      console.log(appointment);
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/removeFromCart', {
+        patient_id: appointment.patient_id,
+        doctor_id: appointment.doctor_id,
+        start: this.dateTimeFormatter(appointment.start)
+      }).then(function (response) {
+        if (response.status === 200) {
+          console.log("Removed appointment from the cart");
+        } else {
+          console.log(appointment);
+          console.log("Removing appointment from cart failed: " + response.status);
+        }
       });
     }
   }
@@ -2341,6 +2384,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -2453,7 +2500,7 @@ __webpack_require__.r(__webpack_exports__);
   name: "ViewAppointments",
   data: function data() {
     return {
-      appointments: {}
+      appointments: []
     };
   },
   mounted: function mounted() {
@@ -2476,7 +2523,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/deleteAppointment', {
-        id: id,
+        appointment_id: id,
         doctor_id: doctor_id
       }).then(function (response) {
         if (response.status == 200) {
@@ -55439,29 +55486,24 @@ var render = function() {
         [_vm._v("Date")]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "col-sm-9 col-md-7 col-lg-8" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
+      _c(
+        "div",
+        { staticClass: "col-sm-9 col-md-7 col-lg-8" },
+        [
+          _c("datepicker", {
+            staticClass: "form-control",
+            attrs: { placeholder: "Select Date", format: "yyyy-MM-dd" },
+            model: {
               value: _vm.date,
+              callback: function($$v) {
+                _vm.date = $$v
+              },
               expression: "date"
             }
-          ],
-          staticClass: "form-control",
-          attrs: { type: "text", placeholder: "Patient ID" },
-          domProps: { value: _vm.date },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.date = $event.target.value
-            }
-          }
-        })
-      ])
+          })
+        ],
+        1
+      )
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "form-group row" }, [
@@ -55605,34 +55647,43 @@ var render = function() {
             _c("div", { staticClass: "modal-content" }, [
               _vm._m(1),
               _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "modal-body" },
-                _vm._l(_vm.cart, function(appointment) {
-                  return _c("div", { key: appointment.id, class: _vm.cart }, [
-                    _vm._v(
-                      "\n                        Appointment with " +
-                        _vm._s(appointment.doctor) +
-                        " on " +
-                        _vm._s(appointment.date) +
-                        "\n                        "
-                    ),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-secondary",
-                        attrs: { type: "button", "data-dismiss": "modal" }
-                      },
-                      [_vm._v("Remove")]
-                    ),
-                    _vm._v(" "),
-                    _c("br")
-                  ])
-                }),
-                0
-              ),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("table", [
+                  _vm._m(2),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.cart, function(appointment) {
+                      return _c("tr", { key: appointment.id }, [
+                        _c("td", [_vm._v(_vm._s(appointment.doctor_id))]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(_vm._s(_vm.dateFormatter(appointment.start)))
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-secondary",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.removeFromCart(appointment)
+                                }
+                              }
+                            },
+                            [_vm._v("Remove")]
+                          )
+                        ])
+                      ])
+                    }),
+                    0
+                  )
+                ])
+              ]),
               _vm._v(" "),
-              _vm._m(2)
+              _vm._m(3)
             ])
           ]
         )
@@ -55682,6 +55733,18 @@ var staticRenderFns = [
           "aria-label": "Close"
         }
       })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Doctor ID")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Date and Time")])
+      ])
     ])
   },
   function() {
@@ -56182,77 +56245,90 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _vm._v("\n    Select Date of Appointment\n    "),
-      _c("datepicker", {
-        attrs: { placeholder: "Select Date", format: "yyyy-MM-dd" },
-        on: { selected: _vm.getAvailabilities }
-      }),
-      _vm._v(" "),
-      _c("br"),
+  return _c("div", [
+    _c("div", { staticClass: "form-group row" }, [
+      _c(
+        "label",
+        {
+          staticClass: "col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label"
+        },
+        [_vm._v("Select Date")]
+      ),
       _vm._v(" "),
       _c(
-        "table",
-        {
-          attrs: { values: _vm.doctors },
-          scopedSlots: _vm._u([
-            {
-              key: "body",
-              fn: function(sort) {
-                return _c(
-                  "tbody",
-                  {},
-                  _vm._l(_vm.availabilities, function(doctor) {
-                    return _c(
-                      "tr",
-                      { key: doctor.id, class: _vm.availabilities },
-                      [
-                        _c("td", [
-                          _vm._v(
-                            _vm._s(doctor.first_name) +
-                              " " +
-                              _vm._s(doctor.last_name)
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _vm._l(
-                          _vm.filterAvailabilities(doctor.permit_number),
-                          function(availability) {
-                            return _c(
-                              "td",
-                              {
-                                key: availability.id,
-                                staticStyle: { float: "left" }
-                              },
-                              [
-                                _c("button", [
-                                  _vm._v(
-                                    _vm._s(
-                                      _vm.splitDate(availability.date_time)[1]
-                                    )
-                                  )
-                                ])
-                              ]
-                            )
-                          }
-                        )
-                      ],
-                      2
-                    )
-                  }),
-                  0
-                )
-              }
-            }
-          ])
-        },
-        [_vm._m(0)]
+        "div",
+        { staticClass: "col-sm-9 col-md-7 col-lg-8" },
+        [
+          _c("datepicker", {
+            staticClass: "form-control",
+            attrs: { placeholder: "Select Date", format: "yyyy-MM-dd" },
+            on: { selected: _vm.getAvailabilities }
+          })
+        ],
+        1
       )
-    ],
-    1
-  )
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c(
+      "table",
+      {
+        attrs: { values: _vm.doctors },
+        scopedSlots: _vm._u([
+          {
+            key: "body",
+            fn: function(sort) {
+              return _c(
+                "tbody",
+                {},
+                _vm._l(_vm.availabilities, function(doctor) {
+                  return _c(
+                    "tr",
+                    { key: doctor.id, class: _vm.availabilities },
+                    [
+                      _c("td", [
+                        _vm._v(
+                          _vm._s(doctor.first_name) +
+                            " " +
+                            _vm._s(doctor.last_name)
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(
+                        _vm.filterAvailabilities(doctor.permit_number),
+                        function(availability) {
+                          return _c(
+                            "td",
+                            {
+                              key: availability.id,
+                              staticStyle: { float: "left" }
+                            },
+                            [
+                              _c("button", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.splitDate(availability.date_time)[1]
+                                  )
+                                )
+                              ])
+                            ]
+                          )
+                        }
+                      )
+                    ],
+                    2
+                  )
+                }),
+                0
+              )
+            }
+          }
+        ])
+      },
+      [_vm._m(0)]
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
@@ -72131,8 +72207,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/ajmer/Documents/Concordia/SOEN344Winter2019/Project/soen344/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/ajmer/Documents/Concordia/SOEN344Winter2019/Project/soen344/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\P\344\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\P\344\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

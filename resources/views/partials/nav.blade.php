@@ -35,14 +35,17 @@
                         </li>
                     @endif
                 @else
+                    @if(Auth('doctor')->user())
                     <li class="nav-item">
                         <a class="nav-link" href="/doctor/addAvailability">Add Availability <span class="sr-only">(current)</span></a>
                     </li>
+                    @endif
 
                     <li class="nav-item">
                         <a class="nav-link" href="/viewAppointments">View Appointments <span class="sr-only">(current)</span></a>
                     </li>
 
+                    @if(!Auth('doctor')->user())
                     <li class="nav-item">
                         <a class="nav-link" href="/createAppointment">Schedule an Appointment</a>
                     </li>
@@ -50,6 +53,7 @@
                     <li class="nav-item">
                         <cart></cart>
                     </li>
+                    @endif
 
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
