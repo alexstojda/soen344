@@ -7,7 +7,7 @@
             </div>
         </div>
         <br />
-        <table :values="doctors">
+        <table>
             <thead>
             <tr>
                 <th scope="col" style="text-align: left; width: 10rem;">
@@ -18,12 +18,10 @@
                 </th>
             </tr>
             </thead>
-            <tbody slot="body" slot-scope="sort">
-                <tr v-for="doctor in availabilities" v-bind:class="availabilities" :key="doctor.id">
-                    <td>{{ doctor.first_name }} {{ doctor.last_name }}</td>
-                    <td style="float: left;" v-for="availability in filterAvailabilities(doctor.permit_number)" :key="availability.id">
-                        <button>{{splitDate(availability.date_time)[1]}}</button>
-                    </td>
+            <tbody slot="body">
+                <tr v-for="availability in availabilities" v-bind:key="availabilities">
+                    <td>{{ availability.doctor_id}}</td>
+                    <td>{{ dateFormatter(availability.start) }}</td>
                 </tr>
             </tbody>
         </table>
@@ -39,8 +37,7 @@
         name: "SearchAppointments",
         data () {
             return {
-                availabilities: [],
-                doctors: []
+                availabilities: []
             }
         },
         components: {
@@ -55,15 +52,11 @@
                 return [date, time];
             },
             getAvailabilities: function(inDate) {
-                axios.get('/api/availabilitiesByDate', {
-                        params: {
-                            date: moment(inDate).format('YYYY/MM/DD HH:mm:ss')
-                        }
-                    }
-                )
+                axios.get('/api/availabilitiesByDate/' + moment(inDate).format('YYYY-MM-DD'))
                     .then(response => {
                         if(response.status == 200) {
                             this.availabilities = response.data.data;
+                            this.$forceUpdate();
                             console.log("getAvailabilitiesByDate " + response.data.data)
                         } else {
                             console.log("GetAvailabilitiesByDate failed: Response code " + response.status)
@@ -73,9 +66,6 @@
                         console.log(error.response)
                     })
             },
-            filterAvailabilities: function(permit_number) {
-                return this.availabilities.filter(availability => availability.doctor_id === permit_number)
-            },
             formatDate: function(date) {
                 var d = new Date(date),
                     month = '' + (d.getMonth() + 1),
@@ -84,6 +74,9 @@
                 if (month.length < 2) month = '0' + month;
                 if (day.length < 2) day = '0' + day;
                 return [year, month, day].join('-');
+            },
+            dateFormatter: function(date) {
+                return moment(date).format("YYYY-MM-DD MM:HH");
             }
         }
     };

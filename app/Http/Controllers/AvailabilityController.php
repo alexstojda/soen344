@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Availability;
 use App\Http\Resources\Availability as AvailabilityResource;
+use DateTime;
 use Illuminate\Http\Request;
 
 class AvailabilityController extends Controller
@@ -32,10 +33,12 @@ class AvailabilityController extends Controller
      *
      * @return AvailabilityResource|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function selectDate(Request $request)
+    public function selectDate($date)
     {
-        $date = $request->get('date');
-        return AvailabilityResource::collection(Availability::where('start','=', $date)->get());
+        $formattedDate = new DateTime($date);
+        $today = $date;
+        $tomorrow = date_format(date_add($formattedDate, date_interval_create_from_date_string("1 days")), 'Y-m-d');
+        return AvailabilityResource::collection(Availability::whereBetween('start', [$today, $tomorrow])->get());
     }
 
     /**

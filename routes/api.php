@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('/availabilities','AvailabilityController');
-Route::get('/availabilitiesByDate', 'AvailabilityController@selectDate');
+Route::get('/availabilitiesByDate/{date}', 'AvailabilityController@selectDate');
 
 Route::apiResource('/cart','CartController');
 Route::post('/createAnAppointment', 'CartController@store');
