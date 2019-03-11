@@ -2422,8 +2422,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 
@@ -2432,8 +2430,7 @@ __webpack_require__.r(__webpack_exports__);
   name: "SearchAppointments",
   data: function data() {
     return {
-      availabilities: [],
-      doctors: []
+      availabilities: []
     };
   },
   components: {
@@ -2450,24 +2447,18 @@ __webpack_require__.r(__webpack_exports__);
     getAvailabilities: function getAvailabilities(inDate) {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/availabilitiesByDate', {
-        params: {
-          date: moment__WEBPACK_IMPORTED_MODULE_1___default()(inDate).format('YYYY/MM/DD HH:mm:ss')
-        }
-      }).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/availabilitiesByDate/' + moment__WEBPACK_IMPORTED_MODULE_1___default()(inDate).format('YYYY-MM-DD')).then(function (response) {
         if (response.status == 200) {
           _this.availabilities = response.data.data;
+
+          _this.$forceUpdate();
+
           console.log("getAvailabilitiesByDate " + response.data.data);
         } else {
           console.log("GetAvailabilitiesByDate failed: Response code " + response.status);
         }
       }).catch(function (error) {
         console.log(error.response);
-      });
-    },
-    filterAvailabilities: function filterAvailabilities(permit_number) {
-      return this.availabilities.filter(function (availability) {
-        return availability.doctor_id === permit_number;
       });
     },
     formatDate: function formatDate(date) {
@@ -2478,6 +2469,9 @@ __webpack_require__.r(__webpack_exports__);
       if (month.length < 2) month = '0' + month;
       if (day.length < 2) day = '0' + day;
       return [year, month, day].join('-');
+    },
+    dateFormatter: function dateFormatter(date) {
+      return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format("YYYY-MM-DD MM:HH");
     }
   }
 });
@@ -56229,63 +56223,22 @@ var render = function() {
     _vm._v(" "),
     _c("br"),
     _vm._v(" "),
-    _c(
-      "table",
-      {
-        attrs: { values: _vm.doctors },
-        scopedSlots: _vm._u([
-          {
-            key: "body",
-            fn: function(sort) {
-              return _c(
-                "tbody",
-                {},
-                _vm._l(_vm.availabilities, function(doctor) {
-                  return _c(
-                    "tr",
-                    { key: doctor.id, class: _vm.availabilities },
-                    [
-                      _c("td", [
-                        _vm._v(
-                          _vm._s(doctor.first_name) +
-                            " " +
-                            _vm._s(doctor.last_name)
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _vm._l(
-                        _vm.filterAvailabilities(doctor.permit_number),
-                        function(availability) {
-                          return _c(
-                            "td",
-                            {
-                              key: availability.id,
-                              staticStyle: { float: "left" }
-                            },
-                            [
-                              _c("button", [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm.splitDate(availability.date_time)[1]
-                                  )
-                                )
-                              ])
-                            ]
-                          )
-                        }
-                      )
-                    ],
-                    2
-                  )
-                }),
-                0
-              )
-            }
-          }
-        ])
-      },
-      [_vm._m(0)]
-    )
+    _c("table", [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        { attrs: { slot: "body" }, slot: "body" },
+        _vm._l(_vm.availabilities, function(availability) {
+          return _c("tr", { key: _vm.availabilities }, [
+            _c("td", [_vm._v(_vm._s(availability.doctor_id))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(_vm.dateFormatter(availability.start)))])
+          ])
+        }),
+        0
+      )
+    ])
   ])
 }
 var staticRenderFns = [
