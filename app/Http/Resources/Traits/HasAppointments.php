@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Http\Resources\Traits;
+
+use App\Appointment;
+use Illuminate\Support\Collection;
+
+trait HasAppointments
+{
+
+    /**
+     * @return Collection|Appointment[]
+     */
+    private function appointmentsToArray()
+    {
+        return $this->appointments()->ofStatus('active')->get()
+            ->map(function(Appointment $appointment) {
+            return [
+                'id'     => $appointment->id,
+                'status' => $appointment->status,
+                'type'   => $appointment->type,
+                'start'  => $appointment->start,
+                'end'    => $appointment->end,
+                'path'   => route('appointment.show', ['id' => $appointment->id]),
+            ];
+        });
+    }
+
+    /**
+     * @return Collection|Appointment[]
+     */
+    private function appointmentsLinksArray()
+    {
+        return $this->appointments()->get()->map(function(Appointment $appointment) {
+            return [
+                'id'     => $appointment->id,
+                'status' => $appointment->status,
+                'path'   => route('appointment.show', ['id' => $appointment->id]),
+            ];
+        });
+    }
+}

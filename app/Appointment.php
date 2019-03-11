@@ -82,7 +82,7 @@ class Appointment extends Model
      */
     public function scopeOfStatus($query, $status)
     {
-        return $query->where('type', $status);
+        return $query->where('status', $status);
     }
 
 

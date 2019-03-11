@@ -6,6 +6,8 @@ use App\Availability;
 
 class AvailabilityObserver
 {
+    use Concerns\VerifiesWalkInHours;
+
     /**
      * Handle the appointment "saving" event.
      *

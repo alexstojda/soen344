@@ -6,6 +6,8 @@ use App\Appointment;
 
 class AppointmentObserver
 {
+    use Concerns\VerifiesWalkInHours;
+
     /**
      * Handle the appointment "saving" event.
      *
