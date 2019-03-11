@@ -21,26 +21,6 @@ class AppointmentController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return Doctor
-     */
-    public function getDoctor($id)
-    {
-        return Doctor::whereId($id);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Room
-     */
-    public function getRoom($id)
-    {
-        return Room::whereId($id);
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -153,16 +133,10 @@ class AppointmentController extends Controller
      * @param  \App\Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy(Appointment $appointment)
     {
-        $appoitment_id = $request->appointment_id;
-        $doctor_id = $request->doctor_id;
-
         try {
-            return Appointment::where([
-                ['id', '=', $appoitment_id],
-                ['doctor_id', '=', $doctor_id],
-            ])->delete();
+            return response()->json(['success' => $appointment->delete()], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'failed', 'error' => $e->getMessage()], 400);
         }

@@ -4,8 +4,8 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Availability::class, function (Faker $faker) {
     $randomDate = $faker->dateTimeThisMonth();
-    $randomTimestamp = random_int($randomDate->setTime(8,0,0)->getTimestamp(),
-        (clone $randomDate)->setTime(20,0,0)->getTimestamp());
+    $randomTimestamp = random_int($randomDate->setTime(8,0)->getTimestamp(),
+        (clone $randomDate)->setTime(20,0)->getTimestamp());
     $start = (new DateTime())->setTimestamp($randomTimestamp);
     $end = (clone $start)
         ->add(date_interval_create_from_date_string(

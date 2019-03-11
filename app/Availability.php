@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
  * @property string|null $reason_of_unavailability
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Doctor $doctor
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability available()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability availableOn(\Illuminate\Support\Carbon $at = null, $type = 'walk-in')
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability newModelQuery()
@@ -102,5 +103,10 @@ class Availability extends Model
         return $query->where('is_available','=',true)
                      ->where('start','<=', $start)
                      ->where('end','>=', $end);
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class, 'doctor_id', 'id');
     }
 }
