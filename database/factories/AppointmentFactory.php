@@ -12,6 +12,6 @@ $factory->define(App\Appointment::class, function (Faker $faker) {
         'start' => $availability->start,
         'end' => $availability->end,
         'type' => $faker->randomElement(['walk-in', 'annual checkup', 'regular', 'urgent']),
-        'status' => $faker->randomElement(['active', 'cancelled', 'complete']),
+        'status' => $faker->randomElement(['cart' ,'active', 'rescheduled', 'complete', 'cancelled']),
     ];
 });

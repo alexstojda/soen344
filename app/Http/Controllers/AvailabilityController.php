@@ -6,6 +6,7 @@ use App\Availability;
 use App\Http\Resources\Availability as AvailabilityResource;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class AvailabilityController extends Controller
 {
@@ -23,7 +24,12 @@ class AvailabilityController extends Controller
      */
     public function index(Request $request)
     {
-        return AvailabilityResource::collection(Availability::paginate($request->perPage ?? 50));
+        return AvailabilityResource::collection(Availability
+            ::availableIs($request->is_available)
+            ->startAfter($request->start)
+            ->endBefore($request->end)
+            ->DoctorId($request->doctor_id)
+            ->paginate($request->per_page ?? 50));
     }
 
     /**
@@ -59,13 +65,17 @@ class AvailabilityController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            //rules go here
+        ]);
+
         try{
             $availability = Availability::create([
-                'doctor_id' => $request->doctor_id,
-                'start' => $request->start,
-                'end' => $request->end,
-                'is_available' => $request->is_available ?? 1,
-                'reason_of_unavailability' => $request->reason_of_unavailability ?? null
+                'doctor_id' => $validated['doctor_id'],
+                'start' => $validated['start'],
+                'end' => $validated['end'],
+                'is_available' => $validated['is_available'] ?? 1,
+                'reason_of_unavailability' => $validated['reason_of_unavailability'] ?? null
             ]);
             return new AvailabilityResource($availability);
         }catch (\Exception $e){

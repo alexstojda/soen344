@@ -4,8 +4,17 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * AppointmentResource
+ *
+ * @mixin \App\Appointment
+ */
 class Appointment extends JsonResource
 {
+    use Traits\HasPatient;
+    use Traits\HasDoctor;
+    use Traits\HasRoom;
+
     /**
      * Transform the resource into an array.
      *
@@ -16,33 +25,16 @@ class Appointment extends JsonResource
     {
         return [
             'id' => $this->id,
-            'doctor_id' => $this->doctor_id,
-            'patient_id' => $this->patient_id,
-            'room_id' => $this->room_id,
-            'doctor' => [
-                'id' => $this->doctor_id,
-                'name' => '',
-                'path' => '',
-                'filter_by_doctor_path' => '',
-            ],
-            'patient' => [
-                'id' => $this->patient_id,
-                'name' => '',
-                'path' => '',
-                'filter_by_patient_path' => '',
-            ],
-            'room' => [
-                'id' => $this->room_id,
-                'name' => '',
-                'path' => '',
-                'filter_by_room_path' => '',
-            ],
+            'doctor' => $this->doctorToArray(),
+            'patient' => $this->patientToArray(),
+            'room' => $this->roomToArray(),
             'start' => $this->start,
             'end' => $this->end,
             'type' => $this->type,
             'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'path' => route('appointment.show', ['id' => $this->id]),
         ];
     }
 }

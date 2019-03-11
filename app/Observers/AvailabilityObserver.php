@@ -6,6 +6,8 @@ use App\Availability;
 
 class AvailabilityObserver
 {
+    use Concerns\VerifiesWalkInHours;
+
     /**
      * Handle the appointment "saving" event.
      *
@@ -17,18 +19,18 @@ class AvailabilityObserver
      */
     public function saving(Availability $availability)
     {
-        //Walk-in hours : 8am - 8pm
-        $start_day = $availability->start->copy()->startOfDay()->addHours(8);
-        $end_day = $availability->start->copy()->startOfDay()->addHours(20);
+        //Reset time to start of minute for consistency...
+        $availability->start = $availability->start->startOfMinute();
+        $availability->end = $availability->end->startOfMinute();
+
         // Check if appointment without walk-in hours
-        if(!($availability->start->greaterThanOrEqualTo($start_day) &&
-            $availability->end->greaterThanOrEqualTo($start_day) &&
-            $availability->start->lessThanOrEqualTo($end_day) &&
-            $availability->end->lessThanOrEqualTo($end_day))) {
+        if(!$this->verifyWalkInHours($availability->start, $availability->end)) {
             dump('availability rejected due to open hours rule | ' .
                 $availability->start->toDateTimeString() .' | '. $availability->end->toDateTimeString() );
             return false;
         }
+
+        return true;
     }
 
     /**

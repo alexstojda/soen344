@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 
 /**
  * App\Availability
@@ -17,6 +16,7 @@ use Illuminate\Support\Collection;
  * @property string|null $reason_of_unavailability
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Doctor $doctor
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability available()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability availableOn(\Illuminate\Support\Carbon $at = null, $type = 'walk-in')
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability newModelQuery()
@@ -64,9 +64,63 @@ class Availability extends Model
     ];
 
     /**
-     * Scope a query to only include active availabilities
+     * Scope a query to only include records that start after given value
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Carbon|string|null $start
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeStartAfter($query, $start = null)
+    {
+        return $start === null ? $query :
+            $query->whereDate('start','<=', Carbon::parse($start));
+    }
+
+    /**
+     * Scope a query to only include records that start after given value
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Carbon|string|null $end
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeEndBefore($query, $end = null)
+    {
+        return $end === null ? $query :
+            $query->whereDate('end','>=', Carbon::parse($end));
+    }
+
+    /**
+     * Scope a query to only include availabilities for a given doctor id
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int|null $doctor_id
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeDoctorId($query, $doctor_id = null)
+    {
+        return $doctor_id === null ? $query :
+            $query->where('doctor_id', '=', $doctor_id);
+    }
+
+    /**
+     * Scope a query to only include available or unavailable records
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  boolean|null  $available
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeAvailableIs($query, $available = null)
+    {
+        return $available === null ? $query :
+               $query->where('is_available', (bool) $available);
+    }
+
+    /**
+     * Scope a query to only include unavailable records
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeAvailable($query)
@@ -75,7 +129,7 @@ class Availability extends Model
     }
 
     /**
-     * Scope a query to only include inactive availabilities
+     * Scope a query to only include available records
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
@@ -86,7 +140,7 @@ class Availability extends Model
     }
 
     /**
-     * Scope a query to only include inactive availabilities
+     * Scope a query to only include available
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
      * @param Carbon|null $at
@@ -102,5 +156,10 @@ class Availability extends Model
         return $query->where('is_available','=',true)
                      ->where('start','<=', $start)
                      ->where('end','>=', $end);
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class, 'doctor_id', 'id');
     }
 }

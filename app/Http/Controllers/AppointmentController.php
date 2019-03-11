@@ -17,27 +17,7 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        return AppointmentResource::collection(Appointment::paginate($request->perPage ?? 50));
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Doctor
-     */
-    public function getDoctor($id)
-    {
-        return Doctor::whereId($id);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Room
-     */
-    public function getRoom($id)
-    {
-        return Room::whereId($id);
+        return AppointmentResource::collection(Appointment::paginate($request->per_page ?? 50));
     }
 
     /**
@@ -153,16 +133,10 @@ class AppointmentController extends Controller
      * @param  \App\Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy(Appointment $appointment)
     {
-        $appoitment_id = $request->appointment_id;
-        $doctor_id = $request->doctor_id;
-
         try {
-            return Appointment::where([
-                ['id', '=', $appoitment_id],
-                ['doctor_id', '=', $doctor_id],
-            ])->delete();
+            return response()->json(['success' => $appointment->delete()], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'failed', 'error' => $e->getMessage()], 400);
         }

@@ -21,7 +21,6 @@ class DatabaseSeeder extends Seeder
             //Seed doctor availabilities / schedule appointments
             $this->call([
                 DoctorAvailabilitiesSeeder::class,
-                CartSeeder::class,
                 AppointmentsSeeder::class
             ]);
         }
