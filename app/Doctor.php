@@ -101,7 +101,7 @@ class Doctor extends Authenticatable
      */
     public function availabilities_on(Carbon $at = null, $type = null)
     {
-        return $this->availabilities()->availableon($at, $type)->get();
+        return $this->availabilities()->availableOn($at, $type)->get();
     }
 
     /**
@@ -112,7 +112,7 @@ class Doctor extends Authenticatable
      *
      * @return bool
      */
-    public function available_on(Carbon $at = null, $type = null): bool
+    public function is_available_on(Carbon $at = null, $type = null): bool
     {
         return $this->availabilities_on($at, $type)->isNotEmpty();
     }

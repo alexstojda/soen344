@@ -6,13 +6,12 @@ use App\Availability;
 use App\Http\Resources\Availability as AvailabilityResource;
 use DateTime;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 
 class AvailabilityController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:doctor')->only('showAddAvailabilityPage');
+        $this->middleware('auth:doctor,nurse');
     }
 
     /**
@@ -54,7 +53,7 @@ class AvailabilityController extends Controller
      */
     public function create()
     {
-        //
+        return view('doctor.addAvailability');
     }
 
     /**
@@ -66,12 +65,16 @@ class AvailabilityController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            //rules go here
+            'doctor_id'    => auth('doctor')->check() ? 'nullable|int' : 'required|int',
+            'start'        => 'required|before_or_equal:end',
+            'end'          => 'required|after_or_equal:start',
+            'is_available' => 'nullable|boolean',
+            'reason_of_unavailability' => 'nullable|string|min:5|max:255',
         ]);
 
         try{
             $availability = Availability::create([
-                'doctor_id' => $validated['doctor_id'],
+                'doctor_id' => $validated['doctor_id'] ?? auth('doctor')->id(),
                 'start' => $validated['start'],
                 'end' => $validated['end'],
                 'is_available' => $validated['is_available'] ?? 1,
@@ -101,7 +104,7 @@ class AvailabilityController extends Controller
      */
     public function showAddAvailabilityPage()
     {
-        return view('doctor.addAvailability');
+        return view('doctor.availability.create');
     }
 
     /**
@@ -125,11 +128,15 @@ class AvailabilityController extends Controller
     public function update(Request $request, Availability $availability)
     {
         $validated = $request->validate([
-            //rules go here
+            'doctor_id'    => 'nullable|int',
+            'start'        => 'required|before_or_equal:end',
+            'end'          => 'required|after_or_equal:start',
+            'is_available' => 'required|boolean',
+            'reason_of_unavailability' => 'nullable|string|min:5|max:255',
         ]);
         // if it's not valid the code will stop here and throw the error with required fields
 
-        !isset($validated['doctor_id']) ?: $availability->doctor_id = $validated['doctor_id'];
+        !isset($validated['doctor_id']) ? auth('doctor')->id() : $availability->doctor_id = $validated['doctor_id'];
         !isset($validated['start']) ?: $availability->start = $validated['start'];
         !isset($validated['end']) ?: $availability->end = $validated['end'];
         !isset($validated['is_available']) ?: $availability->is_available = $validated['is_available'];

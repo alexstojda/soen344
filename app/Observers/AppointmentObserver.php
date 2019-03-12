@@ -27,13 +27,13 @@ class AppointmentObserver
         }
 
         //Check if doctor is available
-        if (!$appointment->doctor->available_on($appointment->start, $appointment->type)) {
+        if (!$appointment->doctor->is_available_on($appointment->start, $appointment->type)) {
             dump('rejected due to doctor availability rule | ' . "Doc ID: {$appointment->doctor_id} | " .
                 $appointment->start->toDateTimeString() .' | '. $appointment->end->toDateTimeString());
             return false;
         }
         //Check if room is available
-        if (!$appointment->room->available_on($appointment->start, $appointment->type)) {
+        if (!$appointment->room->is_available_on($appointment->start, $appointment->type)) {
             dump('rejected due to  room availability rule | ' . "Room ID: {$appointment->room_id} | " .
                 $appointment->start->toDateTimeString() .' | '. $appointment->end->toDateTimeString());
             return false;
