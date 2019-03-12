@@ -49,15 +49,13 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        $current_year = (new Carbon("18 years ago"));
-        $hundred_years_ago = (new Carbon("120 years ago"));
 
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'health_card_number' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
             'phone_number' => ['required', 'string', 'max:255'],
-            'birth_date' => ['required', 'date', 'Between:'.$hundred_years_ago.','.$current_year],
+            'birth_date' => ['required', 'date', 'after:120 years ago', 'before_or_equal:18 years ago'],
             'gender' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
