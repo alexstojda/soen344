@@ -17,7 +17,7 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        return AppointmentResource::collection(Appointment::paginate($request->per_page ?? 50));
+        return AppointmentResource::collection(Appointment::where('status','!=','cart')->get());
     }
 
     /**

@@ -1864,6 +1864,8 @@ __webpack_require__.r(__webpack_exports__);
         } else {
           console.log("Add appointment failed: Response code " + response.status);
         }
+      }).catch(function (error) {
+        console.log(error.response);
       });
     },
     setDate: function setDate(date, time) {
@@ -2438,6 +2440,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var vue_sorted_table__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-sorted-table */ "./node_modules/vue-sorted-table/dist/vue-sorted-table.common.js");
 /* harmony import */ var vue_sorted_table__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_sorted_table__WEBPACK_IMPORTED_MODULE_2__);
+//
+//
+//
+//
 //
 //
 //
@@ -56253,9 +56259,11 @@ var render = function() {
                   {},
                   _vm._l(sort.values, function(appointment) {
                     return _c("tr", { key: appointment.id }, [
-                      _c("td", [_vm._v(_vm._s(appointment.doctor_id))]),
+                      _c("td", [_vm._v(_vm._s(appointment.doctor["name"]))]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(appointment.room_id))]),
+                      _c("td", [_vm._v(_vm._s(appointment.room["id"]))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(appointment.status))]),
                       _vm._v(" "),
                       _c("td", [
                         _vm._v(_vm._s(_vm.dateFormatter(appointment.start)))
@@ -56322,6 +56330,17 @@ var render = function() {
                 [
                   _c("SortLink", { attrs: { name: "room" } }, [
                     _vm._v("Room ID")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "th",
+                { attrs: { scope: "col" } },
+                [
+                  _c("SortLink", { attrs: { name: "status" } }, [
+                    _vm._v("Status")
                   ])
                 ],
                 1
