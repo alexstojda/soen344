@@ -25,7 +25,7 @@
                 <td>{{ appointment.status }}</td>
                 <td>{{ dateFormatter(appointment.start) }}</td>
                 <td><button type="button" class="btn btn-warning" vertical-align="center">Modify</button>
-                    <button type="button" class="btn btn-danger" v-on:click="cancelAppointment(appointment.id, appointment.doctor_id)" vertical-align="center">Cancel</button></td>
+                    <button type="button" class="btn btn-danger" v-on:click="cancelAppointment(appointment.id)" vertical-align="center">Cancel</button></td>
             </tr>
             </tbody>
         </SortedTable>
@@ -58,11 +58,8 @@
                         }
                     })
             },
-            cancelAppointment: function(id, doctor_id) {
-                axios.post('/api/deleteAppointment', {
-                    appointment_id: id,
-                    doctor_id: doctor_id
-                }).then(response => {
+            cancelAppointment: function(id) {
+                axios.post('/cancelAppointment/' + id).then(response => {
                     if(response.status == 200) {
                         console.log("Cancelled appointment : " + id)
                         this.getAppointments();

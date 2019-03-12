@@ -2549,13 +2549,10 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    cancelAppointment: function cancelAppointment(id, doctor_id) {
+    cancelAppointment: function cancelAppointment(id) {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/deleteAppointment', {
-        appointment_id: id,
-        doctor_id: doctor_id
-      }).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/cancelAppointment/' + id).then(function (response) {
         if (response.status == 200) {
           console.log("Cancelled appointment : " + id);
 
@@ -56368,10 +56365,7 @@ var render = function() {
                             },
                             on: {
                               click: function($event) {
-                                return _vm.cancelAppointment(
-                                  appointment.id,
-                                  appointment.doctor_id
-                                )
+                                return _vm.cancelAppointment(appointment.id)
                               }
                             }
                           },

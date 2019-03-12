@@ -48,6 +48,9 @@
                     @if(!Auth('doctor')->user())
                         @if(Auth('nurse')->user())
                             <li class="nav-item">
+                                <a class="nav-link" href="/nurse/viewAppointments">View Appointments <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="/nurse/createAppointment">Schedule an Appointment</a>
                             </li>
                         @else
