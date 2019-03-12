@@ -89,7 +89,7 @@
                     start: this.setDate(this.date, this.time),
                     end: this.setDate(this.date, this.time, this.type),
                     type: this.type,
-                    status: 'active'
+                    status: 'cart'
                 }).then(response => {
                     if(response.status == 200) {
                         console.log("Added appointment")

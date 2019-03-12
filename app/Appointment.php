@@ -85,7 +85,6 @@ class Appointment extends Model
         return $query->where('status', $status);
     }
 
-
     /**
      * Scope a query to narrow appointment dates
      *

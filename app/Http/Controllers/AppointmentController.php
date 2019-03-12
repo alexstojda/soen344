@@ -38,25 +38,20 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        $cart = $request->get('cart');
-
-        foreach($cart as $cartItem)
-        {
             try {
                 $appointment = Appointment::create([
-                    'doctor_id' => $cartItem->doctor_id,
-                    'patient_id' => $cartItem->doctor_id,
-                    'room_id' => $cartItem->room_id, // or find available room
-                    'start' => $cartItem->start,
-                    'end' => $cartItem->end,
-                    'type' => $cartItem->type,
-                    'status' => $cartItem->status,
+                    'doctor_id' => $request->doctor_id,
+                    'patient_id' => $request->doctor_id,
+                    'room_id' => $request->room_id, // or find available room
+                    'start' => $request->start,
+                    'end' => $request->end,
+                    'type' => $request->type,
+                    'status' => $request->status,
                 ]);
                 return new AppointmentResource($appointment);
             } catch (\Exception $e) {
                 return response()->json($e);
             }
-        }
     }
 
     /**

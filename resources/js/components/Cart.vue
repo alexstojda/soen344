@@ -18,13 +18,15 @@
                         <table>
                             <thead>
                             <tr>
-                                <th scope="col">Doctor ID</th>
+                                <th scope="col">Patient</th>
+                                <th scope="col">Doctor</th>
                                 <th scope="col">Date and Time</th>
                             </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="appointment in cart" :key="appointment.id">
-                                    <td>{{ appointment.doctor_id }}</td>
+                                    <td>{{ appointment.patient["name"] }}</td>
+                                    <td>{{ appointment.doctor["name"] }}</td>
                                     <td>{{ dateFormatter(appointment.start) }}</td>
                                     <td>
                                         <button type="button" class="btn btn-secondary" v-on:click="removeFromCart(appointment)">Remove</button>
@@ -54,9 +56,6 @@
                 cart: [],
             }
         },
-        // props: {
-        //     userType: String,
-        // },
         mounted() {
             this.getCart();
         },
@@ -86,47 +85,6 @@
                     .catch(error => {
                         console.log(error.response)
                     })
-                // if(this.userType.equals("web")) {
-                //     axios({method: "GET", "url": "/checkout"})
-                //         .then(result => {
-                //             console.log(result)
-                //             this.cart = result.data.data;
-                //             console.log(this.cart);
-                //         }, error => {
-                //             console.error(error);
-                //         })
-                //         .catch(error => {
-                //             console.log(error.response)
-                //         })
-                // }
-                // else if(this.userType.equals("doctor"))
-                // {
-                //     axios({method: "GET", "url": "/doctor/checkout"})
-                //         .then(result => {
-                //             console.log(result)
-                //             this.cart = result.data.data;
-                //             console.log(this.cart);
-                //         }, error => {
-                //             console.error(error);
-                //         })
-                //         .catch(error => {
-                //             console.log(error.response)
-                //         })
-                // }
-                // else if(this.userType.equals("nurse"))
-                // {
-                //     axios({method: "GET", "url": "/nurse/checkout"})
-                //         .then(result => {
-                //             console.log(result)
-                //             this.cart = result.data.data;
-                //             console.log(this.cart);
-                //         }, error => {
-                //             console.error(error);
-                //         })
-                //         .catch(error => {
-                //             console.log(error.response)
-                //         })
-                // }
             },
             dateTimeFormatter: function(date) {
                 return moment(date).format('YYYY-MM-DD HH:mm:ss');
