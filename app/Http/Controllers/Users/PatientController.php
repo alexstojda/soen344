@@ -114,7 +114,7 @@ class PatientController extends Controller
         !isset($data['health_card_number']) ?: $patient->name = $data['health_card_number'];
         !isset($data['address']) ?: $patient->name = $data['address'];
         !isset($data['phone_number']) ?: $patient->name = $data['phone_number'];
-        !isset($data['nabirth_dateme']) ?: $patient->name = $data['birth_date'];
+        !isset($data['birth_date']) ?: $patient->name = $data['birth_date'];
         !isset($data['gender']) ?: $patient->name = $data['gender'];
         !isset($data['email']) ?: $patient->email = $data['email'];
         !isset($data['password']) ?: $patient->password = Hash::make($data['password']);

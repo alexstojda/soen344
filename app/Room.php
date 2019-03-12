@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -62,8 +63,34 @@ class Room extends Model
      *
      * @return bool
      */
-    public function available_on(Carbon $at = null, $type = null): bool
+    public function is_available_on(Carbon $at = null, $type = null): bool
     {
         return $this->apointments_on($at, $type)->isEmpty();
+    }
+
+    /**
+     * Given a date checks room is available for use
+     *
+     * @param Builder $query
+     * @param Carbon|string|null $at
+     * @param string|null $type
+     *
+     * @return Builder
+     * @throws \Exception
+     */
+    public function scopeAvailableOn(Builder $query, $at = null, $type = null): Builder
+    {
+        if( ($at !== null) && !($at instanceof Carbon) ) {
+            $at = new Carbon($at);
+        }
+        $start = $at ?? now();
+        $end = $start->copy()->addMinutes($type === 'walk-in' ? 20 : 60);
+
+        return $query->whereDoesntHave('appointments', function(Builder $query) use ($start, $end)
+        {
+            $query->whereIn('status', ['active', 'cart'])
+                  ->where('start', '<=', $start)
+                  ->where('end', '>=', $end);
+        });
     }
 }
