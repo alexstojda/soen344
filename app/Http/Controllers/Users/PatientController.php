@@ -41,11 +41,23 @@ class PatientController extends Controller
     {
         try{
             $data = $request->validate([
-                //rules go here
+                'name' => 'required|string|max:255',
+                'health_card_number' => 'required|string|max:255',
+                'address' => 'required|string|max:255',
+                'phone_number' => 'required|string|max:255',
+                'birth_date' => 'required|date',
+                'gender' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255',
+                'password' => 'required|string|min:8'
             ]);
 
             $nurse = User::create([
                 'name' => $data['name'],
+                'health_card_number' => $data['health_card_number'],
+                'address' => $data['address'],
+                'phone_number' => $data['phone_number'],
+                'birth_date' => $data['birth_date'],
+                'gender' => $data['gender'],
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
             ]);
@@ -87,11 +99,23 @@ class PatientController extends Controller
     public function update(Request $request, User $patient)
     {
         $data = $request->validate([
-            //rules go here
+            'name' => 'required|string|max:255',
+            'health_card_number' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:255',
+            'birth_date' => 'required|date',
+            'gender' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:8'
         ]);
         // if it's not valid the code will stop here and throw the error with required fields
 
         !isset($data['name']) ?: $patient->name = $data['name'];
+        !isset($data['health_card_number']) ?: $patient->name = $data['health_card_number'];
+        !isset($data['address']) ?: $patient->name = $data['address'];
+        !isset($data['phone_number']) ?: $patient->name = $data['phone_number'];
+        !isset($data['nabirth_dateme']) ?: $patient->name = $data['birth_date'];
+        !isset($data['gender']) ?: $patient->name = $data['gender'];
         !isset($data['email']) ?: $patient->email = $data['email'];
         !isset($data['password']) ?: $patient->password = Hash::make($data['password']);
 
