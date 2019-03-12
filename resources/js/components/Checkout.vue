@@ -17,6 +17,9 @@
                     <td>Room #{{ cartItem.room['id'] }}</td>
                 </tr>
             </table>
+            <div v-if="empty">
+                Empty Cart
+            </div>
             <br/>
             <br/>
             <div class="container">
@@ -55,17 +58,29 @@
         name: 'Checkout',
         data () {
             return {
-                cart: []
+                cart: [],
+                empty: false,
             }
+        },
+        props: {
+            userId: Number,
         },
         mounted () {
             this.getCart()
         },
         methods: {
             getCart () {
-                axios.get('/api/cart')
+                axios.get('/cart/'  + this.userId)
                     .then(result => {
                         this.cart = result.data.data
+                        if(this.cart.length == 0)
+                        {
+                            this.empty = true;
+                        }
+                        else
+                        {
+                            this.empty = false;
+                        }
                     }, error => {
                         console.error(error)
                     })
@@ -74,7 +89,7 @@
                 })
             },
             checkoutCart () {
-                axios.post('/processAppointments',{
+                axios.post('/processAppointments/' + this.userId,{
                    cart: this.cart
                 }).then(response => {
                     if(response.status == 200) {

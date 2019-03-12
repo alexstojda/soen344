@@ -18,8 +18,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->middleware('auth:web')->name('home');
-Route::get('/checkout', 'CartController@showCheckoutPage');
-Route::post('/processAppointments', 'AppointmentController@finalize');
+Route::get('/checkout', 'CartController@showCheckoutPage')->middleware('auth:web');
+Route::post('/processAppointments/{id}', 'AppointmentController@finalize');
+Route::get('/cart/{id}', 'CartController@getById');
 
 Route::get('/createAppointment', 'AppointmentController@showCreateAppointmentPage')->middleware('auth:web');
 Route::get('/viewAppointments', 'AppointmentController@showViewAppointmentsPage')->middleware('auth:web');

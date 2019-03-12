@@ -58,12 +58,11 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/createAppointment">Schedule an Appointment</a>
                             </li>
-                        @endif
 
-                    <li class="nav-item">
-                        <cart></cart>
-                        {{--:user-type={{ Auth::guard()->getName() }}--}}
-                    </li>
+                            <li class="nav-item">
+                                <cart :user-id={{ Auth::guard('web')->id()}}></cart>
+                            </li>
+                        @endif
                     @endif
 
                     <li class="nav-item dropdown">
