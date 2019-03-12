@@ -29,7 +29,7 @@
                             <label for="health_card_number" class="col-md-4 col-form-label text-md-right">{{ __('Health Card Number') }}</label>
 
                             <div class="col-md-6">
-                                <input id="health_card_number"  pattern="([a-zA-Z]){4}[0-9]{8}" type="text" class="form-control{{ $errors->has('health_card_number') ? ' is-invalid' : '' }}" name="health_card_number" value="{{ old('health_card_number') }}" required>
+                                <input id="health_card_number"  pattern="[A-Z]{4}\s[0-9]{4}\s[0-9]{4}" type="text" class="form-control{{ $errors->has('health_card_number') ? ' is-invalid' : '' }}" name="health_card_number" value="{{ old('health_card_number') }}" required>
 
                                 @if ($errors->has('health_card_number'))
                                     <span class="invalid-feedback" role="alert">
