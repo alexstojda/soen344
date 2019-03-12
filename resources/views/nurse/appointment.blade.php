@@ -19,7 +19,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h2 class="card-title text-center">Add Appointment</h2><br>
-                                <add-appointment :is-nurse="false"></add-appointment>
+                                <add-appointment :is-nurse="true"></add-appointment>
                             </div>
                         </div>
                     </div>
