@@ -2041,14 +2041,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Cart',
   data: function data() {
     return {
-      cart: []
+      cart: [],
+      empty: false
     };
+  },
+  props: {
+    userId: Number
   },
   mounted: function mounted() {
     this.getCart();
@@ -2059,10 +2066,17 @@ __webpack_require__.r(__webpack_exports__);
 
       axios__WEBPACK_IMPORTED_MODULE_0___default()({
         method: "GET",
-        "url": "/api/cart"
+        "url": "/cart/" + this.userId
       }).then(function (result) {
         console.log(result);
         _this.cart = result.data.data;
+
+        if (_this.cart.length == 0) {
+          _this.empty = true;
+        } else {
+          _this.empty = false;
+        }
+
         console.log(_this.cart);
       }, function (error) {
         console.error(error);
@@ -2077,6 +2091,8 @@ __webpack_require__.r(__webpack_exports__);
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format('MMMM Do YYYY, HH:mm:ss');
     },
     removeFromCart: function removeFromCart(appointment) {
+      var _this2 = this;
+
       console.log(appointment);
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/removeFromCart', {
         patient_id: appointment.patient_id,
@@ -2085,6 +2101,12 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         if (response.status === 200) {
           console.log("Removed appointment from the cart");
+
+          if (_this2.cart.length == 0) {
+            _this2.empty = true;
+          } else {
+            _this2.empty = false;
+          }
         } else {
           console.log(appointment);
           console.log("Removing appointment from cart failed: " + response.status);
@@ -2159,14 +2181,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Checkout',
   data: function data() {
     return {
-      cart: []
+      cart: [],
+      empty: false
     };
+  },
+  props: {
+    userId: Number
   },
   mounted: function mounted() {
     this.getCart();
@@ -2175,8 +2204,14 @@ __webpack_require__.r(__webpack_exports__);
     getCart: function getCart() {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/cart').then(function (result) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/cart/' + this.userId).then(function (result) {
         _this.cart = result.data.data;
+
+        if (_this.cart.length == 0) {
+          _this.empty = true;
+        } else {
+          _this.empty = false;
+        }
       }, function (error) {
         console.error(error);
       }).catch(function (error) {
@@ -2184,7 +2219,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     checkoutCart: function checkoutCart() {
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/processAppointments', {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/processAppointments/' + this.userId, {
         cart: this.cart
       }).then(function (response) {
         if (response.status == 200) {
@@ -55637,7 +55672,15 @@ var render = function() {
                     }),
                     0
                   )
-                ])
+                ]),
+                _vm._v(" "),
+                _vm.empty
+                  ? _c("div", [
+                      _vm._v(
+                        "\n                        Empty Cart\n                    "
+                      )
+                    ])
+                  : _vm._e()
               ]),
               _vm._v(" "),
               _vm._m(3)
@@ -55776,6 +55819,10 @@ var render = function() {
         ],
         2
       ),
+      _vm._v(" "),
+      _vm.empty
+        ? _c("div", [_vm._v("\n            Empty Cart\n        ")])
+        : _vm._e(),
       _vm._v(" "),
       _c("br"),
       _vm._v(" "),

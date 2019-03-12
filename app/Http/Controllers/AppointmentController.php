@@ -136,9 +136,9 @@ class AppointmentController extends Controller
      * @param  \App\Appointment  $appointment
      * @return AppointmentResource|\Illuminate\Http\Response
      */
-    public function finalize()
+    public function finalize($id)
     {
-       $cart = Appointment::Where('status','=','cart')->get();
+       $cart = Appointment::Where('patient_id','=',$id)->where('status','=','cart')->get();
 
        foreach($cart as $cartItem)
         {

@@ -19,6 +19,16 @@ class CartController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @Return AppointmentResource|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function getById($id)
+    {
+        return AppointmentResource::collection(Appointment::Where('patient_id','=',$id)->where('status','=','cart')->get());
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

@@ -34,6 +34,9 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <div v-if="empty">
+                            Empty Cart
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -53,17 +56,29 @@
         data () {
             return {
                 cart: [],
+                empty: false,
             }
+        },
+        props: {
+            userId: Number,
         },
         mounted() {
             this.getCart();
         },
         methods: {
             getCart(){
-                axios({ method: "GET", "url": "/api/cart" })
+                axios({ method: "GET", "url": "/cart/" + this.userId })
                     .then(result => {
                         console.log(result)
                         this.cart = result.data.data;
+                        if(this.cart.length == 0)
+                        {
+                            this.empty = true;
+                        }
+                        else
+                        {
+                            this.empty = false;
+                        }
                         console.log(this.cart);
                     }, error => {
                         console.error(error);
@@ -87,6 +102,14 @@
                 }).then(response => {
                     if(response.status === 200) {
                         console.log("Removed appointment from the cart")
+                        if(this.cart.length == 0)
+                        {
+                            this.empty = true;
+                        }
+                        else
+                        {
+                            this.empty = false;
+                        }
                     } else {
                         console.log(appointment);
                         console.log("Removing appointment from cart failed: " + response.status)
