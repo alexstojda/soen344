@@ -26,6 +26,81 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="health_card_number" class="col-md-4 col-form-label text-md-right">{{ __('Health Card Number') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="health_card_number"  pattern="([a-zA-Z]){4}[0-9]{8}" type="text" class="form-control{{ $errors->has('health_card_number') ? ' is-invalid' : '' }}" name="health_card_number" value="{{ old('health_card_number') }}" required>
+
+                                @if ($errors->has('health_card_number'))
+                                    <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $errors->first('health_card_number') }}</strong>
+                                        </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Addresse') }}</label>
+
+                            <div class="col-md-6">
+                            <input id="address" type="text" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" value="{{ old('address') }}" required>
+
+                            @if ($errors->has('address'))
+                                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('address') }}</strong>
+                                    </span>
+                            @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="phone_number" class="col-md-4 col-form-label text-md-right">{{ __('Phone Number') }}</label>
+
+                            <div class="col-md-6">
+                            <input id="phone_number" type="text" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control{{ $errors->has('phone_number') ? ' is-invalid' : '' }}" name="phone_number" value="{{ old('phone_number') }}" required>
+
+                            @if ($errors->has('phone_number'))
+                                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('phone_number') }}</strong>
+                                    </span>
+                            @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="birth_date" class="col-md-4 col-form-label text-md-right">{{ __('Birthdate') }}</label>
+
+                            <div class="col-md-6">
+                            <input id="birth_date" type="date" min = "1900-01-01" class="form-control{{ $errors->has('birth_date') ? ' is-invalid' : '' }}" name="birth_date" value="{{ old('birth_date') }}" required>
+
+                            @if ($errors->has('birth_date'))
+                                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('birth_date') }}</strong>
+                                    </span>
+                            @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="gender" class="col-md-4 col-form-label text-md-right">{{ __('Gender') }}</label>
+
+                            <div class="col-md-6">
+                            <select name="gender"required>
+                                <option value="MALE" selected>Male</option>
+                                <option value="FEMALE">Female</option>
+                                <option value="OTHER">Other</option>
+                            </select> <br>
+
+                            @if ($errors->has('gender'))
+                                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('gender') }}</strong>
+                                    </span>
+                            @endif
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
                             <div class="col-md-6">
