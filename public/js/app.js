@@ -1857,7 +1857,7 @@ __webpack_require__.r(__webpack_exports__);
         start: this.setDate(this.date, this.time),
         end: this.setDate(this.date, this.time, this.type),
         type: this.type,
-        status: 'active'
+        status: 'cart'
       }).then(function (response) {
         if (response.status == 200) {
           console.log("Added appointment");
@@ -2038,6 +2038,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2047,9 +2049,6 @@ __webpack_require__.r(__webpack_exports__);
       cart: []
     };
   },
-  // props: {
-  //     userType: String,
-  // },
   mounted: function mounted() {
     this.getCart();
   },
@@ -2084,47 +2083,7 @@ __webpack_require__.r(__webpack_exports__);
         console.error(error);
       }).catch(function (error) {
         console.log(error.response);
-      }); // if(this.userType.equals("web")) {
-      //     axios({method: "GET", "url": "/checkout"})
-      //         .then(result => {
-      //             console.log(result)
-      //             this.cart = result.data.data;
-      //             console.log(this.cart);
-      //         }, error => {
-      //             console.error(error);
-      //         })
-      //         .catch(error => {
-      //             console.log(error.response)
-      //         })
-      // }
-      // else if(this.userType.equals("doctor"))
-      // {
-      //     axios({method: "GET", "url": "/doctor/checkout"})
-      //         .then(result => {
-      //             console.log(result)
-      //             this.cart = result.data.data;
-      //             console.log(this.cart);
-      //         }, error => {
-      //             console.error(error);
-      //         })
-      //         .catch(error => {
-      //             console.log(error.response)
-      //         })
-      // }
-      // else if(this.userType.equals("nurse"))
-      // {
-      //     axios({method: "GET", "url": "/nurse/checkout"})
-      //         .then(result => {
-      //             console.log(result)
-      //             this.cart = result.data.data;
-      //             console.log(this.cart);
-      //         }, error => {
-      //             console.error(error);
-      //         })
-      //         .catch(error => {
-      //             console.log(error.response)
-      //         })
-      // }
+      });
     },
     dateTimeFormatter: function dateTimeFormatter(date) {
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format('YYYY-MM-DD HH:mm:ss');
@@ -55645,7 +55604,9 @@ var render = function() {
                     "tbody",
                     _vm._l(_vm.cart, function(appointment) {
                       return _c("tr", { key: appointment.id }, [
-                        _c("td", [_vm._v(_vm._s(appointment.doctor_id))]),
+                        _c("td", [_vm._v(_vm._s(appointment.patient["name"]))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(appointment.doctor["name"]))]),
                         _vm._v(" "),
                         _c("td", [
                           _vm._v(_vm._s(_vm.dateFormatter(appointment.start)))
@@ -55731,7 +55692,9 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Doctor ID")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Patient")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Doctor")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Date and Time")])
       ])

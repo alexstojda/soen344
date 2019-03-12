@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\cart;
 use App\Appointment;
-use App\Http\Resources\Cart as CartResource;
+use App\Http\Resources\Appointment as AppointmentResource;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -12,11 +11,11 @@ class CartController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @Return CartResource|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @Return AppointmentResource|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
     {
-        return CartResource::collection(Cart::paginate($request->perPage ?? 50));
+        return AppointmentResource::collection(Appointment::Where('status','=','cart')->get());
     }
 
     /**
@@ -33,12 +32,12 @@ class CartController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return CartResource|\Illuminate\Http\Response
+     * @return AppointmentResource|\Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         try{
-            $cart = Cart::create([
+            $cart = Appointment::create([
                 'doctor_id' => $request->doctor_id,
                 'patient_id' => $request->doctor_id,
                 'room_id' => $request->room_id, // or find available room
@@ -47,7 +46,7 @@ class CartController extends Controller
                 'type' => $request->type,
                 'status' => $request->status,
             ]);
-            return new CartResource($cart);
+            return new AppointmentResource($cart);
         }catch (\Exception $e){
             return response()->json($e);
         }
