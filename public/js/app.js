@@ -2369,6 +2369,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2377,7 +2384,8 @@ __webpack_require__.r(__webpack_exports__);
   name: "SearchAppointments",
   data: function data() {
     return {
-      availabilities: []
+      availabilities: [],
+      empty: false
     };
   },
   components: {
@@ -2397,6 +2405,12 @@ __webpack_require__.r(__webpack_exports__);
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/availabilitiesByDate/' + moment__WEBPACK_IMPORTED_MODULE_1___default()(inDate).format('YYYY-MM-DD')).then(function (response) {
         if (response.status == 200) {
           _this.availabilities = response.data.data;
+
+          if (_this.availabilities.length == 0) {
+            _this.empty = true;
+          } else {
+            _this.empty = false;
+          }
 
           _this.$forceUpdate();
 
@@ -56186,13 +56200,19 @@ var render = function() {
         { attrs: { slot: "body" }, slot: "body" },
         _vm._l(_vm.availabilities, function(availability) {
           return _c("tr", { key: _vm.availabilities }, [
-            _c("td", [_vm._v(_vm._s(availability.doctor_id))]),
+            _c("td", [_vm._v(_vm._s(availability.doctor["name"]))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(availability.doctor["id"]))]),
             _vm._v(" "),
             _c("td", [_vm._v(_vm._s(_vm.dateFormatter(availability.start)))])
           ])
         }),
         0
-      )
+      ),
+      _vm._v(" "),
+      _vm.empty
+        ? _c("div", [_vm._v("\n            No Results\n        ")])
+        : _vm._e()
     ])
   ])
 }
@@ -56210,6 +56230,15 @@ var staticRenderFns = [
             attrs: { scope: "col" }
           },
           [_vm._v("\n                Doctor\n            ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticStyle: { "text-align": "left", width: "10rem" },
+            attrs: { scope: "col" }
+          },
+          [_vm._v("\n                Doctor Id\n            ")]
         ),
         _vm._v(" "),
         _c(
