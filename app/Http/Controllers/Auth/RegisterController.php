@@ -52,7 +52,7 @@ class RegisterController extends Controller
 
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'health_card_number' => ['required', 'string', 'max:255'],
+            'health_card_number' => ['required', 'string', 'max:255', 'unique:users'],
             'address' => ['required', 'string', 'max:255'],
             'phone_number' => ['required', 'string', 'max:255'],
             'birth_date' => ['required', 'date', 'after:120 years ago', 'before_or_equal:18 years ago'],
