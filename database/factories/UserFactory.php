@@ -19,7 +19,8 @@ $factory->define(User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
-        'health_card_number' => Str::random(12),
+        'health_card_number' => mb_strtoupper(Str::random(4)) . ' '
+            . $faker->randomNumber(4, true) . ' ' . $faker->randomNumber(4, true),
         'address' => $faker->address,
         'phone_number' => $faker->phoneNumber,
         'gender' => 'male',
