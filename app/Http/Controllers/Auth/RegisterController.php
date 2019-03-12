@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -48,8 +49,16 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        $current_year = (new Carbon("18 years ago"));
+        $hundred_years_ago = (new Carbon("120 years ago"));
+
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
+            'health_card_number' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
+            'phone_number' => ['required', 'string', 'max:255'],
+            'birth_date' => ['required', 'date', 'Between:'.$hundred_years_ago.','.$current_year],
+            'gender' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -65,6 +74,11 @@ class RegisterController extends Controller
     {
         return User::create([
             'name' => $data['name'],
+            'health_card_number' => $data['health_card_number'],
+            'address' => $data['address'],
+            'phone_number' => $data['phone_number'],
+            'birth_date' => $data['birth_date'],
+            'gender' => $data['gender'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
