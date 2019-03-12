@@ -96,6 +96,13 @@ class CartController extends Controller
     {
         $validated = $request->validate([
             //rules go here
+            'doctor_id' => 'required|int|max:10',
+            'patient_id' => 'required|int|max:10',
+            'room_id' => 'required|int|max:10',
+            'start' => 'date',
+            'end' => 'date',
+            'type' => ['required',Rule::in(['walk-in','annual checkup','regular','urgent'])],
+            'status' => ['required',Rule::in(['active','cancelled','complete'])]
         ]);
         // if it's not valid the code will stop here and throw the error with required fields
 
