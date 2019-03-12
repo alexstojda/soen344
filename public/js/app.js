@@ -1843,6 +1843,9 @@ __webpack_require__.r(__webpack_exports__);
       status: ""
     };
   },
+  props: {
+    isNurse: Boolean
+  },
   components: {
     Datepicker: vuejs_datepicker__WEBPACK_IMPORTED_MODULE_1__["default"],
     VueTimepicker: vuejs_timepicker__WEBPACK_IMPORTED_MODULE_2___default.a
@@ -1850,33 +1853,60 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {},
   methods: {
     addAppointment: function addAppointment() {
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/createAnAppointment', {
-        patient_id: this.patient_id,
-        doctor_id: this.doctor_id,
-        room_id: this.room_id,
-        start: this.setDate(this.date, this.time),
-        end: this.setDate(this.date, this.time, this.type),
-        type: this.type,
-        status: 'cart'
-      }).then(function (response) {
-        if (response.status == 200) {
-          console.log("Added appointment");
-        } else {
-          console.log("Add appointment failed: Response code " + response.status);
-        }
-      }).catch(function (error) {
-        console.log(error.response);
-      });
+      if (this.isNurse) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/createAnAppointmentNurse', {
+          patient_id: this.patient_id,
+          doctor_id: this.doctor_id,
+          room_id: this.room_id,
+          start: this.setDate(this.date, this.time),
+          end: this.setDateTime(this.date, this.time, this.type),
+          type: this.type,
+          status: 'active'
+        }).then(function (response) {
+          if (response.status == 200) {
+            console.log("Added appointment");
+          } else {
+            console.log("Add appointment failed: Response code " + response.status);
+          }
+        }).catch(function (error) {
+          console.log(error.response);
+        });
+      } else {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/createAnAppointment', {
+          patient_id: this.patient_id,
+          doctor_id: this.doctor_id,
+          room_id: this.room_id,
+          start: this.setDate(this.date, this.time),
+          end: this.setDateTime(this.date, this.time, this.type),
+          type: this.type,
+          status: 'cart'
+        }).then(function (response) {
+          if (response.status == 200) {
+            console.log("Added appointment");
+          } else {
+            console.log("Add appointment failed: Response code " + response.status);
+          }
+        }).catch(function (error) {
+          console.log(error.response);
+        });
+      }
     },
     setDate: function setDate(date, time) {
-      var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+      var dateMaker = new Date(date);
+      dateMaker.setHours(time.HH);
+      dateMaker.setMinutes(time.MM);
+      return date;
+    },
+    setDateTime: function setDateTime(date, time, type) {
       var dateMaker = new Date(date);
       dateMaker.setHours(time.HH);
       dateMaker.setMinutes(time.MM);
 
-      if (type.equals("walk-in")) {
+      if (type == null) {
+        return date;
+      } else if (type == "walk-in") {
         dateMaker.setMinutes(dateMaker.getMinutes() + 20);
-      } else if (type.equals("annual checkup")) {
+      } else if (type == "annual checkup") {
         dateMaker.setHours(dateMaker.getHours() + 1);
       }
 

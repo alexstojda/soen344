@@ -71,8 +71,11 @@
                     mm: "",
                 },
                 type: "",
-                status: ""
+                status: "",
             }
+        },
+        props: {
+          isNurse: Boolean,
         },
         components: {
             Datepicker,
@@ -82,34 +85,68 @@
         },
         methods: {
             addAppointment: function() {
-                axios.post('/api/createAnAppointment', {
-                    patient_id: this.patient_id,
-                    doctor_id: this.doctor_id,
-                    room_id: this.room_id,
-                    start: this.setDate(this.date, this.time),
-                    end: this.setDate(this.date, this.time, this.type),
-                    type: this.type,
-                    status: 'cart'
-                }).then(response => {
-                    if(response.status == 200) {
-                        console.log("Added appointment")
-                    } else {
-                        console.log("Add appointment failed: Response code " + response.status)
-                    }
-                }).catch(error => {
-                    console.log(error.response)
-                })
+                if(this.isNurse)
+                {
+                    axios.post('/api/createAnAppointmentNurse', {
+                        patient_id: this.patient_id,
+                        doctor_id: this.doctor_id,
+                        room_id: this.room_id,
+                        start: this.setDate(this.date, this.time),
+                        end: this.setDateTime(this.date, this.time, this.type),
+                        type: this.type,
+                        status: 'active'
+                    }).then(response => {
+                        if (response.status == 200) {
+                            console.log("Added appointment")
+                        } else {
+                            console.log("Add appointment failed: Response code " + response.status)
+                        }
+                    }).catch(error => {
+                        console.log(error.response)
+                    })
+                }
+                else
+                {
+                    axios.post('/api/createAnAppointment', {
+                        patient_id: this.patient_id,
+                        doctor_id: this.doctor_id,
+                        room_id: this.room_id,
+                        start: this.setDate(this.date, this.time),
+                        end: this.setDateTime(this.date, this.time, this.type),
+                        type: this.type,
+                        status: 'cart'
+                    }).then(response => {
+                        if (response.status == 200) {
+                            console.log("Added appointment")
+                        } else {
+                            console.log("Add appointment failed: Response code " + response.status)
+                        }
+                    }).catch(error => {
+                        console.log(error.response)
+                    })
+                }
             },
-            setDate: function(date, time, type=null) {
+            setDate: function(date, time) {
                 let dateMaker = new Date(date);
                 dateMaker.setHours(time.HH);
                 dateMaker.setMinutes(time.MM);
 
-                if(type.equals("walk-in"))
+                return date;
+            },
+            setDateTime: function(date, time, type) {
+                let dateMaker = new Date(date);
+                dateMaker.setHours(time.HH);
+                dateMaker.setMinutes(time.MM);
+
+                if(type == null)
+                {
+                    return date;
+                }
+                else if(type == "walk-in")
                 {
                     dateMaker.setMinutes( dateMaker.getMinutes() + 20 );
                 }
-                else if(type.equals("annual checkup"))
+                else if(type == "annual checkup")
                 {
                     dateMaker.setHours( dateMaker.getHours() + 1 );
                 }

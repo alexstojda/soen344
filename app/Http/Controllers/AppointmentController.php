@@ -7,6 +7,7 @@ use App\Doctor;
 use App\Room;
 use App\Http\Resources\Appointment as AppointmentResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
@@ -41,7 +42,7 @@ class AppointmentController extends Controller
             try {
                 $appointment = Appointment::create([
                     'doctor_id' => $request->doctor_id,
-                    'patient_id' => $request->doctor_id,
+                    'patient_id' => $request->patient_id,
                     'room_id' => $request->room_id, // or find available room
                     'start' => $request->start,
                     'end' => $request->end,
@@ -52,6 +53,30 @@ class AppointmentController extends Controller
             } catch (\Exception $e) {
                 return response()->json($e);
             }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return AppointmentResource|\Illuminate\Http\Response
+     */
+    public function storeNurse(Request $request)
+    {
+        try {
+            $appointment = Appointment::create([
+                'doctor_id' => $request->doctor_id,
+                'patient_id' => $request->patient_id,
+                'room_id' => $request->room_id, // or find available room
+                'start' => $request->start,
+                'end' => $request->end,
+                'type' => $request->type,
+                'status' => $request->status,
+            ]);
+            return new AppointmentResource($appointment);
+        } catch (\Exception $e) {
+            return response()->json($e);
+        }
     }
 
     /**
@@ -72,7 +97,13 @@ class AppointmentController extends Controller
      */
     public function showCreateAppointmentPage()
     {
-        return view('appointment.appointment');
+        if(Auth::guard("nurse"))
+        {
+            return view('nurse.appointment');
+        }
+        else {
+            return view('appointment.appointment');
+        }
     }
 
     /**
