@@ -83,7 +83,8 @@ class RoomController extends Controller
     public function update(Request $request, Room $room)
     {
         $validated = $request->validate([
-            //rules go here
+            'number' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
         ]);
         // if it's not valid the code will stop here and throw the error with required fields
 
