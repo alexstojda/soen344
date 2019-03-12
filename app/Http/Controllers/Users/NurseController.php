@@ -41,7 +41,10 @@ class NurseController extends Controller
     {
         try{
             $data = $request->validate([
-                //rules go here
+                'access_id' => 'required|string|max:255',
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'password' =>'required|string|max:255'
             ]);
 
             $nurse = Nurse::create([
@@ -88,7 +91,10 @@ class NurseController extends Controller
     public function update(Request $request, Nurse $nurse)
     {
         $data = $request->validate([
-            //rules go here
+            'access_id' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'password' =>'required|string|max:255'
         ]);
         // if it's not valid the code will stop here and throw the error with required fields
 
