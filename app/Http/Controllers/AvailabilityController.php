@@ -24,10 +24,10 @@ class AvailabilityController extends Controller
     public function index(Request $request)
     {
         return AvailabilityResource::collection(Availability
-            ::availableIs($request->is_available)
+            ::whereIsAvailable((bool) ($request->is_available ?? true))
+            ->ofDoctorId($request->doctor_id ?? auth('doctor')->id())
             ->startAfter($request->start)
             ->endBefore($request->end)
-            ->DoctorId($request->doctor_id)
             ->paginate($request->per_page ?? 50));
     }
 

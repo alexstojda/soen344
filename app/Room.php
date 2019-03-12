@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
+use \Illuminate\Database\Eloquent\Collection;
 
 /**
  * App\Room
@@ -16,6 +16,7 @@ use Illuminate\Support\Collection;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Appointment[] $appointments
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Room availableOn($at = null, $type = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Room newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Room newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Room query()
@@ -37,6 +38,9 @@ class Room extends Model
         'id',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|Collection|Appointment[]|Appointment
+     */
     public function appointments()
     {
         return $this->hasMany(Appointment::class, 'room_id', 'id');
@@ -50,7 +54,7 @@ class Room extends Model
      *
      * @return Collection|Availability[]
      */
-    public function apointments_on(Carbon $at = null, $type = null)
+    public function appointmentsOn(Carbon $at = null, $type = null)
     {
         return $this->appointments()->between($at, $type)->get();
     }
@@ -65,7 +69,7 @@ class Room extends Model
      */
     public function is_available_on(Carbon $at = null, $type = null): bool
     {
-        return $this->apointments_on($at, $type)->isEmpty();
+        return $this->appointmentsOn($at, $type)->isEmpty();
     }
 
     /**
@@ -80,17 +84,16 @@ class Room extends Model
      */
     public function scopeAvailableOn(Builder $query, $at = null, $type = null): Builder
     {
-        if( ($at !== null) && !($at instanceof Carbon) ) {
+        if (($at !== null) && !($at instanceof Carbon)) {
             $at = new Carbon($at);
         }
         $start = $at ?? now();
         $end = $start->copy()->addMinutes($type === 'walk-in' ? 20 : 60);
 
-        return $query->whereDoesntHave('appointments', function(Builder $query) use ($start, $end)
-        {
+        return $query->whereDoesntHave('appointments', function (Builder $query) use ($start, $end) {
             $query->whereIn('status', ['active', 'cart'])
-                  ->where('start', '<=', $start)
-                  ->where('end', '>=', $end);
+                ->where('start', '<=', $start)
+                ->where('end', '>=', $end);
         });
     }
 }

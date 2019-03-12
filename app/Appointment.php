@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Resources\Patient;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -24,8 +25,6 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment between(\Illuminate\Support\Carbon $at = null, $type = 'walk-in')
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment ofStatus($status)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment ofType($type)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment whereDoctorId($value)
@@ -58,31 +57,31 @@ class Appointment extends Model
      */
     protected $dates = [
         'start',
-        'end'
+        'end',
     ];
 
     /**
-     * Scope a query to only include appointments of a given type.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  mixed $type
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|Doctor
      */
-    public function scopeOfType($query, $type)
+    public function doctor()
     {
-        return $query->where('type', $type);
+        return $this->belongsTo(Doctor::class, 'doctor_id', 'id');
     }
 
     /**
-     * Scope a query to only include appointments of a given status.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  mixed $type
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|Patient
      */
-    public function scopeOfStatus($query, $status)
+    public function patient()
     {
-        return $query->where('status', $status);
+        return $this->belongsTo(User::class, 'patient_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|Room
+     */
+    public function room()
+    {
+        return $this->belongsTo(Room::class, 'room_id', 'id');
     }
 
     /**
@@ -91,31 +90,21 @@ class Appointment extends Model
      * @param  \Illuminate\Database\Eloquent\Builder $query
      * @param Carbon|null $at
      * @param string $type
+     * @param array $status
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeBetween($query, Carbon $at = null, $type = 'walk-in')
-    {
+    public function scopeBetween(
+        $query,
+        Carbon $at = null,
+        $type = 'walk-in',
+        $status = ['confirmed', 'cart', 'complete']
+    ) {
         $start = $at ?? now();
         $end = $start->copy()->addMinutes($type === 'walk-in' ? 20 : 60);
 
-        return $query->whereIn('status', ['confirmed', 'complete'])
-            ->where('start','<=', $start)
-            ->where('end','>=', $end);
-    }
-
-    public function doctor()
-    {
-        return $this->belongsTo(Doctor::class, 'doctor_id', 'id');
-    }
-
-    public function patient()
-    {
-        return $this->belongsTo(User::class, 'patient_id', 'id');
-    }
-
-    public function room()
-    {
-        return $this->belongsTo(Room::class, 'room_id', 'id');
+        return $query->whereIn('status', $status)
+            ->where('start', '<=', $start)
+            ->where('end', '>=', $end);
     }
 }

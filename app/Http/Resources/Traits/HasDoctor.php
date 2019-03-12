@@ -20,7 +20,7 @@ trait HasDoctor
     {
         return [
             'id' => $this->doctor_id,
-            'name' => $this->doctor->full_name,
+            'name' => $this->doctor->name,
             'path' => route('doctor.show', ['id' => $this->doctor_id]),
             'filter_by_doctor' => request()->fullUrlWithQuery(['doctor_id' => $this->doctor_id]),
         ];

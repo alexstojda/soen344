@@ -43,7 +43,7 @@ class Nurse extends Authenticatable
      * @var array
      */
     protected $guarded = [
-        'id'
+        'id',
     ];
 
     /**
@@ -52,7 +52,8 @@ class Nurse extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -67,7 +68,7 @@ class Nurse extends Authenticatable
     /**
      * Send the password reset notification.
      *
-     * @param  string  $token
+     * @param  string $token
      * @return void
      */
     public function sendPasswordResetNotification($token)

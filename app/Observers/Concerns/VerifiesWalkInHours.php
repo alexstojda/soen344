@@ -2,7 +2,6 @@
 
 namespace App\Observers\Concerns;
 
-
 use Illuminate\Support\Carbon;
 
 trait VerifiesWalkInHours

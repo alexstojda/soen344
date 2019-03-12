@@ -12,6 +12,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class Doctor extends JsonResource
 {
     use Traits\HasAppointments;
+    use Traits\HasAvailabilities;
 
     /**
      * Transform the resource into an array.
@@ -24,11 +25,14 @@ class Doctor extends JsonResource
         return [
             'id' => $this->id,
             'permit_id' => $this->permit_id,
-            'name' => $this->full_name,
+            'name' => $this->name,
             'speciality' => $this->speciality,
             'city' => $this->city,
             'email' => $this->email,
-            'appointments' => $this->appointmentsLinksArray(),
+            'appointments_path' => route('appointment.index', ['doctor_id' => $this->id]),
+            'availabilities_path' => route('availability.index', ['doctor_id' => $this->id]),
+            //'appointments' => $this->appointmentsLinksArray(),
+            //'availabilities' => $this->availabilitiesLinksArray(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'path' => route('doctor.show', ['id' => $this->id]),

@@ -20,9 +20,9 @@ class AppointmentObserver
     public function saving(Appointment $appointment)
     {
         // Check if appointment without walk-in hours
-        if(!$this->verifyWalkInHours($appointment->start, $appointment->end)) {
+        if (!$this->verifyWalkInHours($appointment->start, $appointment->end)) {
             dump('rejected due to open hours rule | ' .
-                $appointment->start->toDateTimeString() .' | '. $appointment->end->toDateTimeString() );
+                $appointment->start->toDateTimeString() .' | '. $appointment->end->toDateTimeString());
             return false;
         }
 
@@ -41,7 +41,7 @@ class AppointmentObserver
 
         //TODO: use rescheduled state to notify patient.
         //      set appointment to rescheduled if room, doctor or time changes
-        if($appointment->status === 'rescheduled') {
+        if ($appointment->status === 'rescheduled') {
             $appointment->status = 'active'; // temporarily avoid rescheduled state
         }
         return true;

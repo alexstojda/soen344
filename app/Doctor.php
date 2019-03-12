@@ -26,7 +26,7 @@ use Illuminate\Support\Collection;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Appointment[] $appointments
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Availability[] $availabilities
- * @property-read string $full_name
+ * @property-read string $name
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Doctor newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Doctor newQuery()
@@ -64,7 +64,8 @@ class Doctor extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -81,14 +82,25 @@ class Doctor extends Authenticatable
      *
      * @return string
      */
-    public function getFullNameAttribute()
+    public function getNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|Collection|Availability[]|Availability
+     */
     public function availabilities()
     {
         return $this->hasMany(Availability::class, 'doctor_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|Collection|Appointment[]|Appointment
+     */
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class, 'doctor_id', 'id');
     }
 
     /**
@@ -117,15 +129,36 @@ class Doctor extends Authenticatable
         return $this->availabilities_on($at, $type)->isNotEmpty();
     }
 
-    public function appointments()
+
+    /**
+     * @param Carbon|string|null $date
+     * @return mixed
+     */
+    public function schedule($date = null)
     {
-        return $this->hasMany(Appointment::class, 'doctor_id', 'id');
+        //Grab Availabilities (available) sort & group into days
+
+        //Grab Appointments (active or in cart) sort & group into days
+
+        //Sum availabilities that overlap into a single availability object
+
+
+        $daily_schedule = $this->availabilities()->available()->get()
+            ->sortBy('start')->groupBy(function (Availability $item) {
+                return $item->start->toDateString();
+            });
+
+        if ($date !== null) {
+            return $daily_schedule->get(Carbon::parse($date)->toDateString());
+        }
+
+        return $daily_schedule;
     }
 
     /**
      * Send the password reset notification.
      *
-     * @param  string  $token
+     * @param  string $token
      * @return void
      */
     public function sendPasswordResetNotification($token)
