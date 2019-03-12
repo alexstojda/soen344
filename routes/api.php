@@ -39,8 +39,8 @@ Route::apiResource('/cart','CartController');
 Route::post('/createAnAppointment', 'AppointmentController@store');
 Route::post('/removeFromCart', 'CartController@destroy');
 
+
 Route::apiResource('/appointments','AppointmentController');
-Route::post('/processAppointments', 'AppointmentController@store');
 Route::post('/deleteAppointment', 'AppointmentController@destroy');
 Route::group(['prefix' => 'appointments'], function () {
     Route::get('/{from}/{to}');

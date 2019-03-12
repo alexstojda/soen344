@@ -17,7 +17,7 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        return AppointmentResource::collection(Appointment::paginate($request->per_page ?? 50));
+        return AppointmentResource::collection(Appointment::where('status','!=','cart')->get());
     }
 
     /**
@@ -127,6 +127,24 @@ class AppointmentController extends Controller
 
         $appointment->save();
         return new AppointmentResource($appointment);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Appointment  $appointment
+     * @return AppointmentResource|\Illuminate\Http\Response
+     */
+    public function finalize()
+    {
+       $cart = Appointment::Where('status','=','cart')->get();
+
+       foreach($cart as $cartItem)
+        {
+            $cartItem->status = 'active';
+            $cartItem->save();
+        }
     }
 
     /**

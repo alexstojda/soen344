@@ -9,6 +9,9 @@
                 <th scope="col" >
                     <SortLink name="room">Room ID</SortLink>
                 </th>
+                <th scope="col">
+                    <SortLink name="status">Status</SortLink>
+                </th>
                 <th scope="col" >
                     <SortLink name="date">Date</SortLink>
                 </th>
@@ -17,8 +20,9 @@
             </thead>
             <tbody slot="body" slot-scope="sort">
             <tr v-for="appointment in sort.values" :key="appointment.id">
-                <td>{{ appointment.doctor_id }}</td>
-                <td>{{ appointment.room_id }}</td>
+                <td>{{ appointment.doctor["name"] }}</td>
+                <td>{{ appointment.room["id"] }}</td>
+                <td>{{ appointment.status }}</td>
                 <td>{{ dateFormatter(appointment.start) }}</td>
                 <td><button type="button" class="btn btn-warning" vertical-align="center">Modify</button>
                     <button type="button" class="btn btn-danger" v-on:click="cancelAppointment(appointment.id, appointment.doctor_id)" vertical-align="center">Cancel</button></td>
