@@ -130,6 +130,24 @@ class AppointmentController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Appointment  $appointment
+     * @return AppointmentResource|\Illuminate\Http\Response
+     */
+    public function finalize()
+    {
+       $cart = Appointment::Where('status','=','cart')->get();
+
+       foreach($cart as $cartItem)
+        {
+            $cartItem->status = 'active';
+            $cartItem->save();
+        }
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Appointment  $appointment

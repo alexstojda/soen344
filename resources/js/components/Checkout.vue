@@ -13,8 +13,8 @@
                 </thead>
                 <tr v-for="cartItem in cart" v-bind:cart-line="cartItem">
                     <td>{{ dateFormatter(cartItem.start) }}</td>
-                    <td>{{ cartItem.doctor_id }}</td>
-                    <td>Room #{{ cartItem.room_id }}</td>
+                    <td>{{ cartItem.doctor['name'] }}</td>
+                    <td>Room #{{ cartItem.room['id'] }}</td>
                 </tr>
             </table>
             <br/>
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-    import * as axios from 'axios';
+    import axios from 'axios';
     import moment from "moment";
     export default {
         name: 'Checkout',
@@ -74,14 +74,17 @@
                 })
             },
             checkoutCart () {
-                axios('/api/processAppointments',{
+                axios.post('/processAppointments',{
                    cart: this.cart
                 }).then(response => {
                     if(response.status == 200) {
-                        console.log("Added appointment")
+                        console.log("Added appointments")
+                        window.location.href = '/home';
                     } else {
-                        console.log("Add appointment failed: Response code " + response.status)
+                        console.log("Add appointments failed: Response code " + response.status)
                     }
+                }).catch(error => {
+                    console.log(error.response)
                 })
             },            dateFormatter: function(date) {
                 return moment(date).format("YYYY-MM-DD");

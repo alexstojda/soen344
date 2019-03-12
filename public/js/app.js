@@ -2039,7 +2039,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2063,22 +2062,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(result);
         _this.cart = result.data.data;
         console.log(_this.cart);
-      }, function (error) {
-        console.error(error);
-      }).catch(function (error) {
-        console.log(error.response);
-      });
-    },
-    getCheckout: function getCheckout() {
-      var _this2 = this;
-
-      axios__WEBPACK_IMPORTED_MODULE_0___default()({
-        method: "GET",
-        "url": "/checkout"
-      }).then(function (result) {
-        console.log(result);
-        _this2.cart = result.data.data;
-        console.log(_this2.cart);
       }, function (error) {
         console.error(error);
       }).catch(function (error) {
@@ -2190,7 +2173,7 @@ __webpack_require__.r(__webpack_exports__);
     getCart: function getCart() {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0__["get"]('/api/cart').then(function (result) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/cart').then(function (result) {
         _this.cart = result.data.data;
       }, function (error) {
         console.error(error);
@@ -2199,14 +2182,17 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     checkoutCart: function checkoutCart() {
-      axios__WEBPACK_IMPORTED_MODULE_0__('/api/processAppointments', {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/processAppointments', {
         cart: this.cart
       }).then(function (response) {
         if (response.status == 200) {
-          console.log("Added appointment");
+          console.log("Added appointments");
+          window.location.href = '/home';
         } else {
-          console.log("Add appointment failed: Response code " + response.status);
+          console.log("Add appointments failed: Response code " + response.status);
         }
+      }).catch(function (error) {
+        console.log(error.response);
       });
     },
     dateFormatter: function dateFormatter(date) {
@@ -55717,7 +55703,7 @@ var staticRenderFns = [
       _c(
         "a",
         {
-          staticClass: "nav-link btn btn-success",
+          staticClass: "btn btn-success",
           attrs: { href: "/checkout", type: "button" }
         },
         [_vm._v("Checkout")]
@@ -55762,9 +55748,9 @@ var render = function() {
             return _c("tr", { attrs: { "cart-line": cartItem } }, [
               _c("td", [_vm._v(_vm._s(_vm.dateFormatter(cartItem.start)))]),
               _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(cartItem.doctor_id))]),
+              _c("td", [_vm._v(_vm._s(cartItem.doctor["name"]))]),
               _vm._v(" "),
-              _c("td", [_vm._v("Room #" + _vm._s(cartItem.room_id))])
+              _c("td", [_vm._v("Room #" + _vm._s(cartItem.room["id"]))])
             ])
           })
         ],

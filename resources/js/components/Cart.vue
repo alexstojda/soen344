@@ -37,8 +37,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <a class="nav-link btn btn-success" href="/checkout"  type="button">Checkout</a>
-                            <!--v-on:click="getCheckout()"-->
+                        <a class="btn btn-success" href="/checkout" type="button">Checkout</a>
                     </div>
                 </div>
             </div>
@@ -72,19 +71,6 @@
                     .catch(error => {
                     console.log(error.response)
                 })
-            },
-            getCheckout(){
-                axios({method: "GET", "url": "/checkout"})
-                    .then(result => {
-                        console.log(result)
-                        this.cart = result.data.data;
-                        console.log(this.cart);
-                    }, error => {
-                        console.error(error);
-                    })
-                    .catch(error => {
-                        console.log(error.response)
-                    })
             },
             dateTimeFormatter: function(date) {
                 return moment(date).format('YYYY-MM-DD HH:mm:ss');

@@ -96,6 +96,8 @@
                     } else {
                         console.log("Add appointment failed: Response code " + response.status)
                     }
+                }).catch(error => {
+                    console.log(error.response)
                 })
             },
             setDate: function(date, time, type=null) {
