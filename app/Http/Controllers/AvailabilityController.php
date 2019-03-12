@@ -68,7 +68,7 @@ class AvailabilityController extends Controller
             'doctor_id'    => auth('doctor')->check() ? 'nullable|int' : 'required|int',
             'start'        => 'required|before_or_equal:end',
             'end'          => 'required|after_or_equal:start',
-            'is_available' => 'required|boolean',
+            'is_available' => 'nullable|boolean',
             'reason_of_unavailability' => 'nullable|string|min:5|max:255',
         ]);
 

@@ -91,11 +91,6 @@ class Doctor extends Authenticatable
         return $this->hasMany(Availability::class, 'doctor_id', 'id');
     }
 
-    public function schedule()
-    {
-        return $this->availabilities()->get()->reduce();
-    }
-
     /**
      * Given a date grab all doctors availabilities
      *
