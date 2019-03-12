@@ -13,6 +13,9 @@
                 <th scope="col" style="text-align: left; width: 10rem;">
                     Doctor
                 </th>
+                <th scope="col" style="text-align: left; width: 10rem;">
+                    Doctor Id
+                </th>
                 <th scope="col" style="text-align: left;">
                     Availabilities
                 </th>
@@ -20,10 +23,14 @@
             </thead>
             <tbody slot="body">
                 <tr v-for="availability in availabilities" v-bind:key="availabilities">
-                    <td>{{ availability.doctor_id}}</td>
+                    <td>{{ availability.doctor["name"]}}</td>
+                    <td>{{ availability.doctor["id"]}}</td>
                     <td>{{ dateFormatter(availability.start) }}</td>
                 </tr>
             </tbody>
+            <div v-if="empty">
+                No Results
+            </div>
         </table>
     </div>
 </template>
@@ -37,7 +44,8 @@
         name: "SearchAppointments",
         data () {
             return {
-                availabilities: []
+                availabilities: [],
+                empty: false,
             }
         },
         components: {
@@ -56,6 +64,15 @@
                     .then(response => {
                         if(response.status == 200) {
                             this.availabilities = response.data.data;
+                            if(this.availabilities.length == 0)
+                            {
+                                this.empty = true;
+                            }
+                            else
+                            {
+                                this.empty = false;
+                            }
+
                             this.$forceUpdate();
                             console.log("getAvailabilitiesByDate " + response.data.data)
                         } else {
