@@ -29,6 +29,7 @@ use Illuminate\Support\Collection;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Availability[] $availabilities
  * @property-read string $name
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Doctor availableBetween($from = null, $to = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Doctor newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Doctor newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Doctor query()
@@ -108,45 +109,79 @@ class Doctor extends Authenticatable
      * Given a date checks room is available for use
      *
      * @param Builder $query
-     * @param Carbon|string|null $at
+     * @param Carbon|string|null $from
      * @param Carbon|string|null $to
      *
      * @return Builder
      * @throws \Exception
      */
-    public function scopeAvailableOn(Builder $query, $at = null, $to = null): Builder
+    public function scopeAvailableBetween(Builder $query, $from = null, $to = null): Builder
     {
-        return $query->whereDoesntHave('appointments', function (Builder $query) use ($at, $to) {
-            $query->whereNotIn('status', ['cancelled'])
-                ->where('start', '<=', Carbon::parse($at))
-                ->where('end', '>=', Carbon::parse($to));
-        });
+        $start = Carbon::parse($from ?? now()->startOfDay()->addHours(config('bonmatin.office_hours.open')));
+        $end = ($to === null) ? $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.open')) : Carbon::parse($to);
+
+        $open = $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.open'))->subSecond();
+        $close = $end->copy()->startOfDay()->addHours(config('bonmatin.office_hours.open'))->addSecond();
+
+        if ($start->isAfter($open) && $end->isBefore($close)) {
+            return $query->whereDoesntHave('appointments', function (Builder $query) use ($start, $end) {
+                return $query->whereNotIn('status', ['cancelled'])
+                    ->where('start', '>=', $start)
+                    ->where('end', '<=', $end);
+            })->whereHas('availabilities', function (Builder $query) use ($start, $end) {
+                $query->where('is_available', '=', true)
+                    ->where('start', '>=', $start)
+                    ->where('end', '<=', $end);
+            });
+        }
+        return $query->where('id'); // WHERE id is NULL
+    }
+
+    /**
+     * Given a date grab all appointments in this room
+     *
+     * @param Carbon|string|null $from
+     * @param Carbon|string|null $to
+     *
+     * @return Collection|Availability[]
+     */
+    public function appointmentsBetween($from = null, $to = null)
+    {
+        return $this->appointments()->between($from, $to)->get();
     }
 
     /**
      * Given a date grab all doctors availabilities
      *
-     * @param Carbon|null $at
-     * @param string|null $type
+     * @param Carbon|string|null $from
+     * @param Carbon|string|null $to
      *
      * @return Collection|Availability[]
      */
-    public function availabilities_on(Carbon $at = null, $type = null)
+    public function availabilitiesBetween($from = null, $to = null)
     {
-        return $this->availabilities()->availableOn($at, $type)->get();
+        return $this->availabilities()->between($from, $to)->get();
     }
 
     /**
      * Given a date checks if the doctor is available or booked
      *
-     * @param Carbon|null $at
-     * @param string|null $type
+     * @param Carbon|string|null $from
+     * @param Carbon|string|null $to
      *
      * @return bool
      */
-    public function is_available_on(Carbon $at = null, $type = null): bool
+    public function isAvailableBetween(Carbon $from = null, $to = null): bool
     {
-        return $this->availabilities_on($at, $type)->isNotEmpty();
+        $start = Carbon::parse($from ?? now()->startOfDay()->addHours(config('bonmatin.office_hours.open')));
+        $end = ($to === null) ? $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.close')) : Carbon::parse($to);
+
+        $open = $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.open'))->subSecond();
+        $close = $end->copy()->startOfDay()->addHours(config('bonmatin.office_hours.open'))->addSecond();
+
+        return $start->isAfter($open) && $end->isBefore($close) &&
+            $this->appointmentsBetween($start, $end)->isEmpty() &&
+            $this->availabilitiesBetween($start, $end)->isNotEmpty();
     }
 
 

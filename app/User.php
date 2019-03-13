@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Carbon;
 
 /**
  * App\User
@@ -83,5 +84,18 @@ class User extends Authenticatable
     public function appointments()
     {
         return $this->hasMany(Appointment::class, 'doctor_id', 'id');
+    }
+
+    /**
+     * Given a date grab all appointments in this room
+     *
+     * @param Carbon|string|null $from
+     * @param Carbon|string|null $to
+     *
+     * @return Collection|Availability[]
+     */
+    public function appointmentsBetween($from = null, $to = null)
+    {
+        return $this->appointments()->between($from, $to)->get();
     }
 }

@@ -16,7 +16,7 @@ use \Illuminate\Database\Eloquent\Collection;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Appointment[] $appointments
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Room availableBetween($at = null, $to = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Room availableBetween($from = null, $to = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Room newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Room newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Room query()
@@ -49,31 +49,33 @@ class Room extends Model
     /**
      * Given a date grab all appointments in this room
      *
-     * @param Carbon|string|null $at
+     * @param Carbon|string|null $from
      * @param Carbon|string|null $to
      *
      * @return Collection|Availability[]
      */
-    public function appointmentsBetween($at = null, $to = null)
+    public function appointmentsBetween($from = null, $to = null)
     {
-        return $this->appointments()->between($at, $to)->get();
+        return $this->appointments()->between($from, $to)->get();
     }
 
     /**
      * Given a date checks room is available for use
      *
-     * @param Carbon|string|null $at
+     * @param Carbon|string|null $from
      * @param Carbon|string|null $to
      *
      * @return bool
      */
-    public function isAvailableBetween($at = null, $to = null): bool
+    public function isAvailableBetween($from = null, $to = null): bool
     {
-        $start = Carbon::parse($at);
-        $end = ($to === null) ? $start->copy()->endOfDay() : Carbon::parse($to);
+        $start = Carbon::parse($from ?? now()->startOfDay()->addHours(config('bonmatin.office_hours.open')));
+        $end = ($to === null) ? $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.close')) : Carbon::parse($to);
 
-        return $start->isAfter($start->copy()->startOfDay()->addHours(8)->subSecond()) &&
-               $end->isBefore($end->copy()->startOfDay()->addHours(20)->addSecond()) &&
+        $open = $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.open'))->subSecond();
+        $close = $end->copy()->startOfDay()->addHours(config('bonmatin.office_hours.close'))->addSecond();
+
+        return $start->isAfter($open) && $end->isBefore($close) &&
                $this->appointmentsBetween($start, $end)->isEmpty();
     }
 
@@ -81,21 +83,27 @@ class Room extends Model
      * Given a date checks room is available for use
      *
      * @param Builder $query
-     * @param Carbon|string|null $at
+     * @param Carbon|string|null $from
      * @param Carbon|string|null $to
      *
      * @return Builder
      * @throws \Exception
      */
-    public function scopeAvailableBetween(Builder $query, $at = null, $to = null): Builder
+    public function scopeAvailableBetween(Builder $query, $from = null, $to = null): Builder
     {
-        $start = Carbon::parse($at ?? now()->startOfDay()->addHours(8));
-        $end = ($to === null) ? $start->copy()->startOfDay()->addHours(20) : Carbon::parse($to);
+        $start = Carbon::parse($from ?? now()->startOfDay()->addHours(config('bonmatin.office_hours.open')));
+        $end = ($to === null) ? $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.close')) : Carbon::parse($to);
 
-        return $query->whereDoesntHave('appointments', function (Builder $query) use ($start, $end) {
-            $query->whereNotIn('status', ['cancelled'])
-                ->where('start', '<=', $start)
-                ->where('end', '<=', $end);
-        });
+        $open = $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.open'))->subSecond();
+        $close = $end->copy()->startOfDay()->addHours(config('bonmatin.office_hours.close'))->addSecond();
+
+        if ($start->isAfter($open) && $end->isBefore($close)) {
+            return $query->whereDoesntHave('appointments', function (Builder $query) use ($start, $end) {
+                return $query->whereNotIn('status', ['cancelled'])
+                    ->where('start', '>=', $start)
+                    ->where('end', '<=', $end);
+            });
+        }
+        return $query->where('id'); // WHERE id is NULL
     }
 }

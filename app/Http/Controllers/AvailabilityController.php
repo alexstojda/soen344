@@ -82,7 +82,7 @@ class AvailabilityController extends Controller
             ]);
             return new AvailabilityResource($availability);
         }catch (\Exception $e){
-            return response()->json($e);
+            return response()->json($e, 400);
         }
     }
 

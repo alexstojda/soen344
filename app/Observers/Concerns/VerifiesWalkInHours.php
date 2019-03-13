@@ -9,16 +9,16 @@ trait VerifiesWalkInHours
     /**
      * @param Carbon $start
      * @param Carbon $end
-     * @param int $start_hour defaults to 8am
-     * @param int $end_hour   defaults to 8pm
+     * @param int|null $start_hour defaults to 8am
+     * @param int|null $end_hour   defaults to 8pm
      *
      * @return bool
      */
-    protected function verifyWalkInHours(Carbon $start, Carbon $end, $start_hour = 8, $end_hour = 20)
+    protected function verifyWalkInHours(Carbon $start, Carbon $end, $start_hour = null, $end_hour = null)
     {
         //Walk-in hours : 8am - 8pm
-        $start_day = $start->copy()->startOfDay()->addHours($start_hour);
-        $end_day = $start->copy()->startOfDay()->addHours($end_hour);
+        $start_day = $start->copy()->startOfDay()->addHours($start_hour ?? config('bonmatin.office_hours.open'));
+        $end_day = $start->copy()->startOfDay()->addHours($end_hour ?? config('bonmatin.office_hours.close'));
         // Check if appointment without walk-in hours
         return (
             $start->greaterThanOrEqualTo($start_day) &&
