@@ -118,10 +118,10 @@ class Doctor extends Authenticatable
     public function scopeAvailableBetween(Builder $query, $from = null, $to = null): Builder
     {
         $start = Carbon::parse($from ?? now()->startOfDay()->addHours(config('bonmatin.office_hours.open')));
-        $end = ($to === null) ? $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.open')) : Carbon::parse($to);
+        $end = ($to === null) ? $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.close')) : Carbon::parse($to);
 
         $open = $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.open'))->subSecond();
-        $close = $end->copy()->startOfDay()->addHours(config('bonmatin.office_hours.open'))->addSecond();
+        $close = $end->copy()->startOfDay()->addHours(config('bonmatin.office_hours.close'))->addSecond();
 
         if ($start->isAfter($open) && $end->isBefore($close)) {
             return $query->whereDoesntHave('appointments', function (Builder $query) use ($start, $end) {
@@ -177,7 +177,7 @@ class Doctor extends Authenticatable
         $end = ($to === null) ? $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.close')) : Carbon::parse($to);
 
         $open = $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.open'))->subSecond();
-        $close = $end->copy()->startOfDay()->addHours(config('bonmatin.office_hours.open'))->addSecond();
+        $close = $end->copy()->startOfDay()->addHours(config('bonmatin.office_hours.close'))->addSecond();
 
         return $start->isAfter($open) && $end->isBefore($close) &&
             $this->appointmentsBetween($start, $end)->isEmpty() &&
