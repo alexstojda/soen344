@@ -3477,6 +3477,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     addAppointment: function addAppointment() {
+      var _this = this;
+
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/appointment', {
         patient_id: this.patient_id,
         doctor_id: this.doctor_id,
@@ -3486,18 +3488,19 @@ __webpack_require__.r(__webpack_exports__);
         type: this.type,
         status: this.isNurse ? 'active' : 'cart'
       }).then(function (response) {
-        if (response.status == 200) {
+        if (response.status == 200 || response.status == 201) {
           console.log("Added appointment");
+          console.log(_this.isNurse);
         } else {
           console.log("Add appointment failed: Response code " + response.status);
         }
       }).catch(function (error) {
         console.log(error.response);
+        console.log(_this.isNurse);
       });
     },
     setDate: function setDate(date, time) {
       var timeSplit = time.split(':');
-      console.log(moment__WEBPACK_IMPORTED_MODULE_1___default()(date).add(timeSplit[0], "hours").add(timeSplit[1], "minutes").format("YYYY-MM-DD HH:mm:ss"));
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).add(timeSplit[0], "hours").add(timeSplit[1], "minutes").format("YYYY-MM-DD HH:mm:ss");
     },
     setDateTime: function setDateTime(date, time, type) {
@@ -3512,7 +3515,6 @@ __webpack_require__.r(__webpack_exports__);
         dateMaker.add(1, "hours");
       }
 
-      console.log(moment__WEBPACK_IMPORTED_MODULE_1___default()(dateMaker).format("YYYY-MM-DD HH:mm:ss"));
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(dateMaker).format("YYYY-MM-DD HH:mm:ss");
     }
   }
@@ -3610,7 +3612,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log('Added availability');
           console.log(response);
         } else {
-          console.log('Add availability failed: Response code ' + response.status);
+          console.log('Add availability: Response code ' + response.status);
         }
       });
     }
@@ -10631,115 +10633,6 @@ module.exports = function escape(url) {
 
     return url
 }
-
-
-/***/ }),
-
-/***/ "./node_modules/deepmerge/dist/cjs.js":
-/*!********************************************!*\
-  !*** ./node_modules/deepmerge/dist/cjs.js ***!
-  \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var isMergeableObject = function isMergeableObject(value) {
-	return isNonNullObject(value)
-		&& !isSpecial(value)
-};
-
-function isNonNullObject(value) {
-	return !!value && typeof value === 'object'
-}
-
-function isSpecial(value) {
-	var stringValue = Object.prototype.toString.call(value);
-
-	return stringValue === '[object RegExp]'
-		|| stringValue === '[object Date]'
-		|| isReactElement(value)
-}
-
-// see https://github.com/facebook/react/blob/b5ac963fb791d1298e7f396236383bc955f916c1/src/isomorphic/classic/element/ReactElement.js#L21-L25
-var canUseSymbol = typeof Symbol === 'function' && Symbol.for;
-var REACT_ELEMENT_TYPE = canUseSymbol ? Symbol.for('react.element') : 0xeac7;
-
-function isReactElement(value) {
-	return value.$$typeof === REACT_ELEMENT_TYPE
-}
-
-function emptyTarget(val) {
-    return Array.isArray(val) ? [] : {}
-}
-
-function cloneIfNecessary(value, optionsArgument) {
-    var clone = optionsArgument && optionsArgument.clone === true;
-    return (clone && isMergeableObject(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
-}
-
-function defaultArrayMerge(target, source, optionsArgument) {
-    var destination = target.slice();
-    source.forEach(function(e, i) {
-        if (typeof destination[i] === 'undefined') {
-            destination[i] = cloneIfNecessary(e, optionsArgument);
-        } else if (isMergeableObject(e)) {
-            destination[i] = deepmerge(target[i], e, optionsArgument);
-        } else if (target.indexOf(e) === -1) {
-            destination.push(cloneIfNecessary(e, optionsArgument));
-        }
-    });
-    return destination
-}
-
-function mergeObject(target, source, optionsArgument) {
-    var destination = {};
-    if (isMergeableObject(target)) {
-        Object.keys(target).forEach(function(key) {
-            destination[key] = cloneIfNecessary(target[key], optionsArgument);
-        });
-    }
-    Object.keys(source).forEach(function(key) {
-        if (!isMergeableObject(source[key]) || !target[key]) {
-            destination[key] = cloneIfNecessary(source[key], optionsArgument);
-        } else {
-            destination[key] = deepmerge(target[key], source[key], optionsArgument);
-        }
-    });
-    return destination
-}
-
-function deepmerge(target, source, optionsArgument) {
-    var sourceIsArray = Array.isArray(source);
-    var targetIsArray = Array.isArray(target);
-    var options = optionsArgument || { arrayMerge: defaultArrayMerge };
-    var sourceAndTargetTypesMatch = sourceIsArray === targetIsArray;
-
-    if (!sourceAndTargetTypesMatch) {
-        return cloneIfNecessary(source, optionsArgument)
-    } else if (sourceIsArray) {
-        var arrayMerge = options.arrayMerge || defaultArrayMerge;
-        return arrayMerge(target, source, optionsArgument)
-    } else {
-        return mergeObject(target, source, optionsArgument)
-    }
-}
-
-deepmerge.all = function deepmergeAll(array, optionsArgument) {
-    if (!Array.isArray(array) || array.length < 2) {
-        throw new Error('first argument should be an array with at least two elements')
-    }
-
-    // we are sure there are at least 2 values, so it is safe to have no initial value
-    return array.reduce(function(prev, next) {
-        return deepmerge(prev, next, optionsArgument)
-    })
-};
-
-var deepmerge_1 = deepmerge;
-
-module.exports = deepmerge_1;
 
 
 /***/ }),
@@ -49715,7 +49608,7 @@ var _vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js
 
 var _vue2 = _interopRequireDefault(_vue);
 
-var _deepmerge = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge/dist/cjs.js");
+var _deepmerge = __webpack_require__(/*! deepmerge */ "./node_modules/element-ui/node_modules/deepmerge/dist/cjs.js");
 
 var _deepmerge2 = _interopRequireDefault(_deepmerge);
 
@@ -57920,6 +57813,115 @@ exports.default = {
     this.$options.beforeDestroy[0].call(this);
   }
 };
+
+/***/ }),
+
+/***/ "./node_modules/element-ui/node_modules/deepmerge/dist/cjs.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/element-ui/node_modules/deepmerge/dist/cjs.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var isMergeableObject = function isMergeableObject(value) {
+	return isNonNullObject(value)
+		&& !isSpecial(value)
+};
+
+function isNonNullObject(value) {
+	return !!value && typeof value === 'object'
+}
+
+function isSpecial(value) {
+	var stringValue = Object.prototype.toString.call(value);
+
+	return stringValue === '[object RegExp]'
+		|| stringValue === '[object Date]'
+		|| isReactElement(value)
+}
+
+// see https://github.com/facebook/react/blob/b5ac963fb791d1298e7f396236383bc955f916c1/src/isomorphic/classic/element/ReactElement.js#L21-L25
+var canUseSymbol = typeof Symbol === 'function' && Symbol.for;
+var REACT_ELEMENT_TYPE = canUseSymbol ? Symbol.for('react.element') : 0xeac7;
+
+function isReactElement(value) {
+	return value.$$typeof === REACT_ELEMENT_TYPE
+}
+
+function emptyTarget(val) {
+    return Array.isArray(val) ? [] : {}
+}
+
+function cloneIfNecessary(value, optionsArgument) {
+    var clone = optionsArgument && optionsArgument.clone === true;
+    return (clone && isMergeableObject(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
+}
+
+function defaultArrayMerge(target, source, optionsArgument) {
+    var destination = target.slice();
+    source.forEach(function(e, i) {
+        if (typeof destination[i] === 'undefined') {
+            destination[i] = cloneIfNecessary(e, optionsArgument);
+        } else if (isMergeableObject(e)) {
+            destination[i] = deepmerge(target[i], e, optionsArgument);
+        } else if (target.indexOf(e) === -1) {
+            destination.push(cloneIfNecessary(e, optionsArgument));
+        }
+    });
+    return destination
+}
+
+function mergeObject(target, source, optionsArgument) {
+    var destination = {};
+    if (isMergeableObject(target)) {
+        Object.keys(target).forEach(function(key) {
+            destination[key] = cloneIfNecessary(target[key], optionsArgument);
+        });
+    }
+    Object.keys(source).forEach(function(key) {
+        if (!isMergeableObject(source[key]) || !target[key]) {
+            destination[key] = cloneIfNecessary(source[key], optionsArgument);
+        } else {
+            destination[key] = deepmerge(target[key], source[key], optionsArgument);
+        }
+    });
+    return destination
+}
+
+function deepmerge(target, source, optionsArgument) {
+    var sourceIsArray = Array.isArray(source);
+    var targetIsArray = Array.isArray(target);
+    var options = optionsArgument || { arrayMerge: defaultArrayMerge };
+    var sourceAndTargetTypesMatch = sourceIsArray === targetIsArray;
+
+    if (!sourceAndTargetTypesMatch) {
+        return cloneIfNecessary(source, optionsArgument)
+    } else if (sourceIsArray) {
+        var arrayMerge = options.arrayMerge || defaultArrayMerge;
+        return arrayMerge(target, source, optionsArgument)
+    } else {
+        return mergeObject(target, source, optionsArgument)
+    }
+}
+
+deepmerge.all = function deepmergeAll(array, optionsArgument) {
+    if (!Array.isArray(array) || array.length < 2) {
+        throw new Error('first argument should be an array with at least two elements')
+    }
+
+    // we are sure there are at least 2 values, so it is safe to have no initial value
+    return array.reduce(function(prev, next) {
+        return deepmerge(prev, next, optionsArgument)
+    })
+};
+
+var deepmerge_1 = deepmerge;
+
+module.exports = deepmerge_1;
+
 
 /***/ }),
 
@@ -125277,8 +125279,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/andrew/php/soen344/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/andrew/php/soen344/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\P\344\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\P\344\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

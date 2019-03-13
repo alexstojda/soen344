@@ -52,16 +52,16 @@ class AppointmentController extends Controller
     {
         $validated = $request->validate([
             'doctor_id'    => 'required|int',
-            'patient_id'   => auth('web')->check() ? 'nullable|int' : 'required|int',
+            'patient_id'   => Auth::guard('web')->check() ? 'nullable|int' : 'required|int',
             'room_id'      => 'nullable|int',
             'start'        => 'required|before_or_equal:end',
             'end'          => 'required|after_or_equal:start',
             'type' => ['required', Rule::in(['walk-in','annual checkup'])],
-            'status' => ['required', Rule::in(['active','cancelled','complete'])]
+            'status' => ['required', Rule::in(['active','cancelled','complete','cart'])]
         ]);
 
         try {
-            $patient = Patient::findOrFail($validated['patient_id'] ?? auth('web')->id());
+            $patient = Patient::findOrFail($validated['patient_id'] ?? Auth::guard('web')->id());
 
             if($patient->has_annual_checkup && $validated['status'] === '') {
 
@@ -100,11 +100,17 @@ class AppointmentController extends Controller
      */
     public function showCreateAppointmentPage()
     {
-        if (Auth::guard("nurse")) {
-            return view('nurse.appointment');
-        } else {
-            return view('appointment.appointment');
-        }
+        return view('appointment.appointment');
+    }
+
+    /**
+     * Redirect to appointment page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showCreateAppointmentNursePage()
+    {
+        return view('nurse.appointment');
     }
 
     /**
@@ -145,7 +151,7 @@ class AppointmentController extends Controller
             'start' => 'date',
             'end' => 'date',
             'type' => ['required',Rule::in(['walk-in','annual checkup'])],
-            'status' => ['required',Rule::in(['active','cancelled','complete'])]
+            'status' => ['required',Rule::in(['active','cancelled','complete','cart'])]
         ]);
         // if it's not valid the code will stop here and throw the error with required fields
 

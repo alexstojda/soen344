@@ -27,7 +27,7 @@ Route::get('/createAppointment', 'AppointmentController@showCreateAppointmentPag
 Route::get('/viewAppointments', 'AppointmentController@showViewAppointmentsPage')->middleware('auth:web');
 
 Route::group(['prefix' => 'nurse'], function () {
-    Route::get('/createAppointment', 'AppointmentController@showCreateAppointmentPage')->middleware('auth:nurse');
+    Route::get('/createAppointment', 'AppointmentController@showCreateAppointmentNursePage')->middleware('auth:nurse');
     Route::get('/viewAppointments', 'AppointmentController@showViewAppointmentsPage')->middleware('auth:nurse');
 });
 

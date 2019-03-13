@@ -90,18 +90,19 @@
                     type: this.type,
                     status: (this.isNurse) ? 'active' : 'cart'
                 }).then(response => {
-                    if (response.status == 200) {
+                    if (response.status == 200 || response.status == 201) {
                         console.log("Added appointment");
+                        (this.isNurse)? window.location.href = '/nurse/dashboard' : window.location.href = '/home';
                     } else {
                         console.log("Add appointment failed: Response code " + response.status)
                     }
                 }).catch(error => {
                     console.log(error.response)
+                    console.log(this.isNurse);
                 })
             },
             setDate: function(date, time) {
                 let timeSplit = time.split(':');
-                console.log(moment(date).add(timeSplit[0], "hours").add(timeSplit[1], "minutes").format("YYYY-MM-DD HH:mm:ss"));
                 return moment(date).add(timeSplit[0], "hours").add(timeSplit[1], "minutes").format("YYYY-MM-DD HH:mm:ss");
             },
             setDateTime: function(date, time, type) {
@@ -120,7 +121,6 @@
                 {
                     dateMaker.add(1, "hours");
                 }
-                console.log(moment(dateMaker).format("YYYY-MM-DD HH:mm:ss"));
 
                 return moment(dateMaker).format("YYYY-MM-DD HH:mm:ss");
             }

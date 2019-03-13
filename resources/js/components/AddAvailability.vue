@@ -60,7 +60,7 @@
             console.log('Added availability');
             console.log(response);
           } else {
-            console.log('Add availability failed: Response code ' + response.status);
+            console.log('Add availability: Response code ' + response.status);
           }
         });
       },
