@@ -30,6 +30,8 @@
     import axios from "axios";
     import Datepicker from 'vuejs-datepicker';
     import VueTimepicker from 'vuejs-timepicker';
+    import moment from 'moment';
+
     export default {
         name: "AddAvailability",
         data () {
@@ -50,19 +52,21 @@
             VueTimepicker
         },
         props: {
-            doctorId: String ,
+            doctorId: Number ,
         },
         mounted() {
         },
         methods: {
             addAvailability: function() {
-                axios.post('api/addAvailability', {
+                axios.post('/api/availability', {
                     doctor_id: this.doctorId,
-                    start: this.setDate(this.date, this.startTime),
-                    end: this.setDate(this.date, this.endTime)
+                    start: moment(this.setDate(this.date, this.startTime)).format("YYYY-MM-DD HH:MM:SS"),
+                    end: moment(this.setDate(this.date, this.endTime)).format("YYYY-MM-DD HH:MM:SS")
+                }).catch(error => {
+                  console.log(error.response.data, { type: 'error' });
                 }).then(response => {
-                    if(response.status == 200 || response.status == 201) {
-                        console.log("Added availability")
+                    if(response.status === 200 || response.status === 201) {
+                        console.log("Added availability");
                         console.log(response);
                     } else {
                         console.log("Add availability failed: Response code " + response.status)

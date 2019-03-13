@@ -1931,6 +1931,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
 /* harmony import */ var vuejs_timepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuejs-timepicker */ "./node_modules/vuejs-timepicker/dist/vue2-timepicker.min.js");
 /* harmony import */ var vuejs_timepicker__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuejs_timepicker__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_3__);
 //
 //
 //
@@ -1959,6 +1961,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
@@ -1982,17 +1985,21 @@ __webpack_require__.r(__webpack_exports__);
     VueTimepicker: vuejs_timepicker__WEBPACK_IMPORTED_MODULE_2___default.a
   },
   props: {
-    doctorId: String
+    doctorId: Number
   },
   mounted: function mounted() {},
   methods: {
     addAvailability: function addAvailability() {
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('api/addAvailability', {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/availability', {
         doctor_id: this.doctorId,
-        start: this.setDate(this.date, this.startTime),
-        end: this.setDate(this.date, this.endTime)
+        start: moment__WEBPACK_IMPORTED_MODULE_3___default()(this.setDate(this.date, this.startTime)).format("YYYY-MM-DD HH:MM:SS"),
+        end: moment__WEBPACK_IMPORTED_MODULE_3___default()(this.setDate(this.date, this.endTime)).format("YYYY-MM-DD HH:MM:SS")
+      }).catch(function (error) {
+        console.log(error.response.data, {
+          type: 'error'
+        });
       }).then(function (response) {
-        if (response.status == 200 || response.status == 201) {
+        if (response.status === 200 || response.status === 201) {
           console.log("Added availability");
           console.log(response);
         } else {
@@ -72128,8 +72135,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\P\344\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\P\344\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/andrew/php/soen344/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/andrew/php/soen344/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
