@@ -1,6 +1,6 @@
 <template>
     <div id="appointments">
-        <div class="form-group row">
+        <div v-if="isNurse" class="form-group row">
             <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">Patient ID</label>
             <div class="col-sm-9 col-md-7 col-lg-8">
                 <input v-model="patient_id" type="text" class="form-control" placeholder="Patient ID">

@@ -4245,7 +4245,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     dateFormatter: function dateFormatter(date) {
-      return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format("YYYY-MM-DD");
+      return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format("YYYY-MM-DD HH:mm");
     }
   }
 });
@@ -108341,39 +108341,42 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { attrs: { id: "appointments" } }, [
-    _c("div", { staticClass: "form-group row" }, [
-      _c(
-        "label",
-        {
-          staticClass: "col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label"
-        },
-        [_vm._v("Patient ID")]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-sm-9 col-md-7 col-lg-8" }, [
-        _c("input", {
-          directives: [
+    _vm.isNurse
+      ? _c("div", { staticClass: "form-group row" }, [
+          _c(
+            "label",
             {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.patient_id,
-              expression: "patient_id"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: { type: "text", placeholder: "Patient ID" },
-          domProps: { value: _vm.patient_id },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+              staticClass:
+                "col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label"
+            },
+            [_vm._v("Patient ID")]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-sm-9 col-md-7 col-lg-8" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.patient_id,
+                  expression: "patient_id"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "Patient ID" },
+              domProps: { value: _vm.patient_id },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.patient_id = $event.target.value
+                }
               }
-              _vm.patient_id = $event.target.value
-            }
-          }
-        })
-      ])
-    ]),
+            })
+          ])
+        ])
+      : _vm._e(),
     _vm._v(" "),
     _c("div", { staticClass: "form-group row" }, [
       _c(
