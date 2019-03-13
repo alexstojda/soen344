@@ -4234,7 +4234,7 @@ __webpack_require__.r(__webpack_exports__);
     cancelAppointment: function cancelAppointment(id) {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/cancelAppointment/' + id).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.delete('/deleteAppointment/' + id).then(function (response) {
         if (response.status == 200) {
           console.log("Cancelled appointment : " + id);
 

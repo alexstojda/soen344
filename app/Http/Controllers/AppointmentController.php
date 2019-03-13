@@ -176,23 +176,6 @@ class AppointmentController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Appointment  $appointment
-     * @return AppointmentResource|\Illuminate\Http\Response
-     */
-    public function cancelAppointment($id)
-    {
-        $appointments = Appointment::Where('id', '=', $id)->get();
-
-        foreach ($appointments as $appointment) {
-            $appointment->status = 'cancelled';
-            $appointment->save();
-        }
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Appointment  $appointment

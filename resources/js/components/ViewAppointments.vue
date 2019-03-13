@@ -63,7 +63,7 @@
                     })
             },
             cancelAppointment: function(id) {
-                axios.post('/cancelAppointment/' + id).then(response => {
+                axios.delete('/deleteAppointment/' + id).then(response => {
                     if(response.status == 200) {
                         console.log("Cancelled appointment : " + id)
                         this.getAppointments();
