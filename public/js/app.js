@@ -4074,6 +4074,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4083,7 +4106,9 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       availabilities: [],
-      empty: false
+      doctors: [],
+      empty: false,
+      notEmpty: false
     };
   },
   components: {
@@ -4100,14 +4125,18 @@ __webpack_require__.r(__webpack_exports__);
     getAvailabilities: function getAvailabilities(inDate) {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/availabilitiesByDate/' + moment__WEBPACK_IMPORTED_MODULE_1___default()(inDate).format('YYYY-MM-DD')).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/availability?date=' + moment__WEBPACK_IMPORTED_MODULE_1___default()(inDate).format('YYYY-MM-DD')).then(function (response) {
         if (response.status == 200) {
           _this.availabilities = response.data.data;
 
           if (_this.availabilities.length == 0) {
             _this.empty = true;
+            _this.notEmpty = false;
           } else {
+            _this.doctorAvalabilities(inDate);
+
             _this.empty = false;
+            _this.notEmpty = true;
           }
 
           _this.$forceUpdate();
@@ -4131,6 +4160,19 @@ __webpack_require__.r(__webpack_exports__);
     },
     dateFormatter: function dateFormatter(date) {
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format("YYYY-MM-DD MM:HH");
+    },
+    doctorAvalabilities: function doctorAvalabilities(date) {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/appointments?start=' + moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format("YYYY-MM-DD")).then(function (response) {
+        if (response.status == 200) {
+          console.log("Appointments for : " + date);
+          console.log(response.data.data);
+          _this2.doctors = response.data.data;
+        } else {
+          console.log("Cancel appointment failed: Response code " + response.status);
+        }
+      });
     }
   }
 });
@@ -10614,115 +10656,6 @@ module.exports = function escape(url) {
 
     return url
 }
-
-
-/***/ }),
-
-/***/ "./node_modules/deepmerge/dist/cjs.js":
-/*!********************************************!*\
-  !*** ./node_modules/deepmerge/dist/cjs.js ***!
-  \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var isMergeableObject = function isMergeableObject(value) {
-	return isNonNullObject(value)
-		&& !isSpecial(value)
-};
-
-function isNonNullObject(value) {
-	return !!value && typeof value === 'object'
-}
-
-function isSpecial(value) {
-	var stringValue = Object.prototype.toString.call(value);
-
-	return stringValue === '[object RegExp]'
-		|| stringValue === '[object Date]'
-		|| isReactElement(value)
-}
-
-// see https://github.com/facebook/react/blob/b5ac963fb791d1298e7f396236383bc955f916c1/src/isomorphic/classic/element/ReactElement.js#L21-L25
-var canUseSymbol = typeof Symbol === 'function' && Symbol.for;
-var REACT_ELEMENT_TYPE = canUseSymbol ? Symbol.for('react.element') : 0xeac7;
-
-function isReactElement(value) {
-	return value.$$typeof === REACT_ELEMENT_TYPE
-}
-
-function emptyTarget(val) {
-    return Array.isArray(val) ? [] : {}
-}
-
-function cloneIfNecessary(value, optionsArgument) {
-    var clone = optionsArgument && optionsArgument.clone === true;
-    return (clone && isMergeableObject(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
-}
-
-function defaultArrayMerge(target, source, optionsArgument) {
-    var destination = target.slice();
-    source.forEach(function(e, i) {
-        if (typeof destination[i] === 'undefined') {
-            destination[i] = cloneIfNecessary(e, optionsArgument);
-        } else if (isMergeableObject(e)) {
-            destination[i] = deepmerge(target[i], e, optionsArgument);
-        } else if (target.indexOf(e) === -1) {
-            destination.push(cloneIfNecessary(e, optionsArgument));
-        }
-    });
-    return destination
-}
-
-function mergeObject(target, source, optionsArgument) {
-    var destination = {};
-    if (isMergeableObject(target)) {
-        Object.keys(target).forEach(function(key) {
-            destination[key] = cloneIfNecessary(target[key], optionsArgument);
-        });
-    }
-    Object.keys(source).forEach(function(key) {
-        if (!isMergeableObject(source[key]) || !target[key]) {
-            destination[key] = cloneIfNecessary(source[key], optionsArgument);
-        } else {
-            destination[key] = deepmerge(target[key], source[key], optionsArgument);
-        }
-    });
-    return destination
-}
-
-function deepmerge(target, source, optionsArgument) {
-    var sourceIsArray = Array.isArray(source);
-    var targetIsArray = Array.isArray(target);
-    var options = optionsArgument || { arrayMerge: defaultArrayMerge };
-    var sourceAndTargetTypesMatch = sourceIsArray === targetIsArray;
-
-    if (!sourceAndTargetTypesMatch) {
-        return cloneIfNecessary(source, optionsArgument)
-    } else if (sourceIsArray) {
-        var arrayMerge = options.arrayMerge || defaultArrayMerge;
-        return arrayMerge(target, source, optionsArgument)
-    } else {
-        return mergeObject(target, source, optionsArgument)
-    }
-}
-
-deepmerge.all = function deepmergeAll(array, optionsArgument) {
-    if (!Array.isArray(array) || array.length < 2) {
-        throw new Error('first argument should be an array with at least two elements')
-    }
-
-    // we are sure there are at least 2 values, so it is safe to have no initial value
-    return array.reduce(function(prev, next) {
-        return deepmerge(prev, next, optionsArgument)
-    })
-};
-
-var deepmerge_1 = deepmerge;
-
-module.exports = deepmerge_1;
 
 
 /***/ }),
@@ -49698,7 +49631,7 @@ var _vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js
 
 var _vue2 = _interopRequireDefault(_vue);
 
-var _deepmerge = __webpack_require__(/*! deepmerge */ "./node_modules/deepmerge/dist/cjs.js");
+var _deepmerge = __webpack_require__(/*! deepmerge */ "./node_modules/element-ui/node_modules/deepmerge/dist/cjs.js");
 
 var _deepmerge2 = _interopRequireDefault(_deepmerge);
 
@@ -57903,6 +57836,115 @@ exports.default = {
     this.$options.beforeDestroy[0].call(this);
   }
 };
+
+/***/ }),
+
+/***/ "./node_modules/element-ui/node_modules/deepmerge/dist/cjs.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/element-ui/node_modules/deepmerge/dist/cjs.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var isMergeableObject = function isMergeableObject(value) {
+	return isNonNullObject(value)
+		&& !isSpecial(value)
+};
+
+function isNonNullObject(value) {
+	return !!value && typeof value === 'object'
+}
+
+function isSpecial(value) {
+	var stringValue = Object.prototype.toString.call(value);
+
+	return stringValue === '[object RegExp]'
+		|| stringValue === '[object Date]'
+		|| isReactElement(value)
+}
+
+// see https://github.com/facebook/react/blob/b5ac963fb791d1298e7f396236383bc955f916c1/src/isomorphic/classic/element/ReactElement.js#L21-L25
+var canUseSymbol = typeof Symbol === 'function' && Symbol.for;
+var REACT_ELEMENT_TYPE = canUseSymbol ? Symbol.for('react.element') : 0xeac7;
+
+function isReactElement(value) {
+	return value.$$typeof === REACT_ELEMENT_TYPE
+}
+
+function emptyTarget(val) {
+    return Array.isArray(val) ? [] : {}
+}
+
+function cloneIfNecessary(value, optionsArgument) {
+    var clone = optionsArgument && optionsArgument.clone === true;
+    return (clone && isMergeableObject(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
+}
+
+function defaultArrayMerge(target, source, optionsArgument) {
+    var destination = target.slice();
+    source.forEach(function(e, i) {
+        if (typeof destination[i] === 'undefined') {
+            destination[i] = cloneIfNecessary(e, optionsArgument);
+        } else if (isMergeableObject(e)) {
+            destination[i] = deepmerge(target[i], e, optionsArgument);
+        } else if (target.indexOf(e) === -1) {
+            destination.push(cloneIfNecessary(e, optionsArgument));
+        }
+    });
+    return destination
+}
+
+function mergeObject(target, source, optionsArgument) {
+    var destination = {};
+    if (isMergeableObject(target)) {
+        Object.keys(target).forEach(function(key) {
+            destination[key] = cloneIfNecessary(target[key], optionsArgument);
+        });
+    }
+    Object.keys(source).forEach(function(key) {
+        if (!isMergeableObject(source[key]) || !target[key]) {
+            destination[key] = cloneIfNecessary(source[key], optionsArgument);
+        } else {
+            destination[key] = deepmerge(target[key], source[key], optionsArgument);
+        }
+    });
+    return destination
+}
+
+function deepmerge(target, source, optionsArgument) {
+    var sourceIsArray = Array.isArray(source);
+    var targetIsArray = Array.isArray(target);
+    var options = optionsArgument || { arrayMerge: defaultArrayMerge };
+    var sourceAndTargetTypesMatch = sourceIsArray === targetIsArray;
+
+    if (!sourceAndTargetTypesMatch) {
+        return cloneIfNecessary(source, optionsArgument)
+    } else if (sourceIsArray) {
+        var arrayMerge = options.arrayMerge || defaultArrayMerge;
+        return arrayMerge(target, source, optionsArgument)
+    } else {
+        return mergeObject(target, source, optionsArgument)
+    }
+}
+
+deepmerge.all = function deepmergeAll(array, optionsArgument) {
+    if (!Array.isArray(array) || array.length < 2) {
+        throw new Error('first argument should be an array with at least two elements')
+    }
+
+    // we are sure there are at least 2 values, so it is safe to have no initial value
+    return array.reduce(function(prev, next) {
+        return deepmerge(prev, next, optionsArgument)
+    })
+};
+
+var deepmerge_1 = deepmerge;
+
+module.exports = deepmerge_1;
+
 
 /***/ }),
 
@@ -109312,28 +109354,65 @@ var render = function() {
     _vm._v(" "),
     _c("br"),
     _vm._v(" "),
-    _c("table", [
-      _vm._m(0),
-      _vm._v(" "),
-      _c(
-        "tbody",
-        { attrs: { slot: "body" }, slot: "body" },
-        _vm._l(_vm.availabilities, function(availability) {
-          return _c("tr", { key: _vm.availabilities }, [
-            _c("td", [_vm._v(_vm._s(availability.doctor["name"]))]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(availability.doctor["id"]))]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(_vm.dateFormatter(availability.start)))])
-          ])
-        }),
-        0
-      ),
-      _vm._v(" "),
-      _vm.empty
-        ? _c("div", [_vm._v("\n            No Results\n        ")])
-        : _vm._e()
-    ])
+    _vm.notEmpty
+      ? _c("table", [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            { attrs: { slot: "body" }, slot: "body" },
+            _vm._l(_vm.availabilities, function(availability) {
+              return _c("tr", { key: _vm.availabilities }, [
+                _c("td", [_vm._v(_vm._s(availability.doctor["name"]))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(availability.doctor["id"]))]),
+                _vm._v(" "),
+                _c("td", [
+                  _vm._v(
+                    _vm._s(_vm.dateFormatter(availability.start)) +
+                      " to " +
+                      _vm._s(_vm.dateFormatter(availability.end))
+                  )
+                ])
+              ])
+            }),
+            0
+          )
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.empty
+      ? _c("div", { attrs: { align: "center" } }, [
+          _vm._v("\n        No Results\n    ")
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _vm.notEmpty
+      ? _c("table", [
+          _vm._m(1),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            { attrs: { slot: "body" }, slot: "body" },
+            _vm._l(_vm.doctors, function(doctor) {
+              return _c("tr", [
+                _c("td", [_vm._v(_vm._s(doctor.doctor["name"]))]),
+                _vm._v(" "),
+                _c("td", [
+                  _vm._v(
+                    _vm._s(_vm.dateFormatter(doctor.start)) +
+                      " to " +
+                      _vm._s(_vm.dateFormatter(doctor.end))
+                  )
+                ])
+              ])
+            }),
+            0
+          )
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -109365,6 +109444,36 @@ var staticRenderFns = [
           "th",
           { staticStyle: { "text-align": "left" }, attrs: { scope: "col" } },
           [_vm._v("\n                Availabilities\n            ")]
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c(
+          "th",
+          {
+            staticStyle: { "text-align": "left", width: "10rem" },
+            attrs: { scope: "col" }
+          },
+          [_vm._v("\n                Doctor\n            ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticStyle: { "text-align": "left", width: "10rem" },
+            attrs: { scope: "col" }
+          },
+          [
+            _vm._v(
+              "\n                Booked Appointment On Selected Date\n            "
+            )
+          ]
         )
       ])
     ])
@@ -125199,8 +125308,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/andrew/php/soen344/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/andrew/php/soen344/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\P\344\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\P\344\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
