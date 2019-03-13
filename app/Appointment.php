@@ -26,6 +26,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment ofDoctorId($doctor_id = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment ofPatientId($patient_id = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment ofStatus($status = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment whereCreatedAt($value)
@@ -119,6 +120,20 @@ class Appointment extends Model
     {
         return $doctor_id === null ? $query :
             $query->where('doctor_id', '=', $doctor_id);
+    }
+
+    /**
+     * Scope a query to only include availabilities for a given doctor id
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int|null $patient_id
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOfPatientId($query, $patient_id = null)
+    {
+        return $patient_id === null ? $query :
+            $query->where('patient_id', '=', $patient_id);
     }
 
     /**

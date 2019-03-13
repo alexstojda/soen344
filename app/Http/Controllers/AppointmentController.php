@@ -23,6 +23,7 @@ class AppointmentController extends Controller
     public function index(Request $request)
     {
         $appointments = Appointment::ofDoctorId($request->doctor_id ?? auth('doctor')->id())
+            ->ofPatientId($request->patient_id ?? auth('web')->id())
             ->ofStatus($request->status);
 
         if ($request->exists('start') || $request->exists('end')) {
