@@ -1,6 +1,8 @@
 import ElementUI from 'element-ui';
 import Vue from 'vue';
 import 'element-ui/lib/theme-chalk/index.css';
+import lang from 'element-ui/lib/locale/lang/en';
+import locale from 'element-ui/lib/locale';
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -29,6 +31,8 @@ if (process.env.NODE_ENV !== "production") {
  */
 
 Vue.use(ElementUI);
+// configure language
+locale.use(lang);
 
 /**
  * The following block of code may be used to automatically register your

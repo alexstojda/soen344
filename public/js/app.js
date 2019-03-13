@@ -3556,11 +3556,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
-/* harmony import */ var vuejs_timepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuejs-timepicker */ "./node_modules/vuejs-timepicker/dist/vue2-timepicker.min.js");
-/* harmony import */ var vuejs_timepicker__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuejs_timepicker__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
 //
 //
 //
@@ -3584,74 +3581,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'AddAvailability',
   data: function data() {
     return {
-      value1: '',
-      date: '',
-      startTime: {
-        HH: '',
-        mm: ''
-      },
-      endTime: {
-        HH: '',
-        mm: ''
-      }
+      startTime: '',
+      endTime: '',
+      date: ''
     };
   },
-  components: {
-    Datepicker: vuejs_datepicker__WEBPACK_IMPORTED_MODULE_1__["default"],
-    VueTimepicker: vuejs_timepicker__WEBPACK_IMPORTED_MODULE_2___default.a
-  },
+  components: {},
   props: {
     doctorId: Number
   },
   mounted: function mounted() {},
   methods: {
     addAvailability: function addAvailability() {
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/availability', {
+      console.log(this.date);
+      /*axios.post('/api/availability', {
         doctor_id: this.doctorId,
-        start: moment__WEBPACK_IMPORTED_MODULE_3___default()(this.setDate(this.date, this.startTime)).format('YYYY-MM-DD HH:MM:SS'),
-        end: moment__WEBPACK_IMPORTED_MODULE_3___default()(this.setDate(this.date, this.endTime)).format('YYYY-MM-DD HH:MM:SS')
-      }).catch(function (error) {
-        console.log(error.response.data, {
-          type: 'error'
-        });
-      }).then(function (response) {
+        //start: moment(this.setDate(this.date, { HH: '08', mm: '00',})).format('YYYY-MM-DD HH:MM:SS'),
+        //end: moment(this.setDate(this.date, { HH: '08', mm: '30',})).format('YYYY-MM-DD HH:MM:SS'),
+      }).catch(error => {
+        console.log(error.response.data, {type: 'error'});
+      }).then(response => {
         if (response.status === 200 || response.status === 201) {
           console.log('Added availability');
           console.log(response);
         } else {
           console.log('Add availability failed: Response code ' + response.status);
         }
-      });
-    },
-    setDate: function setDate(date, time) {
-      var dateMaker = new Date(date);
-      dateMaker.setHours(time.HH);
-      dateMaker.setMinutes(time.MM);
-      return date;
+      });*/
     }
   }
 });
@@ -49762,6 +49724,129 @@ var i18n = exports.i18n = function i18n(fn) {
 };
 
 exports.default = { use: use, t: t, i18n: i18n };
+
+/***/ }),
+
+/***/ "./node_modules/element-ui/lib/locale/lang/en.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/element-ui/lib/locale/lang/en.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.default = {
+  el: {
+    colorpicker: {
+      confirm: 'OK',
+      clear: 'Clear'
+    },
+    datepicker: {
+      now: 'Now',
+      today: 'Today',
+      cancel: 'Cancel',
+      clear: 'Clear',
+      confirm: 'OK',
+      selectDate: 'Select date',
+      selectTime: 'Select time',
+      startDate: 'Start Date',
+      startTime: 'Start Time',
+      endDate: 'End Date',
+      endTime: 'End Time',
+      prevYear: 'Previous Year',
+      nextYear: 'Next Year',
+      prevMonth: 'Previous Month',
+      nextMonth: 'Next Month',
+      year: '',
+      month1: 'January',
+      month2: 'February',
+      month3: 'March',
+      month4: 'April',
+      month5: 'May',
+      month6: 'June',
+      month7: 'July',
+      month8: 'August',
+      month9: 'September',
+      month10: 'October',
+      month11: 'November',
+      month12: 'December',
+      week: 'week',
+      weeks: {
+        sun: 'Sun',
+        mon: 'Mon',
+        tue: 'Tue',
+        wed: 'Wed',
+        thu: 'Thu',
+        fri: 'Fri',
+        sat: 'Sat'
+      },
+      months: {
+        jan: 'Jan',
+        feb: 'Feb',
+        mar: 'Mar',
+        apr: 'Apr',
+        may: 'May',
+        jun: 'Jun',
+        jul: 'Jul',
+        aug: 'Aug',
+        sep: 'Sep',
+        oct: 'Oct',
+        nov: 'Nov',
+        dec: 'Dec'
+      }
+    },
+    select: {
+      loading: 'Loading',
+      noMatch: 'No matching data',
+      noData: 'No data',
+      placeholder: 'Select'
+    },
+    cascader: {
+      noMatch: 'No matching data',
+      loading: 'Loading',
+      placeholder: 'Select'
+    },
+    pagination: {
+      goto: 'Go to',
+      pagesize: '/page',
+      total: 'Total {total}',
+      pageClassifier: ''
+    },
+    messagebox: {
+      title: 'Message',
+      confirm: 'OK',
+      cancel: 'Cancel',
+      error: 'Illegal input'
+    },
+    upload: {
+      deleteTip: 'press delete to remove',
+      delete: 'Delete',
+      preview: 'Preview',
+      continue: 'Continue'
+    },
+    table: {
+      emptyText: 'No Data',
+      confirmFilter: 'Confirm',
+      resetFilter: 'Reset',
+      clearFilter: 'All',
+      sumText: 'Sum'
+    },
+    tree: {
+      emptyText: 'No Data'
+    },
+    transfer: {
+      noMatch: 'No matching data',
+      noData: 'No data',
+      titles: ['List 1', 'List 2'], // to be translated
+      filterPlaceholder: 'Enter keyword', // to be translated
+      noCheckedFormat: '{total} items', // to be translated
+      hasCheckedFormat: '{checked}/{total} checked' // to be translated
+    }
+  }
+};
 
 /***/ }),
 
@@ -108473,121 +108558,62 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "form-group row" }, [
-      _c(
-        "label",
-        {
-          staticClass: "col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label"
-        },
-        [_vm._v("Date")]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "col-sm-9 col-md-7 col-lg-8" },
-        [
-          _c("datepicker", {
-            staticClass: "form-control",
-            attrs: { placeholder: "Select Date", format: "yyyy-MM-dd" },
-            model: {
-              value: _vm.date,
-              callback: function($$v) {
-                _vm.date = $$v
-              },
-              expression: "date"
-            }
-          })
-        ],
-        1
-      )
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "form-group row" }, [
-      _c(
-        "label",
-        {
-          staticClass: "col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label"
-        },
-        [_vm._v("Start Time")]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "col-sm-9 col-md-7 col-lg-8" },
-        [
-          _c("vue-timepicker", {
-            model: {
-              value: _vm.startTime,
-              callback: function($$v) {
-                _vm.startTime = $$v
-              },
-              expression: "startTime"
-            }
-          })
-        ],
-        1
-      )
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "form-group row" }, [
-      _c(
-        "label",
-        {
-          staticClass: "col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label"
-        },
-        [_vm._v("End Time")]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "col-sm-9 col-md-7 col-lg-8" },
-        [
-          _c("vue-timepicker", {
-            model: {
-              value: _vm.endTime,
-              callback: function($$v) {
-                _vm.endTime = $$v
-              },
-              expression: "endTime"
-            }
-          })
-        ],
-        1
-      )
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "form-group row" }, [
-      _c(
-        "label",
-        {
-          staticClass: "col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label"
-        },
-        [_vm._v("End Time")]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "col-sm-9 col-md-7 col-lg-8" },
-        [
-          _c("el-time-select", {
-            attrs: {
-              "picker-options": { start: "08:30", step: "00:15", end: "18:30" },
-              placeholder: "Select time"
+    _c(
+      "div",
+      { staticClass: "row" },
+      [
+        _c("el-date-picker", {
+          attrs: {
+            type: "date",
+            placeholder: "Pick a date",
+            "default-value": "2010-10-01"
+          },
+          model: {
+            value: _vm.date,
+            callback: function($$v) {
+              _vm.date = $$v
             },
-            model: {
-              value: _vm.value1,
-              callback: function($$v) {
-                _vm.value1 = $$v
-              },
-              expression: "value1"
+            expression: "date"
+          }
+        }),
+        _vm._v(" "),
+        _c("el-time-select", {
+          attrs: {
+            placeholder: "Start time",
+            "picker-options": { start: "08:30", step: "00:15", end: "18:30" }
+          },
+          model: {
+            value: _vm.startTime,
+            callback: function($$v) {
+              _vm.startTime = $$v
+            },
+            expression: "startTime"
+          }
+        }),
+        _vm._v(" "),
+        _c("el-time-select", {
+          attrs: {
+            placeholder: "End time",
+            "picker-options": {
+              start: "08:30",
+              step: "00:15",
+              end: "18:30",
+              minTime: _vm.startTime
             }
-          })
-        ],
-        1
-      )
-    ]),
+          },
+          model: {
+            value: _vm.endTime,
+            callback: function($$v) {
+              _vm.endTime = $$v
+            },
+            expression: "endTime"
+          }
+        })
+      ],
+      1
+    ),
     _vm._v(" "),
-    _c("div", { staticClass: "form-group row" }, [
+    _c("div", { staticClass: "row" }, [
       _c(
         "div",
         {
@@ -124527,6 +124553,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var element_ui_lib_theme_chalk_index_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! element-ui/lib/theme-chalk/index.css */ "./node_modules/element-ui/lib/theme-chalk/index.css");
 /* harmony import */ var element_ui_lib_theme_chalk_index_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(element_ui_lib_theme_chalk_index_css__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var element_ui_lib_locale_lang_en__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! element-ui/lib/locale/lang/en */ "./node_modules/element-ui/lib/locale/lang/en.js");
+/* harmony import */ var element_ui_lib_locale_lang_en__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(element_ui_lib_locale_lang_en__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var element_ui_lib_locale__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! element-ui/lib/locale */ "./node_modules/element-ui/lib/locale/index.js");
+/* harmony import */ var element_ui_lib_locale__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(element_ui_lib_locale__WEBPACK_IMPORTED_MODULE_4__);
+
+
 
 
 
@@ -124552,7 +124584,9 @@ if (true) {
  */
 
 
-vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(element_ui__WEBPACK_IMPORTED_MODULE_0___default.a);
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(element_ui__WEBPACK_IMPORTED_MODULE_0___default.a); // configure language
+
+element_ui_lib_locale__WEBPACK_IMPORTED_MODULE_4___default.a.use(element_ui_lib_locale_lang_en__WEBPACK_IMPORTED_MODULE_3___default.a);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

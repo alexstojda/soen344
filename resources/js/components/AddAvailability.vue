@@ -1,34 +1,18 @@
 <template>
     <div>
-        <div class="form-group row">
-            <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">Date</label>
-            <div class="col-sm-9 col-md-7 col-lg-8">
-                <datepicker class="form-control" v-model="date" placeholder="Select Date"
-                            format="yyyy-MM-dd"></datepicker>
-            </div>
+        <div class="row">
+            <el-date-picker v-model="date" type="date"
+                            placeholder="Pick a date"
+                            default-value="2010-10-01">
+            </el-date-picker>
+            <el-time-select placeholder="Start time" v-model="startTime"
+                            :picker-options="{ start: '08:30',  step: '00:15', end: '18:30'}">
+            </el-time-select>
+            <el-time-select placeholder="End time" v-model="endTime"
+                            :picker-options="{ start: '08:30', step: '00:15', end: '18:30', minTime: startTime}">
+            </el-time-select>
         </div>
-        <div class="form-group row">
-            <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">Start Time</label>
-            <div class="col-sm-9 col-md-7 col-lg-8">
-                <vue-timepicker v-model="startTime"></vue-timepicker>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">End Time</label>
-            <div class="col-sm-9 col-md-7 col-lg-8">
-                <vue-timepicker v-model="endTime"></vue-timepicker>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-sm-3 offset-md-1 col-md-3 col-lg-2 col-form-label">End Time</label>
-            <div class="col-sm-9 col-md-7 col-lg-8">
-                <el-time-select
-                        v-model="value1" :picker-options="{start: '08:30', step: '00:15', end: '18:30'}"
-                        placeholder="Select time">
-                </el-time-select>
-            </div>
-        </div>
-        <div class="form-group row">
+        <div class="row">
             <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1 text-right">
                 <button v-on:click="addAvailability()" type="button" class="btn btn-success btn-lg">Add Availability
                 </button>
@@ -39,29 +23,18 @@
 
 <script>
   import axios from 'axios';
-  import Datepicker from 'vuejs-datepicker';
-  import VueTimepicker from 'vuejs-timepicker';
   import moment from 'moment';
 
   export default {
     name: 'AddAvailability',
     data() {
       return {
-        value1: '',
+        startTime: '',
+        endTime: '',
         date: '',
-        startTime: {
-          HH: '',
-          mm: '',
-        },
-        endTime: {
-          HH: '',
-          mm: '',
-        },
       };
     },
     components: {
-      Datepicker,
-      VueTimepicker,
     },
     props: {
       doctorId: Number,
@@ -70,10 +43,11 @@
     },
     methods: {
       addAvailability: function() {
-        axios.post('/api/availability', {
+        console.log(this.date);
+        /*axios.post('/api/availability', {
           doctor_id: this.doctorId,
-          start: moment(this.setDate(this.date, this.startTime)).format('YYYY-MM-DD HH:MM:SS'),
-          end: moment(this.setDate(this.date, this.endTime)).format('YYYY-MM-DD HH:MM:SS'),
+          //start: moment(this.setDate(this.date, { HH: '08', mm: '00',})).format('YYYY-MM-DD HH:MM:SS'),
+          //end: moment(this.setDate(this.date, { HH: '08', mm: '30',})).format('YYYY-MM-DD HH:MM:SS'),
         }).catch(error => {
           console.log(error.response.data, {type: 'error'});
         }).then(response => {
@@ -83,13 +57,7 @@
           } else {
             console.log('Add availability failed: Response code ' + response.status);
           }
-        });
-      },
-      setDate: function(date, time) {
-        let dateMaker = new Date(date);
-        dateMaker.setHours(time.HH);
-        dateMaker.setMinutes(time.MM);
-        return date;
+        });*/
       },
     },
   };
