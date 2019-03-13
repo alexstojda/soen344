@@ -3734,11 +3734,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       console.log(appointment);
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/removeFromCart', {
-        patient_id: appointment.patient_id,
-        doctor_id: appointment.doctor_id,
-        start: this.dateTimeFormatter(appointment.start)
-      }).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.delete('/api/appointment/' + appointment.id).then(function (response) {
         if (response.status === 200) {
           console.log("Removed appointment from the cart");
 

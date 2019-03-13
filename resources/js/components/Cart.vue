@@ -95,13 +95,9 @@
             },
             removeFromCart: function(appointment) {
                 console.log(appointment);
-                axios.post('/api/removeFromCart', {
-                    patient_id: appointment.patient_id,
-                    doctor_id: appointment.doctor_id,
-                    start: this.dateTimeFormatter(appointment.start)
-                }).then(response => {
+                axios.delete('/api/appointment/' + appointment.id).then(response => {
                     if(response.status === 200) {
-                        console.log("Removed appointment from the cart")
+                        console.log("Removed appointment from the cart");
                         if(this.cart.length == 0)
                         {
                             this.empty = true;
