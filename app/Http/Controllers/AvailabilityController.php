@@ -11,7 +11,7 @@ class AvailabilityController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:doctor,nurse');
+        $this->middleware('auth:doctor,nurse')->only(['create','store','edit','update','destroy']);
     }
 
     /**
@@ -23,12 +23,19 @@ class AvailabilityController extends Controller
      */
     public function index(Request $request)
     {
-        return AvailabilityResource::collection(Availability
-            ::whereIsAvailable((bool) ($request->is_available ?? true))
-            ->ofDoctorId($request->doctor_id ?? auth('doctor')->id())
-            ->startAfter($request->start)
-            ->endBefore($request->end)
-            ->paginate($request->per_page ?? 50));
+        $availabilities = Availability::whereIsAvailable((bool) ($request->is_available ?? true))
+            ->ofDoctorId($request->doctor_id ?? auth('doctor')->id());
+
+
+        if ($request->exists('date')) {
+            $availabilities = $availabilities->between($request->date);
+        }
+
+        if ($request->exists('start') || $request->exists('end')) {
+            $availabilities = $availabilities->startAfter($request->start)->endBefore($request->end);
+        }
+
+        return AvailabilityResource::collection($availabilities->paginate($request->per_page ?? 50));
     }
 
     /**
