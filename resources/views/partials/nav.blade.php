@@ -35,7 +35,7 @@
                         </li>
                     @endif
                 @else
-                    @if(Auth('doctor')->user())
+                    @auth('doctor')
                     <li class="nav-item">
                         <a class="nav-link" href="/doctor/addAvailability">Add Availability <span class="sr-only">(current)</span></a>
                     </li>
@@ -43,30 +43,20 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/doctor/viewAppointments">View Appointments <span class="sr-only">(current)</span></a>
                     </li>
-                    @endif
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link" href="/viewAppointments">View Appointments <span class="sr-only">(current)</span></a>
+                        </li>
 
-                    @if(!Auth('doctor')->user())
-                        @if(Auth('nurse')->user())
-                            <li class="nav-item">
-                                <a class="nav-link" href="/nurse/viewAppointments">View Appointments <span class="sr-only">(current)</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/nurse/createAppointment">Schedule an Appointment</a>
-                            </li>
-                        @else
-                            <li class="nav-item">
-                                <a class="nav-link" href="/viewAppointments">View Appointments <span class="sr-only">(current)</span></a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="/createAppointment">Schedule an Appointment</a>
-                            </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="/createAppointment">Schedule an Appointment</a>
+                        </li>
+                        @auth('web')
                             <li class="nav-item">
                                 <cart :user-id={{ Auth::guard('web')->id()}}></cart>
                             </li>
-                        @endif
-                    @endif
+                        @endauth
+                    @endauth
 
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
