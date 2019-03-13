@@ -1,15 +1,13 @@
 <template>
     <div>
         <div class="row">
-            <el-date-picker v-model="date" type="date"
-                            placeholder="Pick a date"
-                            default-value="2010-10-01">
+            <el-date-picker v-model="date" type="date" placeholder="Pick a date" default-value="2019-01-01">
             </el-date-picker>
             <el-time-select placeholder="Start time" v-model="startTime"
-                            :picker-options="{ start: '08:30',  step: '00:15', end: '18:30'}">
+                            :picker-options="{ start: '08:00',  step: '00:20', end: '20:00'}">
             </el-time-select>
             <el-time-select placeholder="End time" v-model="endTime"
-                            :picker-options="{ start: '08:30', step: '00:15', end: '18:30', minTime: startTime}">
+                            :picker-options="{ start: '08:00', step: '00:20', end: '20:00', minTime: startTime}">
             </el-time-select>
         </div>
         <div class="row">
@@ -40,14 +38,21 @@
       doctorId: Number,
     },
     mounted() {
+      this.moment = moment;
     },
     methods: {
       addAvailability: function() {
-        console.log(this.date);
-        /*axios.post('/api/availability', {
-          doctor_id: this.doctorId,
-          //start: moment(this.setDate(this.date, { HH: '08', mm: '00',})).format('YYYY-MM-DD HH:MM:SS'),
-          //end: moment(this.setDate(this.date, { HH: '08', mm: '30',})).format('YYYY-MM-DD HH:MM:SS'),
+        let date = { y: this.date.getFullYear(), m: this.date.getMonth(), d: this.date.getDate() };
+        let startSplit = this.startTime.split(':');
+        let endSplit = this.endTime.split(':');
+
+        let start = moment({y: date.y, M: date.m, d: date.d, h: startSplit[0], m: startSplit[1]}).format("YYYY-MM-DD HH:mm:ss");
+        let end = moment({y: date.y, M: date.m, d: date.d, h: endSplit[0], m: endSplit[1]}).format("YYYY-MM-DD HH:mm:ss");
+
+        //console.log(start);
+        //console.log(end);
+        axios.post('/api/availability', {
+          doctor_id: this.doctorId, start: start, end: end,
         }).catch(error => {
           console.log(error.response.data, {type: 'error'});
         }).then(response => {
@@ -57,7 +62,7 @@
           } else {
             console.log('Add availability failed: Response code ' + response.status);
           }
-        });*/
+        });
       },
     },
   };

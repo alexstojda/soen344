@@ -3579,8 +3579,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3596,24 +3594,50 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     doctorId: Number
   },
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    this.moment = moment__WEBPACK_IMPORTED_MODULE_1___default.a;
+  },
   methods: {
     addAvailability: function addAvailability() {
-      console.log(this.date);
-      /*axios.post('/api/availability', {
+      var date = {
+        y: this.date.getFullYear(),
+        m: this.date.getMonth(),
+        d: this.date.getDate()
+      };
+      var startSplit = this.startTime.split(':');
+      var endSplit = this.endTime.split(':');
+      var start = moment__WEBPACK_IMPORTED_MODULE_1___default()({
+        y: date.y,
+        M: date.m,
+        d: date.d,
+        h: startSplit[0],
+        m: startSplit[1]
+      }).format("YYYY-MM-DD HH:mm:ss");
+      var end = moment__WEBPACK_IMPORTED_MODULE_1___default()({
+        y: date.y,
+        M: date.m,
+        d: date.d,
+        h: endSplit[0],
+        m: endSplit[1]
+      }).format("YYYY-MM-DD HH:mm:ss"); //console.log(start);
+      //console.log(end);
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/availability', {
         doctor_id: this.doctorId,
-        //start: moment(this.setDate(this.date, { HH: '08', mm: '00',})).format('YYYY-MM-DD HH:MM:SS'),
-        //end: moment(this.setDate(this.date, { HH: '08', mm: '30',})).format('YYYY-MM-DD HH:MM:SS'),
-      }).catch(error => {
-        console.log(error.response.data, {type: 'error'});
-      }).then(response => {
+        start: start,
+        end: end
+      }).catch(function (error) {
+        console.log(error.response.data, {
+          type: 'error'
+        });
+      }).then(function (response) {
         if (response.status === 200 || response.status === 201) {
           console.log('Added availability');
           console.log(response);
         } else {
           console.log('Add availability failed: Response code ' + response.status);
         }
-      });*/
+      });
     }
   }
 });
@@ -108566,7 +108590,7 @@ var render = function() {
           attrs: {
             type: "date",
             placeholder: "Pick a date",
-            "default-value": "2010-10-01"
+            "default-value": "2019-01-01"
           },
           model: {
             value: _vm.date,
@@ -108580,7 +108604,7 @@ var render = function() {
         _c("el-time-select", {
           attrs: {
             placeholder: "Start time",
-            "picker-options": { start: "08:30", step: "00:15", end: "18:30" }
+            "picker-options": { start: "08:00", step: "00:20", end: "20:00" }
           },
           model: {
             value: _vm.startTime,
@@ -108595,9 +108619,9 @@ var render = function() {
           attrs: {
             placeholder: "End time",
             "picker-options": {
-              start: "08:30",
-              step: "00:15",
-              end: "18:30",
+              start: "08:00",
+              step: "00:20",
+              end: "20:00",
               minTime: _vm.startTime
             }
           },
