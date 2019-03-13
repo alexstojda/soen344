@@ -144,7 +144,7 @@ class Doctor extends Authenticatable
      * @param Carbon|string|null $to
      * @param array $status
      *
-     * @return Collection|Availability[]
+     * @return Collection|Appointment[]|Appointment
      */
     public function appointmentsBetween($from = null, $to = null, $status = ['cancelled', 'cart'])
     {
@@ -157,7 +157,7 @@ class Doctor extends Authenticatable
      * @param Carbon|string|null $from
      * @param Carbon|string|null $to
      *
-     * @return Collection|Availability[]
+     * @return Collection|Availability[]|Availability
      */
     public function availabilitiesBetween($from = null, $to = null)
     {

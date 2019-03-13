@@ -22,10 +22,11 @@ use Illuminate\Support\Carbon;
  * @property-read \App\Doctor $doctor
  * @property-read \App\User $patient
  * @property-read \App\Room $room
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment between($at = null, $to = null, $status = ['cancelled'])
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment ofDoctorId($doctor_id = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment between($at = null, $to = null, $status = array())
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment ofDoctorId($doctor_id = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment ofStatus($status = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment whereDoctorId($value)
@@ -118,5 +119,19 @@ class Appointment extends Model
     {
         return $doctor_id === null ? $query :
             $query->where('doctor_id', '=', $doctor_id);
+    }
+
+    /**
+     * Scope a query to only include availabilities for a given doctor id
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string|null $status
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOfStatus($query, $status = null)
+    {
+        return $status === null ? $query->whereIn('status', ['active', 'rescheduled', 'complete']) :
+            $query->where('status', '=', $status);
     }
 }

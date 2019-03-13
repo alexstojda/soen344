@@ -17,16 +17,16 @@ use Illuminate\Support\Carbon;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Doctor $doctor
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability startAfter($start = null)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability startBefore($start = null)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability endBefore($end = null)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability between($at = null, $to = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability available()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability unavailable()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability ofDoctorId($doctor_id = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability between($at = null, $to = null, $available = true)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability endBefore($end = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability ofDoctorId($doctor_id = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability startAfter($start = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability startBefore($start = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability unavailable()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability whereDoctorId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability whereEnd($value)

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -25,6 +26,7 @@ use Illuminate\Support\Carbon;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Appointment[] $appointments
+ * @property-read string $has_annual_checkup
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newQuery()
@@ -79,11 +81,30 @@ class User extends Authenticatable
     ];
 
     /**
+     * Does patient already have an appointment this year
+     *
+     * @return string
+     */
+    public function getHasAnnualCheckupAttribute()
+    {
+        return $this->appointmentsThisYear()->where('type', 'annual checkup')
+                    ->whereNotIn('status', ['cancelled'])->isNotEmpty();
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany|Collection|Appointment[]|Appointment
      */
     public function appointments()
     {
         return $this->hasMany(Appointment::class, 'doctor_id', 'id');
+    }
+
+    /**
+     * @return Builder|Collection|Appointment[]|Appointment
+     */
+    public function appointmentsThisYear()
+    {
+        return $this->appointments()->between(now()->startOfYear(), now()->endOfYear())->get();
     }
 
     /**

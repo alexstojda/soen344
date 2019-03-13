@@ -81,51 +81,28 @@
         },
         methods: {
             addAppointment: function() {
-                if(this.isNurse)
-                {
-                    axios.post('/api/createAnAppointmentNurse', {
-                        patient_id: this.patient_id,
-                        doctor_id: this.doctor_id,
-                        room_id: this.room_id,
-                        start: this.setDate(this.date, this.time),
-                        end: this.setDateTime(this.date, this.time, this.type),
-                        type: this.type,
-                        status: 'active'
-                    }).then(response => {
-                        if (response.status == 200) {
-                            console.log("Added appointment")
-                        } else {
-                            console.log("Add appointment failed: Response code " + response.status)
-                        }
-                    }).catch(error => {
-                        console.log(error.response)
-                    })
-                }
-                else
-                {
-                    axios.post('/api/createAnAppointment', {
-                        patient_id: this.patient_id,
-                        doctor_id: this.doctor_id,
-                        room_id: this.room_id,
-                        start: this.setDate(this.date, this.time),
-                        end: this.setDateTime(this.date, this.time, this.type),
-                        type: this.type,
-                        status: 'cart'
-                    }).then(response => {
-                        if (response.status == 200) {
-                            console.log("Added appointment");
-                        } else {
-                            console.log("Add appointment failed: Response code " + response.status)
-                        }
-                    }).catch(error => {
-                        console.log(error.response)
-                    })
-                }
+                axios.post('/api/appointment', {
+                    patient_id: this.patient_id,
+                    doctor_id: this.doctor_id,
+                    room_id: this.room_id,
+                    start: this.setDate(this.date, this.time),
+                    end: this.setDateTime(this.date, this.time, this.type),
+                    type: this.type,
+                    status: (this.isNurse) ? 'active' : 'cart'
+                }).then(response => {
+                    if (response.status == 200) {
+                        console.log("Added appointment");
+                    } else {
+                        console.log("Add appointment failed: Response code " + response.status)
+                    }
+                }).catch(error => {
+                    console.log(error.response)
+                })
             },
             setDate: function(date, time) {
                 let timeSplit = time.split(':');
-                console.log(moment(date).add(timeSplit[0], "hours").add(timeSplit[1], "minutes").format("YYYY-MM-DD HH:mm"))
-                return moment(date).add(timeSplit[0], "hours").add(timeSplit[1], "minutes").format("YYYY-MM-DD HH:mm");
+                console.log(moment(date).add(timeSplit[0], "hours").add(timeSplit[1], "minutes").format("YYYY-MM-DD HH:mm:ss"));
+                return moment(date).add(timeSplit[0], "hours").add(timeSplit[1], "minutes").format("YYYY-MM-DD HH:mm:ss");
             },
             setDateTime: function(date, time, type) {
                 let timeSplit = time.split(':');
@@ -143,9 +120,9 @@
                 {
                     dateMaker.add(1, "hours");
                 }
-                console.log(moment(dateMaker).format("YYYY-MM-DD HH:mm"))
+                console.log(moment(dateMaker).format("YYYY-MM-DD HH:mm:ss"));
 
-                return moment(dateMaker).format("YYYY-MM-DD HH:mm");
+                return moment(dateMaker).format("YYYY-MM-DD HH:mm:ss");
             }
         }
     };

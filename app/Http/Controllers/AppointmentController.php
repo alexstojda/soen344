@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Appointment;
 use App\Doctor;
+use App\User as Patient;
 use App\Room;
 use App\Http\Resources\Appointment as AppointmentResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class AppointmentController extends Controller
 {
@@ -21,7 +23,7 @@ class AppointmentController extends Controller
     public function index(Request $request)
     {
         $appointments = Appointment::ofDoctorId($request->doctor_id ?? auth('doctor')->id())
-            ->whereIn('status', collect($request->status) ?? ['active', 'rescheduled', 'complete']);
+            ->ofStatus($request->status);
 
         if ($request->exists('start') || $request->exists('end')) {
             $appointments = $appointments->between($request->start, $request->end);
@@ -37,7 +39,7 @@ class AppointmentController extends Controller
      */
     public function create()
     {
-        //
+        //exit
     }
 
     /**
@@ -48,40 +50,32 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $appointment = Appointment::create([
-                    'doctor_id' => $request->doctor_id,
-                    'patient_id' => $request->patient_id,
-                    'room_id' => $request->room_id, // or find available room
-                    'start' => $request->start,
-                    'end' => $request->end,
-                    'type' => $request->type,
-                    'status' => $request->status,
-                ]);
-            return new AppointmentResource($appointment);
-        } catch (\Exception $e) {
-            return response()->json($e);
-        }
-    }
+        $validated = $request->validate([
+            'doctor_id'    => 'required|int',
+            'patient_id'   => auth('web')->check() ? 'nullable|int' : 'required|int',
+            'room_id'      => 'nullable|int',
+            'start'        => 'required|before_or_equal:end',
+            'end'          => 'required|after_or_equal:start',
+            'type' => ['required', Rule::in(['walk-in','annual checkup'])],
+            'status' => ['required', Rule::in(['active','cancelled','complete'])]
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return AppointmentResource|\Illuminate\Http\Response
-     */
-    public function storeNurse(Request $request)
-    {
         try {
+            $patient = Patient::findOrFail($validated['patient_id'] ?? auth('web')->id());
+
+            if($patient->has_annual_checkup && $validated['status'] === '') {
+
+            }
+
             $appointment = Appointment::create([
-                'doctor_id' => $request->doctor_id,
-                'patient_id' => $request->patient_id,
-                'room_id' => $request->room_id, // or find available room
-                'start' => $request->start,
-                'end' => $request->end,
-                'type' => $request->type,
-                'status' => $request->status,
-            ]);
+                    'doctor_id' => $validated['doctor_id'],
+                    'patient_id' => $patient->id,
+                    'room_id' => $validated['room_id'] ?? Room::all()->random()->id, // or find available room
+                    'start' => $validated['start'],
+                    'end' => $validated['end'],
+                    'type' => $validated['type'] ?? 'walk-in',
+                    'status' => $validated['status'] ?? 'cart',
+                ]);
             return new AppointmentResource($appointment);
         } catch (\Exception $e) {
             return response()->json($e);
@@ -150,7 +144,7 @@ class AppointmentController extends Controller
             'room_id' => 'required|int|max:10',
             'start' => 'date',
             'end' => 'date',
-            'type' => ['required',Rule::in(['walk-in','annual checkup','regular','urgent'])],
+            'type' => ['required',Rule::in(['walk-in','annual checkup'])],
             'status' => ['required',Rule::in(['active','cancelled','complete'])]
         ]);
         // if it's not valid the code will stop here and throw the error with required fields

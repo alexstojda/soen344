@@ -36,8 +36,6 @@ Route::apiResource('/availabilities','AvailabilityController');
 Route::get('/availabilitiesByDate/{date}', 'AvailabilityController@selectDate');
 
 Route::apiResource('/cart','CartController');
-Route::post('/createAnAppointment', 'AppointmentController@store');
-Route::post('/createAnAppointmentNurse', 'AppointmentController@storeNurse');
 Route::post('/removeFromCart', 'CartController@destroy');
 
 

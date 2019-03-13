@@ -27,6 +27,7 @@ class Patient extends JsonResource
             'appointments' => $this->appointmentsLinksArray(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'updated_at' => $this->has_annual_checkup,
             'path' => route('patient.show', ['id' => $this->id]),
         ];
     }
