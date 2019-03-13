@@ -121,7 +121,7 @@
                 return [year, month, day].join('-');
             },
             dateFormatter: function(date) {
-                return moment(date).format("YYYY-MM-DD MM:HH");
+                return moment(date).format("YYYY-MM-DD HH:mm");
             },
             doctorAvalabilities: function(date) {
                 axios.get('/api/appointments?start=' + moment(date).format("YYYY-MM-DD"))

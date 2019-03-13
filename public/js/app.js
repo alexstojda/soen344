@@ -4159,7 +4159,7 @@ __webpack_require__.r(__webpack_exports__);
       return [year, month, day].join('-');
     },
     dateFormatter: function dateFormatter(date) {
-      return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format("YYYY-MM-DD MM:HH");
+      return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format("YYYY-MM-DD HH:mm");
     },
     doctorAvalabilities: function doctorAvalabilities(date) {
       var _this2 = this;
