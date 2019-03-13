@@ -1,3 +1,7 @@
+import ElementUI from 'element-ui';
+import Vue from 'vue';
+import 'element-ui/lib/theme-chalk/index.css';
+
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -6,7 +10,7 @@
 
 require("./bootstrap");
 
-window.Vue = require("vue");
+window.Vue = Vue;
 
 /**
  * Enable Debug Mode based on env
@@ -19,6 +23,12 @@ if (process.env.NODE_ENV !== "production") {
     Vue.config.debug = false;
     Vue.config.silent = true;
 }
+
+/**
+ * The following block of code may be used to add libraries to Vue
+ */
+
+Vue.use(ElementUI);
 
 /**
  * The following block of code may be used to automatically register your
