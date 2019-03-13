@@ -14,11 +14,20 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return AvailabilityResource|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @param Request $request
+     *
+     * @return AppointmentResource|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return AppointmentResource::collection(Appointment::where('status','!=','cart')->get());
+        $appointments = Appointment::ofDoctorId($request->doctor_id ?? auth('doctor')->id())
+            ->whereIn('status', $request->status ?? ['cart' ,'active', 'rescheduled', 'complete']);
+
+        if ($request->exists('start') || $request->exists('end')) {
+            $appointments = $appointments->between($request->start, $request->end);
+        }
+
+        return AppointmentResource::collection($appointments->paginate($request->per_page ?? 50));
     }
 
     /**
@@ -39,8 +48,8 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-            try {
-                $appointment = Appointment::create([
+        try {
+            $appointment = Appointment::create([
                     'doctor_id' => $request->doctor_id,
                     'patient_id' => $request->patient_id,
                     'room_id' => $request->room_id, // or find available room
@@ -49,10 +58,10 @@ class AppointmentController extends Controller
                     'type' => $request->type,
                     'status' => $request->status,
                 ]);
-                return new AppointmentResource($appointment);
-            } catch (\Exception $e) {
-                return response()->json($e);
-            }
+            return new AppointmentResource($appointment);
+        } catch (\Exception $e) {
+            return response()->json($e);
+        }
     }
 
     /**
@@ -97,11 +106,9 @@ class AppointmentController extends Controller
      */
     public function showCreateAppointmentPage()
     {
-        if(Auth::guard("nurse"))
-        {
+        if (Auth::guard("nurse")) {
             return view('nurse.appointment');
-        }
-        else {
+        } else {
             return view('appointment.appointment');
         }
     }
@@ -169,10 +176,9 @@ class AppointmentController extends Controller
      */
     public function finalize($id)
     {
-       $cart = Appointment::Where('patient_id','=',$id)->where('status','=','cart')->get();
+        $cart = Appointment::Where('patient_id', '=', $id)->where('status', '=', 'cart')->get();
 
-       foreach($cart as $cartItem)
-        {
+        foreach ($cart as $cartItem) {
             $cartItem->status = 'active';
             $cartItem->save();
         }
@@ -187,10 +193,9 @@ class AppointmentController extends Controller
      */
     public function cancelAppointment($id)
     {
-        $appointments = Appointment::Where('id','=',$id)->get();
+        $appointments = Appointment::Where('id', '=', $id)->get();
 
-        foreach($appointments as $appointment) {
-
+        foreach ($appointments as $appointment) {
             $appointment->status = 'cancelled';
             $appointment->save();
         }

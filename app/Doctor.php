@@ -174,7 +174,7 @@ class Doctor extends Authenticatable
     public function isAvailableBetween($from = null, $to = null): bool
     {
         $start = Carbon::parse($from ?? now()->startOfDay()->addHours(config('bonmatin.office_hours.open')));
-        $end = ($to === null) ? $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.close')) : Carbon::parse($to);
+        $end = Carbon::parse($to ?? $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.close')));
 
         $open = $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.open'))->subSecond();
         $close = $end->copy()->startOfDay()->addHours(config('bonmatin.office_hours.close'))->addSecond();

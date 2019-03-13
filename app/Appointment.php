@@ -23,6 +23,7 @@ use Illuminate\Support\Carbon;
  * @property-read \App\User $patient
  * @property-read \App\Room $room
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment between($at = null, $to = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment ofDoctorId($doctor_id = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment query()
@@ -102,5 +103,20 @@ class Appointment extends Model
         return $query->whereNotIn('status', $status)
             ->where('start', '>=', $start)
             ->where('end', '<=', $end);
+    }
+
+
+    /**
+     * Scope a query to only include availabilities for a given doctor id
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  int|null $doctor_id
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOfDoctorId($query, $doctor_id = null)
+    {
+        return $doctor_id === null ? $query :
+            $query->where('doctor_id', '=', $doctor_id);
     }
 }
