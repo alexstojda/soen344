@@ -4,7 +4,10 @@
             <thead>
             <tr>
                 <th scope="col">
-                    <SortLink name="doctor">Doctor ID</SortLink>
+                    <SortLink name="doctor">Doctor</SortLink>
+                </th>
+                <th scope="col">
+                    <SortLink name="patient">Patient ID</SortLink>
                 </th>
                 <th scope="col" >
                     <SortLink name="room">Room ID</SortLink>
@@ -21,6 +24,7 @@
             <tbody slot="body" slot-scope="sort">
             <tr v-for="appointment in sort.values" :key="appointment.id">
                 <td>{{ appointment.doctor["name"] }}</td>
+                <td>{{ appointment.patient["id"] }}</td>
                 <td>{{ appointment.room["id"] }}</td>
                 <td>{{ appointment.status }}</td>
                 <td>{{ dateFormatter(appointment.start) }}</td>
