@@ -51,12 +51,13 @@ class Room extends Model
      *
      * @param Carbon|string|null $from
      * @param Carbon|string|null $to
+     * @param array $status
      *
      * @return Collection|Availability[]
      */
-    public function appointmentsBetween($from = null, $to = null)
+    public function appointmentsBetween($from = null, $to = null, $status = ['cancelled', 'cart'])
     {
-        return $this->appointments()->between($from, $to)->get();
+        return $this->appointments()->between($from, $to, $status)->get();
     }
 
     /**

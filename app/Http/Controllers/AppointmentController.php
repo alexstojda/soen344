@@ -100,9 +100,6 @@ class AppointmentController extends Controller
      */
     public function showCreateAppointmentPage()
     {
-        if (Auth::guard('nurse')->check()) {
-            return view('nurse.appointment');
-        }
         return view('appointment.appointment');
     }
 

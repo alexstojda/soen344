@@ -17,7 +17,35 @@
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
                 <!-- Authentication Links -->
-                @guest
+                @auth('doctor')
+                    <li class="nav-item">
+                        <a class="nav-link" href="/doctor/addAvailability">Add Availability <span class="sr-only">(current)</span></a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/doctor/viewAppointments">View Appointments <span class="sr-only">(current)</span></a>
+                    </li>
+                @elseauth('nurse')
+                    <li class="nav-item">
+                        <a class="nav-link" href="/viewAppointments">View Appointments <span class="sr-only">(current)</span></a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/createAppointment">Schedule an Appointment</a>
+                    </li>
+                @elseauth('web')
+                    <li class="nav-item">
+                        <a class="nav-link" href="/viewAppointments">View Appointments <span class="sr-only">(current)</span></a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/createAppointment">Schedule an Appointment</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <cart :user-id={{ Auth::guard('web')->id()}}></cart>
+                    </li>
+                @else
                     <li class="nav-item dropdown">
                         <a id="navbarLoginDropdown" class="nav-link dropdown-toggle" href="#"
                            role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -34,33 +62,17 @@
                             <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                         </li>
                     @endif
-                @else
-                    @auth('doctor')
-                    <li class="nav-item">
-                        <a class="nav-link" href="/doctor/addAvailability">Add Availability <span class="sr-only">(current)</span></a>
-                    </li>
+                @endauth
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/doctor/viewAppointments">View Appointments <span class="sr-only">(current)</span></a>
-                    </li>
-                    @else
-                        <li class="nav-item">
-                            <a class="nav-link" href="/viewAppointments">View Appointments <span class="sr-only">(current)</span></a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="/createAppointment">Schedule an Appointment</a>
-                        </li>
-                        @auth('web')
-                            <li class="nav-item">
-                                <cart :user-id={{ Auth::guard('web')->id()}}></cart>
-                            </li>
-                        @endauth
-                    @endauth
+                @if(auth()->check() || auth('nurse')->check() || auth('doctor')->check() )
 
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ Auth::user()->name }} <span class="caret"></span>
+                            @auth('web') {{ auth()->user()->name }}
+                            @elseauth('nurse') {{ auth('nurse')->user()->name }}
+                            @elseauth('doctor') {{ auth('doctor')->user()->name }}
+                            @endauth
+                            <span class="caret"></span>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -75,7 +87,7 @@
                             </form>
                         </div>
                     </li>
-                @endguest
+                @endif
             </ul>
         </div>
     </div>

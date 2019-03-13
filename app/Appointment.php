@@ -96,7 +96,7 @@ class Appointment extends Model
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeBetween($query, $at = null, $to = null, $status = ['cancelled'])
+    public function scopeBetween($query, $at = null, $to = null, $status = ['cancelled', 'cart'])
     {
         $start = Carbon::parse($at);
         $end = ($to === null) ? $start->copy()->endOfDay() : Carbon::parse($to);
