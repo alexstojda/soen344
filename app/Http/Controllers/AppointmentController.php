@@ -21,7 +21,7 @@ class AppointmentController extends Controller
     public function index(Request $request)
     {
         $appointments = Appointment::ofDoctorId($request->doctor_id ?? auth('doctor')->id())
-            ->whereIn('status', $request->status ?? ['cart' ,'active', 'rescheduled', 'complete']);
+            ->whereIn('status', $request->status ?? ['active', 'rescheduled', 'complete']);
 
         if ($request->exists('start') || $request->exists('end')) {
             $appointments = $appointments->between($request->start, $request->end);
