@@ -1990,10 +1990,12 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {},
   methods: {
     addAvailability: function addAvailability() {
+      var _this = this;
+
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/availability', {
         doctor_id: this.doctorId,
-        start: moment__WEBPACK_IMPORTED_MODULE_3___default()(this.setDate(this.date, this.startTime)).format("YYYY-MM-DD HH:MM:SS"),
-        end: moment__WEBPACK_IMPORTED_MODULE_3___default()(this.setDate(this.date, this.endTime)).format("YYYY-MM-DD HH:MM:SS")
+        start: moment__WEBPACK_IMPORTED_MODULE_3___default()(this.date, 'YYYY-MM-DD hh:mm:ss').subtract(this.gethours(), 'hours').add(this.startTime.HH, 'hours').add(this.startTime.MM, 'minutes').format("YYYY-MM-DD HH:MM:SS"),
+        end: moment__WEBPACK_IMPORTED_MODULE_3___default()(this.date, 'YYYY-MM-DD hh:mm:ss').subtract(this.gethours(), 'hours').add(this.endTime.HH, 'hours').add(this.endTime.MM, 'minutes').format("YYYY-MM-DD HH:MM:SS")
       }).catch(function (error) {
         console.log(error.response.data, {
           type: 'error'
@@ -2005,13 +2007,14 @@ __webpack_require__.r(__webpack_exports__);
         } else {
           console.log("Add availability failed: Response code " + response.status);
         }
+      }).catch(function (error) {
+        console.log(moment__WEBPACK_IMPORTED_MODULE_3___default()(_this.date, 'YYYY-MM-DD hh:mm:ss').subtract(_this.gethours(), 'hours').add(_this.startTime.HH, 'hours').add(_this.startTime.MM, 'minutes').format("YYYY-MM-DD HH:MM:SS"));
+        console.log(error.response);
       });
     },
-    setDate: function setDate(date, time) {
-      var dateMaker = new Date(date);
-      dateMaker.setHours(time.HH);
-      dateMaker.setMinutes(time.MM);
-      return date;
+    gethours: function gethours() {
+      var dateMaker = new Date();
+      return dateMaker.getHours();
     }
   }
 });
@@ -72135,8 +72138,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/andrew/php/soen344/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/andrew/php/soen344/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\P\344\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\P\344\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

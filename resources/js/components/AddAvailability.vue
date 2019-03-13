@@ -60,8 +60,8 @@
             addAvailability: function() {
                 axios.post('/api/availability', {
                     doctor_id: this.doctorId,
-                    start: moment(this.setDate(this.date, this.startTime)).format("YYYY-MM-DD HH:MM:SS"),
-                    end: moment(this.setDate(this.date, this.endTime)).format("YYYY-MM-DD HH:MM:SS")
+                    start: moment(this.date, 'YYYY-MM-DD hh:mm:ss').subtract(this.gethours(), 'hours').add(this.startTime.HH, 'hours').add(this.startTime.MM, 'minutes').format("YYYY-MM-DD HH:MM:SS"),
+                    end: moment(this.date, 'YYYY-MM-DD hh:mm:ss').subtract(this.gethours(), 'hours').add(this.endTime.HH, 'hours').add(this.endTime.MM, 'minutes').format("YYYY-MM-DD HH:MM:SS")
                 }).catch(error => {
                   console.log(error.response.data, { type: 'error' });
                 }).then(response => {
@@ -71,13 +71,13 @@
                     } else {
                         console.log("Add availability failed: Response code " + response.status)
                     }
+                }).catch(error => {
+                   console.log(error.response)
                 })
             },
-            setDate: function(date, time) {
-                let dateMaker = new Date(date);
-                    dateMaker.setHours(time.HH);
-                    dateMaker.setMinutes(time.MM);
-                return date;
+            gethours: function() {
+                let dateMaker = new Date();
+                return dateMaker.getHours();
             }
         }
     };
