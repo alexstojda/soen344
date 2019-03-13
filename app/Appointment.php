@@ -22,7 +22,7 @@ use Illuminate\Support\Carbon;
  * @property-read \App\Doctor $doctor
  * @property-read \App\User $patient
  * @property-read \App\Room $room
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment between(\Illuminate\Support\Carbon $at = null, $type = 'walk-in')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment between($at = null, $to = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment query()
@@ -88,23 +88,19 @@ class Appointment extends Model
      * Scope a query to narrow appointment dates
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param Carbon|null $at
-     * @param string $type
+     * @param Carbon|string|null $at
+     * @param Carbon|string|null $to
      * @param array $status
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeBetween(
-        $query,
-        Carbon $at = null,
-        $type = 'walk-in',
-        $status = ['confirmed', 'cart', 'complete']
-    ) {
-        $start = $at ?? now();
-        $end = $start->copy()->addMinutes($type === 'walk-in' ? 20 : 60);
+    public function scopeBetween($query, $at = null, $to = null, $status = ['cancelled'])
+    {
+        $start = Carbon::parse($at);
+        $end = ($to === null) ? $start->copy()->endOfDay() : Carbon::parse($to);
 
-        return $query->whereIn('status', $status)
-            ->where('start', '<=', $start)
-            ->where('end', '>=', $end);
+        return $query->whereNotIn('status', $status)
+            ->where('start', '>=', $start)
+            ->where('end', '<=', $end);
     }
 }

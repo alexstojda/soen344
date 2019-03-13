@@ -16,7 +16,7 @@ use \Illuminate\Database\Eloquent\Collection;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Appointment[] $appointments
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Room availableOn($at = null, $type = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Room availableBetween($at = null, $to = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Room newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Room newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Room query()
@@ -49,27 +49,32 @@ class Room extends Model
     /**
      * Given a date grab all appointments in this room
      *
-     * @param Carbon|null $at
-     * @param string|null $type
+     * @param Carbon|string|null $at
+     * @param Carbon|string|null $to
      *
      * @return Collection|Availability[]
      */
-    public function appointmentsOn(Carbon $at = null, $type = null)
+    public function appointmentsBetween($at = null, $to = null)
     {
-        return $this->appointments()->between($at, $type)->get();
+        return $this->appointments()->between($at, $to)->get();
     }
 
     /**
      * Given a date checks room is available for use
      *
-     * @param Carbon|null $at
-     * @param string|null $type
+     * @param Carbon|string|null $at
+     * @param Carbon|string|null $to
      *
      * @return bool
      */
-    public function is_available_on(Carbon $at = null, $type = null): bool
+    public function isAvailableBetween($at = null, $to = null): bool
     {
-        return $this->appointmentsOn($at, $type)->isEmpty();
+        $start = Carbon::parse($at);
+        $end = ($to === null) ? $start->copy()->endOfDay() : Carbon::parse($to);
+
+        return $start->isAfter($start->copy()->startOfDay()->addHours(8)->subSecond()) &&
+               $end->isBefore($end->copy()->startOfDay()->addHours(20)->addSecond()) &&
+               $this->appointmentsBetween($start, $end)->isEmpty();
     }
 
     /**
@@ -77,23 +82,20 @@ class Room extends Model
      *
      * @param Builder $query
      * @param Carbon|string|null $at
-     * @param string|null $type
+     * @param Carbon|string|null $to
      *
      * @return Builder
      * @throws \Exception
      */
-    public function scopeAvailableOn(Builder $query, $at = null, $type = null): Builder
+    public function scopeAvailableBetween(Builder $query, $at = null, $to = null): Builder
     {
-        if (($at !== null) && !($at instanceof Carbon)) {
-            $at = new Carbon($at);
-        }
-        $start = $at ?? now();
-        $end = $start->copy()->addMinutes($type === 'walk-in' ? 20 : 60);
+        $start = Carbon::parse($at ?? now()->startOfDay()->addHours(8));
+        $end = ($to === null) ? $start->copy()->startOfDay()->addHours(20) : Carbon::parse($to);
 
         return $query->whereDoesntHave('appointments', function (Builder $query) use ($start, $end) {
-            $query->whereIn('status', ['active', 'cart'])
+            $query->whereNotIn('status', ['cancelled'])
                 ->where('start', '<=', $start)
-                ->where('end', '>=', $end);
+                ->where('end', '<=', $end);
         });
     }
 }

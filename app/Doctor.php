@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Notifications\DoctorResetPassword;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -101,6 +102,25 @@ class Doctor extends Authenticatable
     public function appointments()
     {
         return $this->hasMany(Appointment::class, 'doctor_id', 'id');
+    }
+
+    /**
+     * Given a date checks room is available for use
+     *
+     * @param Builder $query
+     * @param Carbon|string|null $at
+     * @param Carbon|string|null $to
+     *
+     * @return Builder
+     * @throws \Exception
+     */
+    public function scopeAvailableOn(Builder $query, $at = null, $to = null): Builder
+    {
+        return $query->whereDoesntHave('appointments', function (Builder $query) use ($at, $to) {
+            $query->whereNotIn('status', ['cancelled'])
+                ->where('start', '<=', Carbon::parse($at))
+                ->where('end', '>=', Carbon::parse($to));
+        });
     }
 
     /**

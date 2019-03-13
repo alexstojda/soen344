@@ -20,7 +20,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability startAfter($start = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability startBefore($start = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability endBefore($end = null)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability availableOn(Carbon $at = null, $type = 'walk-in')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability between($at = null, $to = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability available()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability unavailable()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Availability ofDoctorId($doctor_id = null)
@@ -78,7 +78,7 @@ class Availability extends Model
     public function scopeStartAfter($query, $start = null)
     {
         return $start === null ? $query :
-            $query->whereDate('start', '>=', Carbon::parse($start));
+            $query->where('start', '>=', Carbon::parse($start));
     }
 
     /**
@@ -92,7 +92,7 @@ class Availability extends Model
     public function scopeStartBefore($query, $start = null)
     {
         return $start === null ? $query :
-            $query->whereDate('start', '<=', Carbon::parse($start));
+            $query->where('start', '<=', Carbon::parse($start));
     }
 
     /**
@@ -106,7 +106,27 @@ class Availability extends Model
     public function scopeEndBefore($query, $end = null)
     {
         return $end === null ? $query :
-            $query->whereDate('end', '<=', Carbon::parse($end));
+            $query->where('end', '<=', Carbon::parse($end));
+    }
+
+    /**
+     * Scope a query to narrow availability dates
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Carbon|string|null $at
+     * @param  Carbon|string|null $to
+     * @param  boolean $available
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeBetween($query, $at = null, $to = null, $available = true)
+    {
+        $start = Carbon::parse($at);
+        $end = ($to === null) ? $start->copy()->endOfDay() : Carbon::parse($to);
+
+        return $query->where('is_available', $available)
+            ->where('start', '>=', $start)
+            ->where('end', '<=', $end);
     }
 
     /**
@@ -143,29 +163,6 @@ class Availability extends Model
     public function scopeUnavailable($query)
     {
         return $query->where('is_available', false);
-    }
-
-    /**
-     * Scope a query to only include available
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param Carbon|string|null $at
-     * @param string $type
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     * @throws \Exception
-     */
-    public function scopeAvailableOn($query, $at = null, $type = 'walk-in')
-    {
-        if (($at !== null) && !($at instanceof Carbon)) {
-            $at = new Carbon($at);
-        }
-        $start = $at ?? now();
-        $end = $start->copy()->addMinutes($type === 'walk-in' ? 20 : 60);
-
-        return $query->where('is_available', '=', true)
-            ->where('start', '<=', $start)
-            ->where('end', '>=', $end);
     }
 
     public function doctor()
