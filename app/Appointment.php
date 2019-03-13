@@ -22,7 +22,7 @@ use Illuminate\Support\Carbon;
  * @property-read \App\Doctor $doctor
  * @property-read \App\User $patient
  * @property-read \App\Room $room
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment between($at = null, $to = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment between($at = null, $to = null, $status = ['cancelled'])
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment ofDoctorId($doctor_id = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Appointment newQuery()

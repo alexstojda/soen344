@@ -125,7 +125,7 @@ class Doctor extends Authenticatable
 
         if ($start->isAfter($open) && $end->isBefore($close)) {
             return $query->whereDoesntHave('appointments', function (Builder $query) use ($start, $end) {
-                return $query->whereNotIn('status', ['cancelled'])
+                return $query->whereNotIn('status', ['cancelled', 'cart'])
                     ->where('start', '>=', $start)
                     ->where('end', '<=', $end);
             })->whereHas('availabilities', function (Builder $query) use ($start, $end) {
@@ -142,12 +142,13 @@ class Doctor extends Authenticatable
      *
      * @param Carbon|string|null $from
      * @param Carbon|string|null $to
+     * @param array $status
      *
      * @return Collection|Availability[]
      */
-    public function appointmentsBetween($from = null, $to = null)
+    public function appointmentsBetween($from = null, $to = null, $status = ['cancelled', 'cart'])
     {
-        return $this->appointments()->between($from, $to)->get();
+        return $this->appointments()->between($from, $to, $status)->get();
     }
 
     /**
