@@ -1,3 +1,9 @@
+import ElementUI from 'element-ui';
+import Vue from 'vue';
+import 'element-ui/lib/theme-chalk/index.css';
+import lang from 'element-ui/lib/locale/lang/en';
+import locale from 'element-ui/lib/locale';
+
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -6,7 +12,7 @@
 
 require("./bootstrap");
 
-window.Vue = require("vue");
+window.Vue = Vue;
 
 /**
  * Enable Debug Mode based on env
@@ -19,6 +25,14 @@ if (process.env.NODE_ENV !== "production") {
     Vue.config.debug = false;
     Vue.config.silent = true;
 }
+
+/**
+ * The following block of code may be used to add libraries to Vue
+ */
+
+Vue.use(ElementUI);
+// configure language
+locale.use(lang);
 
 /**
  * The following block of code may be used to automatically register your
@@ -37,6 +51,7 @@ Vue.component("search-appointment", require("./components/SearchAppointment.vue"
 Vue.component("view-appointments", require("./components/ViewAppointments.vue").default);
 Vue.component("add-appointment", require("./components/AddAppointment.vue").default);
 Vue.component("add-availability", require("./components/AddAvailability.vue").default);
+Vue.component("modify-appointment-modal", require("./components/ModifyAppointmentModal.vue").default);
 Vue.component("login-component", require("./components/LoginComponent.vue").default);
 
 /**

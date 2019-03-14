@@ -3,7 +3,7 @@
 use Faker\Generator as Faker;
 
 $factory->define(App\Availability::class, function (Faker $faker) {
-    $randomDate = $faker->dateTimeThisMonth();
+    $randomDate = $faker->dateTimeBetween('last month', 'next year');
     $randomTimestamp = random_int($randomDate->setTime(8,0)->getTimestamp(),
         (clone $randomDate)->setTime(20,0)->getTimestamp());
     $start = (new DateTime())->setTimestamp($randomTimestamp);

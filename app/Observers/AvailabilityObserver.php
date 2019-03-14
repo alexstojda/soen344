@@ -24,9 +24,9 @@ class AvailabilityObserver
         $availability->end = $availability->end->startOfMinute();
 
         // Check if appointment without walk-in hours
-        if(!$this->verifyWalkInHours($availability->start, $availability->end)) {
+        if (!$this->verifyWalkInHours($availability->start, $availability->end)) {
             dump('availability rejected due to open hours rule | ' .
-                $availability->start->toDateTimeString() .' | '. $availability->end->toDateTimeString() );
+                $availability->start->toDateTimeString() .' | '. $availability->end->toDateTimeString());
             return false;
         }
 

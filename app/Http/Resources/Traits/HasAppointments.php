@@ -5,6 +5,11 @@ namespace App\Http\Resources\Traits;
 use App\Appointment;
 use Illuminate\Support\Collection;
 
+/**
+ * Trait HasAppointments
+ *
+ * @method Appointment[]|Appointment appointments()
+ */
 trait HasAppointments
 {
 
@@ -13,9 +18,9 @@ trait HasAppointments
      */
     private function appointmentsToArray()
     {
-        return $this->appointments()->ofStatus('active')->get()
-            ->map(function(Appointment $appointment) {
-            return [
+        return $this->appointments()->whereStatus('active')->get()
+            ->map(function (Appointment $appointment) {
+                return [
                 'id'     => $appointment->id,
                 'status' => $appointment->status,
                 'type'   => $appointment->type,
@@ -23,7 +28,7 @@ trait HasAppointments
                 'end'    => $appointment->end,
                 'path'   => route('appointment.show', ['id' => $appointment->id]),
             ];
-        });
+            });
     }
 
     /**
@@ -31,7 +36,7 @@ trait HasAppointments
      */
     private function appointmentsLinksArray()
     {
-        return $this->appointments()->get()->map(function(Appointment $appointment) {
+        return $this->appointments()->get()->map(function (Appointment $appointment) {
             return [
                 'id'     => $appointment->id,
                 'status' => $appointment->status,

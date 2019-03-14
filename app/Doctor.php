@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Notifications\DoctorResetPassword;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -26,8 +27,9 @@ use Illuminate\Support\Collection;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Appointment[] $appointments
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Availability[] $availabilities
- * @property-read string $full_name
+ * @property-read string $name
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Doctor availableBetween($from = null, $to = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Doctor newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Doctor newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Doctor query()
@@ -64,7 +66,8 @@ class Doctor extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -81,51 +84,137 @@ class Doctor extends Authenticatable
      *
      * @return string
      */
-    public function getFullNameAttribute()
+    public function getNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|Collection|Availability[]|Availability
+     */
     public function availabilities()
     {
         return $this->hasMany(Availability::class, 'doctor_id', 'id');
     }
 
     /**
-     * Given a date grab all doctors availabilities
-     *
-     * @param Carbon|null $at
-     * @param string|null $type
-     *
-     * @return Collection|Availability[]
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|Collection|Appointment[]|Appointment
      */
-    public function availabilities_on(Carbon $at = null, $type = null)
-    {
-        return $this->availabilities()->availableOn($at, $type)->get();
-    }
-
-    /**
-     * Given a date checks if the doctor is available or booked
-     *
-     * @param Carbon|null $at
-     * @param string|null $type
-     *
-     * @return bool
-     */
-    public function is_available_on(Carbon $at = null, $type = null): bool
-    {
-        return $this->availabilities_on($at, $type)->isNotEmpty();
-    }
-
     public function appointments()
     {
         return $this->hasMany(Appointment::class, 'doctor_id', 'id');
     }
 
     /**
+     * Given a date checks room is available for use
+     *
+     * @param Builder $query
+     * @param Carbon|string|null $from
+     * @param Carbon|string|null $to
+     *
+     * @return Builder
+     * @throws \Exception
+     */
+    public function scopeAvailableBetween(Builder $query, $from = null, $to = null): Builder
+    {
+        $start = Carbon::parse($from ?? now()->startOfDay()->addHours(config('bonmatin.office_hours.open')));
+        $end = ($to === null) ? $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.close')) : Carbon::parse($to);
+
+        $open = $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.open'))->subSecond();
+        $close = $end->copy()->startOfDay()->addHours(config('bonmatin.office_hours.close'))->addSecond();
+
+        if ($start->isAfter($open) && $end->isBefore($close)) {
+            return $query->whereDoesntHave('appointments', function (Builder $query) use ($start, $end) {
+                return $query->whereNotIn('status', ['cancelled', 'cart'])
+                    ->where('start', '>=', $start)
+                    ->where('end', '<=', $end);
+            })->whereHas('availabilities', function (Builder $query) use ($start, $end) {
+                $query->where('is_available', '=', true)
+                    ->where('start', '>=', $start)
+                    ->where('end', '<=', $end);
+            });
+        }
+        return $query->where('id'); // WHERE id is NULL
+    }
+
+    /**
+     * Given a date grab all appointments in this room
+     *
+     * @param Carbon|string|null $from
+     * @param Carbon|string|null $to
+     * @param array $status
+     *
+     * @return Collection|Appointment[]|Appointment
+     */
+    public function appointmentsBetween($from = null, $to = null, $status = ['cancelled', 'cart'])
+    {
+        return $this->appointments()->between($from, $to, $status)->get();
+    }
+
+    /**
+     * Given a date grab all doctors availabilities
+     *
+     * @param Carbon|string|null $from
+     * @param Carbon|string|null $to
+     *
+     * @return Collection|Availability[]|Availability
+     */
+    public function availabilitiesBetween($from = null, $to = null)
+    {
+        return $this->availabilities()->between($from, $to)->get();
+    }
+
+    /**
+     * Given a date checks if the doctor is available or booked
+     *
+     * @param Carbon|string|null $from
+     * @param Carbon|string|null $to
+     *
+     * @return bool
+     */
+    public function isAvailableBetween($from = null, $to = null): bool
+    {
+        $start = Carbon::parse($from ?? now()->startOfDay()->addHours(config('bonmatin.office_hours.open')));
+        $end = Carbon::parse($to ?? $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.close')));
+
+        $open = $start->copy()->startOfDay()->addHours(config('bonmatin.office_hours.open'))->subSecond();
+        $close = $end->copy()->startOfDay()->addHours(config('bonmatin.office_hours.close'))->addSecond();
+
+        return $start->isAfter($open) && $end->isBefore($close) &&
+            $this->appointmentsBetween($start, $end)->isEmpty() &&
+            $this->availabilitiesBetween($start, $end)->isNotEmpty();
+    }
+
+
+    /**
+     * @param Carbon|string|null $date
+     * @return mixed
+     */
+    public function schedule($date = null)
+    {
+        //Grab Availabilities (available) sort & group into days
+
+        //Grab Appointments (active or in cart) sort & group into days
+
+        //Sum availabilities that overlap into a single availability object
+
+
+        $daily_schedule = $this->availabilities()->available()->get()
+            ->sortBy('start')->groupBy(function (Availability $item) {
+                return $item->start->toDateString();
+            });
+
+        if ($date !== null) {
+            return $daily_schedule->get(Carbon::parse($date)->toDateString());
+        }
+
+        return $daily_schedule;
+    }
+
+    /**
      * Send the password reset notification.
      *
-     * @param  string  $token
+     * @param  string $token
      * @return void
      */
     public function sendPasswordResetNotification($token)

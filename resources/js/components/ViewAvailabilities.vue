@@ -1,13 +1,10 @@
 <template>
-    <div id="appointments">
-        <SortedTable :values="appointments">
+    <div id="availabilities">
+        <SortedTable :values="availabilities">
             <thead>
             <tr>
                 <th scope="col">
-                    <SortLink name="doctor">Doctor</SortLink>
-                </th>
-                <th scope="col">
-                    <SortLink name="patient">Patient ID</SortLink>
+                    <SortLink name="doctor">Doctor ID</SortLink>
                 </th>
                 <th scope="col" >
                     <SortLink name="room">Room ID</SortLink>
@@ -24,11 +21,10 @@
             <tbody slot="body" slot-scope="sort">
             <tr v-for="appointment in sort.values" :key="appointment.id">
                 <td>{{ appointment.doctor["name"] }}</td>
-                <td>{{ appointment.patient["id"] }}</td>
                 <td>{{ appointment.room["id"] }}</td>
                 <td>{{ appointment.status }}</td>
                 <td>{{ dateFormatter(appointment.start) }}</td>
-                <td><modify-appointment-modal></modify-appointment-modal>
+                <td><button type="button" class="btn btn-warning" vertical-align="center">Modify</button>
                     <button type="button" class="btn btn-danger" v-on:click="cancelAppointment(appointment.id)" vertical-align="center">Cancel</button></td>
             </tr>
             </tbody>
@@ -39,7 +35,6 @@
 <script>
     import axios from "axios";
     import moment from "moment";
-    import ModifyAppointmentModal from "./ModifyAppointmentModal";
     import { SortedTable, SortLink } from "vue-sorted-table";
     export default {
         name: "ViewAppointments",
@@ -48,15 +43,12 @@
                 appointments: []
             }
         },
-        Components : {
-            ModifyAppointmentModal
-        },
         mounted() {
             this.getAppointments();
         },
         methods: {
             getAppointments: function() {
-                axios.get('/api/appointments')
+                axios.get('/api/availability')
                     .then(response => {
                         if(response.status == 200) {
                             this.appointments = response.data.data;
@@ -67,7 +59,7 @@
                     })
             },
             cancelAppointment: function(id) {
-                axios.delete('/deleteAppointment/' + id).then(response => {
+                axios.delete('/cancelAppointment/' + id).then(response => {
                     if(response.status == 200) {
                         console.log("Cancelled appointment : " + id)
                         this.getAppointments();
@@ -77,7 +69,7 @@
                 })
             },
             dateFormatter: function(date) {
-                return moment(date).format("YYYY-MM-DD HH:mm");
+                return moment(date).format("YYYY-MM-DD");
             }
         }
     };

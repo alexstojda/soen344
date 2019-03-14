@@ -27,7 +27,8 @@ class Availability extends JsonResource
             'start' => $this->start,
             'end' => $this->end,
             'is_available' => $this->is_available,
-            'reason_of_unavailability' => $this->reason_of_unavailability ?? 'Doctor is available at this time',
+            'message' => $this->reason_of_unavailability ??
+                __('Doctor is '. ($this->is_available ? 'available' : 'unavailable') .' at this time'),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'path' => route('availability.show', ['id' => $this->id]),
