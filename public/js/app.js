@@ -3493,27 +3493,26 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (response) {
           if (response.status == 200 || response.status == 201) {
             console.log("Added appointment");
-            _this.isNurse ? window.location.href = '/nurse/dashboard' : window.location.href = '/home';
+            window.location.href = '/viewAppointments';
           } else {
             console.log("Add appointment failed: Response code " + response.status);
           }
         }).catch(function (error) {
           console.log(error.response);
-          console.log(_this.isNurse);
         });
       } else {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('/appointmentUpdate/', {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('api/appointment/' + this.apmt.id, {
           patient_id: this.patient_id,
           doctor_id: this.doctor_id,
           room_id: this.room_id,
           start: this.setDate(this.date, this.time),
           end: this.setDateTime(this.date, this.time, this.type),
           type: this.type,
-          status: this.isNurse ? 'active' : 'cart'
+          status: 'active'
         }).then(function (response) {
           if (response.status == 200 || response.status == 201) {
             console.log("Added appointment");
-            _this.isNurse ? window.location.href = '/nurse/dashboard' : window.location.href = '/home';
+            window.location.href = '/viewAppointments';
           } else {
             console.log("Add appointment failed: Response code " + response.status);
           }
