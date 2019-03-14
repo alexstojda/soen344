@@ -51,6 +51,7 @@ Vue.component("search-appointment", require("./components/SearchAppointment.vue"
 Vue.component("view-appointments", require("./components/ViewAppointments.vue").default);
 Vue.component("add-appointment", require("./components/AddAppointment.vue").default);
 Vue.component("add-availability", require("./components/AddAvailability.vue").default);
+Vue.component("modify-appointment-modal", require("./components/ModifyAppointmentModal.vue").default);
 Vue.component("login-component", require("./components/LoginComponent.vue").default);
 
 /**

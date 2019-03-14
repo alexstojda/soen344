@@ -28,7 +28,7 @@
                 <td>{{ appointment.room["id"] }}</td>
                 <td>{{ appointment.status }}</td>
                 <td>{{ dateFormatter(appointment.start) }}</td>
-                <td><button type="button" class="btn btn-warning" vertical-align="center">Modify</button>
+                <td><modify-appointment-modal></modify-appointment-modal>
                     <button type="button" class="btn btn-danger" v-on:click="cancelAppointment(appointment.id)" vertical-align="center">Cancel</button></td>
             </tr>
             </tbody>
@@ -39,6 +39,7 @@
 <script>
     import axios from "axios";
     import moment from "moment";
+    import ModifyAppointmentModal from "./ModifyAppointmentModal";
     import { SortedTable, SortLink } from "vue-sorted-table";
     export default {
         name: "ViewAppointments",
@@ -46,6 +47,9 @@
             return {
                 appointments: []
             }
+        },
+        Components : {
+            ModifyAppointmentModal
         },
         mounted() {
             this.getAppointments();
