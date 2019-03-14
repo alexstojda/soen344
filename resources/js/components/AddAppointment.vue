@@ -64,67 +64,92 @@
         name: "AddAppointment",
         data () {
             return {
-                patient_id: "",
-                doctor_id: "",
-                room_id: "",
-                date: "",
+                patient_id: this.apmt == null ?  "" : this.apmt.patient["id"],
+                doctor_id: this.apmt == null ?  "" : this.apmt.doctor["id"],
+                room_id: this.apmt == null ?  "" : this.apmt.room["id"],
+                date: this.apmt == null ?  "" : moment(this.apmt.date).format("YYYY-MM-DD"),
                 time: "",
-                type: "",
-                status: "",
+                type: this.apmt == null ?  "" : this.apmt.type,
+                status: this.apmt == null ?  "" : this.apmt.status,
             }
         },
         props: {
-          isNurse: Boolean,
+            isNurse: Boolean,
+            apmt: Object,
         },
         mounted() {
             this.moment = moment;
         },
         methods: {
             addAppointment: function() {
-                axios.post('/api/appointment', {
-                    patient_id: this.patient_id,
-                    doctor_id: this.doctor_id,
-                    room_id: this.room_id,
-                    start: this.setDate(this.date, this.time),
-                    end: this.setDateTime(this.date, this.time, this.type),
-                    type: this.type,
-                    status: (this.isNurse) ? 'active' : 'cart'
-                }).then(response => {
-                    if (response.status == 200 || response.status == 201) {
-                        console.log("Added appointment");
-                        (this.isNurse)? window.location.href = '/nurse/dashboard' : window.location.href = '/home';
-                    } else {
-                        console.log("Add appointment failed: Response code " + response.status)
+                if (this.apmt == null)
+                {
+                    axios.post('/api/appointment', {
+                        patient_id: this.patient_id,
+                        doctor_id: this.doctor_id,
+                        room_id: this.room_id,
+                        start: this.setDate(this.date, this.time),
+                        end: this.setDateTime(this.date, this.time, this.type),
+                        type: this.type,
+                        status: (this.isNurse) ? 'active' : 'cart'
+                    }).then(response => {
+                        if (response.status == 200 || response.status == 201) {
+                            console.log("Added appointment");
+                            window.location.href = '/viewAppointments';
+                        } else {
+                            console.log("Add appointment failed: Response code " + response.status)
+                        }
+                    }).catch(error => {
+                        console.log(error.response)
+                    })
+                }
+                else
+                {
+                    axios.put('api/appointment/' + this.apmt.id, {
+                        patient_id: this.patient_id,
+                        doctor_id: this.doctor_id,
+                        room_id: this.room_id,
+                        start: this.setDate(this.date, this.time),
+                        end: this.setDateTime(this.date, this.time, this.type),
+                        type: this.type,
+                        status: 'active'
+                        }).then(response => {
+                            if (response.status == 200 || response.status == 201) {
+                                console.log("Added appointment");
+                                window.location.href = '/viewAppointments';
+                            } else {
+                                console.log("Add appointment failed: Response code " + response.status)
+                            }
+                        }).catch(error => {
+                            console.log(error.response)
+                            console.log(this.isNurse);
+                        })
                     }
-                }).catch(error => {
-                    console.log(error.response)
-                    console.log(this.isNurse);
-                })
-            },
-            setDate: function(date, time) {
-                let timeSplit = time.split(':');
-                return moment(date).add(timeSplit[0], "hours").add(timeSplit[1], "minutes").format("YYYY-MM-DD HH:mm:ss");
-            },
-            setDateTime: function(date, time, type) {
-                let timeSplit = time.split(':');
-                let dateMaker = moment(date).add(timeSplit[0], "hours").add(timeSplit[1], "minutes");
+                },
+                setDate: function(date, time) {
+                    let timeSplit = time.split(':');
+                    return moment(date).add(timeSplit[0], "hours").add(timeSplit[1], "minutes").format("YYYY-MM-DD HH:mm:ss");
+                },
+                setDateTime: function(date, time, type) {
+                    let timeSplit = time.split(':');
+                    let dateMaker = moment(date).add(timeSplit[0], "hours").add(timeSplit[1], "minutes");
 
-                if(type === '')
-                {
-                    return date;
-                }
-                else if(type === "walk-in")
-                {
-                    dateMaker.add(20, "minutes");
-                }
-                else if(type === "annual checkup")
-                {
-                    dateMaker.add(1, "hours");
-                }
+                    if(type === '')
+                    {
+                        return date;
+                    }
+                    else if(type === "walk-in")
+                    {
+                        dateMaker.add(20, "minutes");
+                    }
+                    else if(type === "annual checkup")
+                    {
+                        dateMaker.add(1, "hours");
+                    }
 
-                return moment(dateMaker).format("YYYY-MM-DD HH:mm:ss");
+                    return moment(dateMaker).format("YYYY-MM-DD HH:mm:ss");
+                }
             }
-        }
-    };
+        };
 </script>
 

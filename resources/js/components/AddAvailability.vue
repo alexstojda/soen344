@@ -49,8 +49,6 @@
         let start = moment({y: date.y, M: date.m, d: date.d, h: startSplit[0], m: startSplit[1]}).format("YYYY-MM-DD HH:mm:ss");
         let end = moment({y: date.y, M: date.m, d: date.d, h: endSplit[0], m: endSplit[1]}).format("YYYY-MM-DD HH:mm:ss");
 
-        //console.log(start);
-        //console.log(end);
         axios.post('/api/availability', {
           doctor_id: this.doctorId, start: start, end: end,
         }).catch(error => {
