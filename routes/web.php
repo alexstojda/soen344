@@ -22,6 +22,7 @@ Route::get('/checkout', 'CartController@showCheckoutPage')->middleware('auth:web
 Route::post('/processAppointments/{id}', 'AppointmentController@finalize');
 Route::delete('/deleteAppointment/{appointment}', 'AppointmentController@destroy');
 Route::get('/cart/{id}', 'CartController@getById');
+Route::put('/appointmentUpdate/{appointment}', 'AppointmentController@update');
 
 Route::get('/createAppointment', 'AppointmentController@showCreateAppointmentPage');
 Route::get('/viewAppointments', 'AppointmentController@showViewAppointmentsPage');

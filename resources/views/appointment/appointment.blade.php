@@ -18,8 +18,8 @@
                     <div class="container">
                         <div class="card">
                             <div class="card-body">
-                                <h2 class="card-title text-center">Add Appointment</h2><br>
-                                <add-appointment :is-nurse="{{ json_encode(auth('nurse')->check()) }}"></add-appointment>
+                                <h2 class="card-title text-center">Modify Appointment</h2><br>
+                                <add-appointment :apmt="null" :is-nurse="{{ json_encode(auth('nurse')->check()) }}"></add-appointment>
                             </div>
                         </div>
                     </div>

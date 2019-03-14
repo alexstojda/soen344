@@ -28,7 +28,8 @@
                 <td>{{ appointment.room["id"] }}</td>
                 <td>{{ appointment.status }}</td>
                 <td>{{ dateFormatter(appointment.start) }}</td>
-                <td><modify-appointment-modal></modify-appointment-modal>
+                <td>
+                    <modify-appointment-modal :apmt="appointment"></modify-appointment-modal>
                     <button type="button" class="btn btn-danger" v-on:click="cancelAppointment(appointment.id)" vertical-align="center">Cancel</button></td>
             </tr>
             </tbody>

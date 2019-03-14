@@ -3460,44 +3460,68 @@ __webpack_require__.r(__webpack_exports__);
   name: "AddAppointment",
   data: function data() {
     return {
-      patient_id: "",
-      doctor_id: "",
-      room_id: "",
-      date: "",
+      patient_id: this.apmt == null ? "" : this.apmt.patient["id"],
+      doctor_id: this.apmt == null ? "" : this.apmt.doctor["id"],
+      room_id: this.apmt == null ? "" : this.apmt.room["id"],
+      date: this.apmt == null ? "" : moment__WEBPACK_IMPORTED_MODULE_1___default()(this.apmt.date).format("YYYY-MM-DD"),
       time: "",
-      type: "",
-      status: ""
+      type: this.apmt == null ? "" : this.apmt.type,
+      status: this.apmt == null ? "" : this.apmt.status
     };
   },
   props: {
-    isNurse: Boolean
+    isNurse: Boolean,
+    apmt: Object
   },
   mounted: function mounted() {
     this.moment = moment__WEBPACK_IMPORTED_MODULE_1___default.a;
+    console.log(this.apmt);
   },
   methods: {
     addAppointment: function addAppointment() {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/appointment', {
-        patient_id: this.patient_id,
-        doctor_id: this.doctor_id,
-        room_id: this.room_id,
-        start: this.setDate(this.date, this.time),
-        end: this.setDateTime(this.date, this.time, this.type),
-        type: this.type,
-        status: this.isNurse ? 'active' : 'cart'
-      }).then(function (response) {
-        if (response.status == 200 || response.status == 201) {
-          console.log("Added appointment");
-          _this.isNurse ? window.location.href = '/nurse/dashboard' : window.location.href = '/home';
-        } else {
-          console.log("Add appointment failed: Response code " + response.status);
-        }
-      }).catch(function (error) {
-        console.log(error.response);
-        console.log(_this.isNurse);
-      });
+      if (this.apmt == null) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/appointment', {
+          patient_id: this.patient_id,
+          doctor_id: this.doctor_id,
+          room_id: this.room_id,
+          start: this.setDate(this.date, this.time),
+          end: this.setDateTime(this.date, this.time, this.type),
+          type: this.type,
+          status: this.isNurse ? 'active' : 'cart'
+        }).then(function (response) {
+          if (response.status == 200 || response.status == 201) {
+            console.log("Added appointment");
+            _this.isNurse ? window.location.href = '/nurse/dashboard' : window.location.href = '/home';
+          } else {
+            console.log("Add appointment failed: Response code " + response.status);
+          }
+        }).catch(function (error) {
+          console.log(error.response);
+          console.log(_this.isNurse);
+        });
+      } else {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('/appointmentUpdate/', {
+          patient_id: this.patient_id,
+          doctor_id: this.doctor_id,
+          room_id: this.room_id,
+          start: this.setDate(this.date, this.time),
+          end: this.setDateTime(this.date, this.time, this.type),
+          type: this.type,
+          status: this.isNurse ? 'active' : 'cart'
+        }).then(function (response) {
+          if (response.status == 200 || response.status == 201) {
+            console.log("Added appointment");
+            _this.isNurse ? window.location.href = '/nurse/dashboard' : window.location.href = '/home';
+          } else {
+            console.log("Add appointment failed: Response code " + response.status);
+          }
+        }).catch(function (error) {
+          console.log(error.response);
+          console.log(_this.isNurse);
+        });
+      }
     },
     setDate: function setDate(date, time) {
       var timeSplit = time.split(':');
@@ -3596,9 +3620,7 @@ __webpack_require__.r(__webpack_exports__);
         d: date.d,
         h: endSplit[0],
         m: endSplit[1]
-      }).format("YYYY-MM-DD HH:mm:ss"); //console.log(start);
-      //console.log(end);
-
+      }).format("YYYY-MM-DD HH:mm:ss");
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/availability', {
         doctor_id: this.doctorId,
         start: start,
@@ -4058,8 +4080,8 @@ __webpack_require__.r(__webpack_exports__);
     SearchAppointment: _SearchAppointment__WEBPACK_IMPORTED_MODULE_0__["default"],
     AddAppointment: _AddAppointment__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  mounted: function mounted() {
-    console.log(this.appointment);
+  props: {
+    apmt: Object
   }
 });
 
@@ -4239,6 +4261,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ModifyAppointmentModal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ModifyAppointmentModal */ "./resources/js/components/ModifyAppointmentModal.vue");
 /* harmony import */ var vue_sorted_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-sorted-table */ "./node_modules/vue-sorted-table/dist/vue-sorted-table.common.js");
 /* harmony import */ var vue_sorted_table__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_sorted_table__WEBPACK_IMPORTED_MODULE_3__);
+//
 //
 //
 //
@@ -109458,7 +109481,7 @@ var render = function() {
                           _c("br"),
                           _vm._v(" "),
                           _c("add-appointment", {
-                            attrs: { "is-nurse": false }
+                            attrs: { apmt: _vm.apmt, "is-nurse": false }
                           })
                         ],
                         1
@@ -109739,7 +109762,9 @@ var render = function() {
                       _c(
                         "td",
                         [
-                          _c("modify-appointment-modal"),
+                          _c("modify-appointment-modal", {
+                            attrs: { apmt: appointment }
+                          }),
                           _vm._v(" "),
                           _c(
                             "button",
