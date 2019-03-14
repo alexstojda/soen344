@@ -79,7 +79,6 @@
         },
         mounted() {
             this.moment = moment;
-            console.log(this.apmt);
         },
         methods: {
             addAppointment: function() {
