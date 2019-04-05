@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Room;
+use App\Models\Room;
 use App\Http\Resources\Room as RoomResource;
 use Illuminate\Http\Request;
 
@@ -11,14 +11,20 @@ class RoomController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return RoomResource::collection(Room::paginate($request->per_page ?? 5));
+        $rooms = Room::query();
+        if ($request->exists('start') || $request->exists('end')) {
+            $rooms = Room::availableBetween($request->start, $request->end);
+        }
+
+        return RoomResource::collection($rooms->paginate($request->per_page ?? 5));
     }
 
-    /**
+    /**s
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -37,16 +43,20 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        try {
+            $data = $request->validate([
+                'number' => 'required|string|max:255',
+                'name' => 'required|string|max:255',
+                //'office_id' => 'int|max:255',
+            ]);
+
             $room = Room::create([
-                'doctor_id' => $request->doctor_id,
-                'start' => $request->start,
-                'end' => $request->end,
-                'is_available' => $request->is_available ?? 1,
-                'reason_of_unavailability' => $request->reason_of_unavailability ?? null
+                'number' => $data['number'],
+                'name' => $data['name'],
+                //'office_id' => $data['office_id'],
             ]);
             return new RoomResource($room);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return response()->json($e);
         }
     }
@@ -54,7 +64,7 @@ class RoomController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Room  $room
+     * @param  Room  $room
      * @return \Illuminate\Http\Response|\App\Http\Resources\Room
      */
     public function show(Room $room)
@@ -65,7 +75,7 @@ class RoomController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Room  $room
+     * @param  Room  $room
      * @return \Illuminate\Http\Response
      */
     public function edit(Room $room)
@@ -77,7 +87,7 @@ class RoomController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Room  $room
+     * @param  Room  $room
      * @return \Illuminate\Http\Response|\App\Http\Resources\Room
      */
     public function update(Request $request, Room $room)
@@ -85,11 +95,12 @@ class RoomController extends Controller
         $validated = $request->validate([
             'number' => 'required|string|max:255',
             'name' => 'required|string|max:255',
+            //'office_id' => 'int|max:255',
         ]);
-        // if it's not valid the code will stop here and throw the error with required fields
 
         !isset($validated['number']) ?: $room->number = $validated['number'];
         !isset($validated['name']) ?: $room->name = $validated['name'];
+        //!isset($validated['office_id']) ?: $room->office->sync($validated['office_id']);
 
         $room->save();
         return new RoomResource($room);
@@ -98,7 +109,7 @@ class RoomController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Room  $room
+     * @param  Room  $room
      * @return \Illuminate\Http\Response
      */
     public function destroy(Room $room)

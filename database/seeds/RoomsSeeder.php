@@ -11,6 +11,6 @@ class RoomsSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Room::class, 5)->create();
+        factory(\App\Models\Room::class, 5)->create();
     }
 }

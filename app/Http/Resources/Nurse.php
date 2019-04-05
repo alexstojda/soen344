@@ -7,7 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * DoctorResource
  *
- * @mixin \App\Nurse
+ * @mixin \App\Models\Nurse
  */
 class Nurse extends JsonResource
 {

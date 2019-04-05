@@ -2,12 +2,15 @@
 
 namespace App\Providers;
 
-use App\User;
+use App\Models\User;
 use App\Observers\UserObserver;
-use App\Appointment;
+use App\Models\Appointment;
 use App\Observers\AppointmentObserver;
-use App\Availability;
+use App\Models\Availability;
 use App\Observers\AvailabilityObserver;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,7 +22,26 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // Enable pagination
+        if (!Collection::hasMacro('paginate')) {
+            Collection::macro(
+                'paginate',
+                function ($perPage = 15, $page = null, $options = []) {
+                    if (Paginator::resolveCurrentPage()) {
+                        $page = $page ?: Paginator::resolveCurrentPage();
+                    } else {
+                        $page = $page ?: 1;
+                    }
+                    return (new LengthAwarePaginator(
+                        $this->forPage($page, $perPage)->values()->all(),
+                        $this->count(),
+                        $perPage,
+                        $page,
+                        $options
+                    ))->withPath(Paginator::resolveCurrentPath());
+                }
+            );
+        }
     }
 
     /**

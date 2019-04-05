@@ -1,22 +1,23 @@
 <?php
 
 use Faker\Generator as Faker;
+use Illuminate\Support\Carbon;
+use App\Models\Availability;
+use App\Models\Doctor;
 
-$factory->define(App\Availability::class, function (Faker $faker) {
+$factory->define(Availability::class, function (Faker $faker) {
     $randomDate = $faker->dateTimeBetween('last month', 'next year');
-    $randomTimestamp = random_int($randomDate->setTime(8,0)->getTimestamp(),
-        (clone $randomDate)->setTime(20,0)->getTimestamp());
-    $start = (new DateTime())->setTimestamp($randomTimestamp);
-    $end = (clone $start)
-        ->add(date_interval_create_from_date_string(
-            $faker->randomElement(['20min','40min', '1hour', '2hours'])
-        ));
-    $available = $faker->boolean(60);
+    $randomTimestamp = random_int($randomDate->setTime(config('bonmatin.office_hours.open'), 0)
+        ->getTimestamp(), (clone $randomDate)->setTime(config('bonmatin.office_hours.close'), 0)
+        ->getTimestamp());
+    $start = Carbon::createFromTimestamp($randomTimestamp)->startOfHour();
+    $end = $start->copy()->add($faker->randomElement(['20 minutes','40 minutes', '1 hour', '2 hours']));
+    $available = $faker->boolean(100);
     return [
-        'doctor_id' => \App\Doctor::all()->random(),
+        'doctor_id' => Doctor::all()->random(),
         'start' => $start,
         'end' => $end,
-        'is_available' => $available,
-        'reason_of_unavailability' => $available ? null : $faker->sentence(8),
+        'is_working' => $available,
+        'message' => $available ? null : $faker->sentence(8),
     ];
 });

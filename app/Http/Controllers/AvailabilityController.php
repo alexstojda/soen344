@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Availability;
+use App\Models\Availability;
 use App\Http\Resources\Availability as AvailabilityResource;
 use DateTime;
 use Illuminate\Http\Request;
@@ -23,9 +23,13 @@ class AvailabilityController extends Controller
      */
     public function index(Request $request)
     {
-        $availabilities = Availability::whereIsAvailable((bool) ($request->is_available ?? true))
-            ->ofDoctorId($request->doctor_id ?? auth('doctor')->id());
+        $availabilities = Availability::ofDoctorId($request->doctor_id ?? auth('doctor')->id());
 
+        if ($request->available ?? true) {
+            $availabilities = $availabilities->available();
+        } elseif (!$request->available) {
+            $availabilities = $availabilities->unavailable();
+        }
 
         if ($request->exists('date')) {
             $availabilities = $availabilities->between($request->date);
@@ -33,6 +37,12 @@ class AvailabilityController extends Controller
 
         if ($request->exists('start') || $request->exists('end')) {
             $availabilities = $availabilities->startAfter($request->start)->endBefore($request->end);
+        }
+
+        if ($request->exists('consecutive')) {
+            $availabilities = $availabilities->consecutive($request->consecutive, $request->operator);
+        } elseif ($request->exists('length')) {
+            $availabilities = $availabilities->length($request->length . 'min', $request->operator);
         }
 
         return AvailabilityResource::collection($availabilities->paginate($request->per_page ?? 50));
@@ -75,20 +85,20 @@ class AvailabilityController extends Controller
             'doctor_id'    => auth('doctor')->check() ? 'nullable|int' : 'required|int',
             'start'        => 'required|before_or_equal:end',
             'end'          => 'required|after_or_equal:start',
-            'is_available' => 'nullable|boolean',
-            'reason_of_unavailability' => 'nullable|string|min:5|max:255',
+            'is_working' => 'nullable|boolean',
+            'message' => 'nullable|string|min:5|max:255',
         ]);
 
-        try{
+        try {
             $availability = Availability::create([
                 'doctor_id' => $validated['doctor_id'] ?? auth('doctor')->id(),
                 'start' => $validated['start'],
                 'end' => $validated['end'],
-                'is_available' => $validated['is_available'] ?? 1,
-                'reason_of_unavailability' => $validated['reason_of_unavailability'] ?? null
+                'is_working' => $validated['is_working'] ?? 1,
+                'message' => $validated['message'] ?? null
             ]);
             return new AvailabilityResource($availability);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return response()->json($e, 400);
         }
     }
@@ -96,7 +106,7 @@ class AvailabilityController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Availability  $availability
+     * @param  Availability  $availability
      * @return AvailabilityResource
      */
     public function show(Availability $availability)
@@ -117,7 +127,7 @@ class AvailabilityController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Availability  $availability
+     * @param  Availability  $availability
      * @return \Illuminate\Http\Response
      */
     public function edit(Availability $availability)
@@ -129,7 +139,7 @@ class AvailabilityController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Availability  $availability
+     * @param  Availability  $availability
      * @return AvailabilityResource|\Illuminate\Http\Response
      */
     public function update(Request $request, Availability $availability)
@@ -138,17 +148,17 @@ class AvailabilityController extends Controller
             'doctor_id'    => 'nullable|int',
             'start'        => 'required|before_or_equal:end',
             'end'          => 'required|after_or_equal:start',
-            'is_available' => 'required|boolean',
-            'reason_of_unavailability' => 'nullable|string|min:5|max:255',
+            'is_working' => 'required|boolean',
+            'message' => 'nullable|string|min:5|max:255',
         ]);
         // if it's not valid the code will stop here and throw the error with required fields
 
         !isset($validated['doctor_id']) ? auth('doctor')->id() : $availability->doctor_id = $validated['doctor_id'];
         !isset($validated['start']) ?: $availability->start = $validated['start'];
         !isset($validated['end']) ?: $availability->end = $validated['end'];
-        !isset($validated['is_available']) ?: $availability->is_available = $validated['is_available'];
-        !isset($validated['reason_of_unavailability']) ?:
-            $availability->reason_of_unavailability = $validated['reason_of_unavailability'];
+        !isset($validated['is_working']) ?: $availability->is_working = $validated['is_working'];
+        !isset($validated['message']) ?:
+            $availability->message = $validated['message'];
 
         $availability->save();
         return new AvailabilityResource($availability);
@@ -157,7 +167,7 @@ class AvailabilityController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Availability  $availability
+     * @param  Availability  $availability
      * @return \Illuminate\Http\Response
      */
     public function destroy(Availability $availability)

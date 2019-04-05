@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Traits;
 
-use App\Room;
+use App\Models\Room;
 
 /**
  * Trait HasRoom
@@ -20,8 +20,8 @@ trait HasRoom
     {
         return [
             'id' => $this->room_id,
-            'path' => route('room.show', ['id' => $this->doctor_id]),
-            'filter_by_room' => request()->fullUrlWithQuery(['doctor_id' => $this->doctor_id]),
+            'path' => route('room.show', ['id' => $this->room_id]),
+            'filter_by_room' => request()->fullUrlWithQuery(['room_id' => $this->room_id]),
         ];
     }
 }

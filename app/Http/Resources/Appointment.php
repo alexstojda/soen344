@@ -7,7 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * AppointmentResource
  *
- * @mixin \App\Appointment
+ * @mixin \App\Models\Appointment
  */
 class Appointment extends JsonResource
 {
@@ -32,6 +32,8 @@ class Appointment extends JsonResource
             'end' => $this->end,
             'type' => $this->type,
             'status' => $this->status,
+            'duration' => $this->duration,
+            'consecutive_blocks' => $this->consecutive_blocks,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'path' => route('appointment.show', ['id' => $this->id]),

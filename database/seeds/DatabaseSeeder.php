@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
             RoomsSeeder::class
         ]);
 
-        if(env('SEED_SCHEDULE', true)) {
+        if (env('SEED_SCHEDULE', true)) {
             //Seed doctor availabilities / schedule appointments
             $this->call([
                 DoctorAvailabilitiesSeeder::class,

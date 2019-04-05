@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Doctor;
+use App\Models\Doctor;
 use App\Http\Resources\Doctor as DoctorResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -39,7 +39,7 @@ class DoctorController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        try {
             $data = $request->validate([
                 'permit_id' => 'required|int|max:11',
                 'first_name' => 'required|string',
@@ -48,7 +48,6 @@ class DoctorController extends Controller
                 'city' => 'required|string',
                 'email' => 'required|email',
                 'password' =>'required|string'
-
             ]);
 
             $doctor = Doctor::create([
@@ -61,7 +60,7 @@ class DoctorController extends Controller
                 'password' => Hash::make($data['password']),
             ]);
             return new DoctorResource($doctor);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return response()->json($e);
         }
     }
@@ -69,7 +68,7 @@ class DoctorController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Doctor  $doctor
+     * @param  Doctor  $doctor
      * @return \Illuminate\Http\Response|\App\Http\Resources\Doctor
      */
     public function show(Doctor $doctor)
@@ -80,7 +79,7 @@ class DoctorController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Doctor  $doctor
+     * @param  Doctor  $doctor
      * @return \Illuminate\Http\Response
      */
     public function edit(Doctor $doctor)
@@ -92,7 +91,7 @@ class DoctorController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Doctor  $doctor
+     * @param  Doctor  $doctor
      * @return \Illuminate\Http\Response|\App\Http\Resources\Doctor
      */
     public function update(Request $request, Doctor $doctor)
@@ -123,7 +122,7 @@ class DoctorController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Doctor  $doctor
+     * @param  Doctor  $doctor
      * @return \Illuminate\Http\Response
      */
     public function destroy(Doctor $doctor)

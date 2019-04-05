@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\User;
+use App\Models\User as Patient;
 use App\Http\Resources\Patient as PatientResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        return PatientResource::collection(User::paginate($request->per_page ?? 5));
+        return PatientResource::collection(Patient::paginate($request->per_page ?? 5));
     }
 
     /**
@@ -51,7 +51,7 @@ class PatientController extends Controller
                 'password' => 'required|string|min:8'
             ]);
 
-            $nurse = User::create([
+            $nurse = Patient::create([
                 'name' => $data['name'],
                 'health_card_number' => $data['health_card_number'],
                 'address' => $data['address'],
@@ -62,7 +62,7 @@ class PatientController extends Controller
                 'password' => Hash::make($data['password']),
             ]);
             return new PatientResource($nurse);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return response()->json($e);
         }
     }
@@ -70,10 +70,10 @@ class PatientController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\User  $patient
+     * @param  Patient  $patient
      * @return \Illuminate\Http\Response|\App\Http\Resources\Patient
      */
-    public function show(User $patient)
+    public function show(Patient $patient)
     {
         return new PatientResource($patient);
     }
@@ -81,10 +81,10 @@ class PatientController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\User  $patient
+     * @param  Patient  $patient
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $patient)
+    public function edit(Patient $patient)
     {
         //
     }
@@ -93,10 +93,10 @@ class PatientController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $patient
+     * @param  Patient  $patient
      * @return \Illuminate\Http\Response|\App\Http\Resources\Patient
      */
-    public function update(Request $request, User $patient)
+    public function update(Request $request, Patient $patient)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
@@ -126,10 +126,10 @@ class PatientController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\User  $patient
+     * @param  Patient  $patient
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $patient)
+    public function destroy(Patient $patient)
     {
         try {
             return response()->json(['success' => $patient->delete()], 200);

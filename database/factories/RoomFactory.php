@@ -1,8 +1,9 @@
 <?php
 
 use Faker\Generator as Faker;
+use App\Models\Room;
 
-$factory->define(App\Room::class, function (Faker $faker) {
+$factory->define(Room::class, function (Faker $faker) {
     return [
         'number' => $faker->buildingNumber,
         'name' => $faker->words(2, true)

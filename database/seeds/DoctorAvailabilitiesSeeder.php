@@ -11,6 +11,6 @@ class DoctorAvailabilitiesSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Availability::class, 50)->create();
+        factory(\App\Models\Availability::class, 50)->create();
     }
 }

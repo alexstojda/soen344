@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Appointment;
-use App\Doctor;
-use App\User as Patient;
-use App\Room;
+use App\Models\Appointment;
+use App\Models\Availability;
+use App\Models\Doctor;
+use App\Models\User as Patient;
+use App\Models\Room;
 use App\Http\Resources\Appointment as AppointmentResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -57,15 +58,15 @@ class AppointmentController extends Controller
             'room_id'      => 'nullable|int',
             'start'        => 'required|before_or_equal:end',
             'end'          => 'required|after_or_equal:start',
-            'type' => ['required', Rule::in(['walk-in','annual checkup'])],
+            'type' => ['required', Rule::in(['walk-in','checkup'])],
             'status' => ['required', Rule::in(['active','cart','cancelled','complete','cart'])]
         ]);
 
         try {
             $patient = Patient::findOrFail($validated['patient_id'] ?? Auth::guard('web')->id());
 
-            if($patient->has_annual_checkup && $validated['status'] === '') {
-
+            if ($patient->has_checkup && $validated['type'] === 'checkup') {
+                return response()->json('Patient already booked a checkup this year', 412);
             }
 
             $appointment = Appointment::create([
@@ -75,8 +76,12 @@ class AppointmentController extends Controller
                     'start' => $validated['start'],
                     'end' => $validated['end'],
                     'type' => $validated['type'] ?? 'walk-in',
-                    'status' => $validated['status'] ?? 'cart',
                 ]);
+
+            $appointment->availabilities()->sync(Availability::between($validated['start'], $validated['end']));
+            $appointment->status = $validated['status'] ?? 'cart';
+            $appointment->save();
+
             return new AppointmentResource($appointment);
         } catch (\Exception $e) {
             return response()->json($e);
@@ -86,7 +91,7 @@ class AppointmentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Appointment  $appointment
+     * @param  Appointment  $appointment
      * @return AppointmentResource
      */
     public function show(Appointment $appointment)
@@ -117,7 +122,7 @@ class AppointmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Appointment  $appointment
+     * @param  Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
     public function edit(Appointment $appointment)
@@ -129,7 +134,7 @@ class AppointmentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Appointment  $appointment
+     * @param  Appointment  $appointment
      * @return AppointmentResource|\Illuminate\Http\Response
      */
     public function update(Request $request, Appointment $appointment)
@@ -149,8 +154,6 @@ class AppointmentController extends Controller
         !isset($validated['doctor_id']) ?: $appointment->doctor_id = $validated['doctor_id'];
         !isset($validated['patient_id']) ?: $appointment->patient_id = $validated['patient_id'];
         !isset($validated['room_id']) ?: $appointment->room_id = $validated['room_id'];
-        !isset($validated['start']) ?: $appointment->start = $validated['start'];
-        !isset($validated['end']) ?: $appointment->end = $validated['end'];
         !isset($validated['type']) ?: $appointment->type = $validated['type'];
         !isset($validated['status']) ?: $appointment->status = $validated['status'];
 
@@ -159,26 +162,9 @@ class AppointmentController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Appointment  $appointment
-     * @return AppointmentResource|\Illuminate\Http\Response
-     */
-    public function finalize($id)
-    {
-        $cart = Appointment::Where('patient_id', '=', $id)->where('status', '=', 'cart')->get();
-
-        foreach ($cart as $cartItem) {
-            $cartItem->status = 'active';
-            $cartItem->save();
-        }
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Appointment  $appointment
+     * @param  Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
     public function destroy(Appointment $appointment)

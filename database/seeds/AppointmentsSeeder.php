@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\Doctor;
+use App\Models\Appointment;
+use App\Models\Availability;
 
 class AppointmentsSeeder extends Seeder
 {
@@ -11,6 +14,15 @@ class AppointmentsSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Appointment::class, 50)->create();
+        /**
+         * @var \Illuminate\Support\Collection
+         */
+        $collection = factory(Appointment::class, 50)->create();
+
+        $collection->each(function (Appointment $appointment) {
+            // avail of doctor where not busy and length for appt type and room free
+            $appointment->doctor->availabilities()->length();
+        });
+
     }
 }
