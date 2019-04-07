@@ -238,7 +238,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{url}}/api/availability?per_page=100&date=2019-11-03",
+									"raw": "{{url}}/api/availability?per_page=100&date=2019-11-03&clinic_id=1",
 									"host": [
 										"{{url}}"
 									],
@@ -272,6 +272,11 @@
 											"value": "2020-03-06 23:59:59",
 											"description": "show avail ending before",
 											"disabled": true
+										},
+										{
+											"key": "clinic_id",
+											"value": "1",
+											"description": "filter by clinic"
 										},
 										{
 											"key": "doctor_id",
@@ -551,7 +556,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{url}}/api/room?per_page=5&page=1&start=2019-03-24 18:00:00&end=2019-03-24 19:00:00",
+									"raw": "{{url}}/api/room?per_page=5&page=1&clinic_id=1&start=2019-03-24 18:00:00&end=2019-03-24 19:00:00",
 									"host": [
 										"{{url}}"
 									],
@@ -566,6 +571,10 @@
 										},
 										{
 											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "clinic_id",
 											"value": "1"
 										},
 										{
@@ -605,6 +614,89 @@
 								}
 							},
 							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Clinic",
+					"item": [
+						{
+							"name": "GET all clinics",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/clinic?per_page=5&page=1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"clinic"
+									],
+									"query": [
+										{
+											"key": "per_page",
+											"value": "5"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET clinic",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/clinic/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"clinic",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "73f17bfa-041c-43fa-a61b-1b21c896b7f0",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "ee93a590-7c02-4724-becb-dd7a34f017d3",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
 						}
 					],
 					"_postman_isSubFolder": true
@@ -803,7 +895,7 @@
 	],
 	"variable": [
 		{
-			"id": "ba2f4ebb-5c22-4f3b-b3d0-e11f2d25229d",
+			"id": "80ed39de-92b5-4300-a066-ad0b3943e252",
 			"key": "url",
 			"value": "http://soen344.test",
 			"type": "string"

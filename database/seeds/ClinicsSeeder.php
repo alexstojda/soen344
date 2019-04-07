@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\Clinic;
 
 class ClinicsSeeder extends Seeder
 {
@@ -11,6 +12,11 @@ class ClinicsSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\Clinic::class, 1)->create();
+        factory(Clinic::class)->create([
+            'open'  => config('bonmatin.office_hours.open') . ':00:00',
+            'close' => config('bonmatin.office_hours.close') . ':00:00',
+        ]);
+
+        factory(Clinic::class, 5)->create();
     }
 }

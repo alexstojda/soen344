@@ -23,7 +23,8 @@ class AvailabilityController extends Controller
      */
     public function index(Request $request)
     {
-        $availabilities = Availability::ofDoctorId($request->doctor_id ?? auth('doctor')->id());
+        $availabilities = Availability::ofClinicId($request->clinic_id)
+            ->ofDoctorId($request->doctor_id ?? auth('doctor')->id());
 
         if ($request->available ?? true) {
             $availabilities = $availabilities->available();
@@ -45,22 +46,63 @@ class AvailabilityController extends Controller
             $availabilities = $availabilities->length($request->length . 'min', $request->operator);
         }
 
+        //TODO: add clinic id filter
+
         return AvailabilityResource::collection($availabilities->paginate($request->per_page ?? 50));
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @param Request $request
-     *
-     * @return AvailabilityResource|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
-     */
-    public function selectDate($date)
+    public function possibleAppointments(Request $request)
     {
-        $formattedDate = new DateTime($date);
-        $today = $date;
-        $tomorrow = date_format(date_add($formattedDate, date_interval_create_from_date_string("1 days")), 'Y-m-d');
-        return AvailabilityResource::collection(Availability::whereBetween('start', [$today, $tomorrow])->get());
+        // IN : date, type of appointment, doctor, clinic, etc. all filters from index
+
+        $availabilities = Availability::ofClinicId($request->clinic_id)
+            ->ofDoctorId($request->doctor_id ?? auth('doctor')->id());
+
+        if ($request->available ?? true) {
+            $availabilities = $availabilities->available();
+        } elseif (!$request->available) {
+            $availabilities = $availabilities->unavailable();
+        }
+
+        if ($request->exists('date')) {
+            $availabilities = $availabilities->between($request->date);
+        }
+
+        if ($request->exists('start') || $request->exists('end')) {
+            $availabilities = $availabilities->startAfter($request->start)->endBefore($request->end);
+        }
+
+        if ($request->exists('type') && $request->type === 'checkup') {
+            $availabilities = $availabilities->consecutive(3);
+        }
+
+        //TODO: EVAN
+        // return all possible availabilities WITH all diff rooms
+        // so duplicate availabilities if there's 1+ rooms that are free.
+
+        // EXAMPLE
+        // requested appointment type was checkup and a clinic was given
+
+        // found: id, doc, start, end
+        //         1   1    3:00   3:20
+        //         2   1    3:20   3:40
+        //         3   1    3:40   4:00
+        //         4   1    4:00   4:20
+        //         5   1    4:20   4:40
+        //         6   1    4:40   5:00
+        //         7   1    5:00   5:20
+
+        // there are 4 rooms in that clinic
+        // check with availableBetween scope gives you rooms 1 and 3 available between 3 & 5
+
+        // return
+        //  ids,    doc, start, end, room
+        //   1,2,3   1    3:00  4:00  1
+        //   1,2,3   1    4:00  5:00  1
+        //   4,5,6   1    3:00  4:00  3
+        //   4,5,6   1    4:00  5:00  3
+
+        // theres a merge timeslots in the model, you might want to use that. just dont break it
     }
 
     /**
@@ -146,10 +188,10 @@ class AvailabilityController extends Controller
     {
         $validated = $request->validate([
             'doctor_id'    => 'nullable|int',
-            'start'        => 'required|before_or_equal:end',
-            'end'          => 'required|after_or_equal:start',
-            'is_working' => 'required|boolean',
-            'message' => 'nullable|string|min:5|max:255',
+            'start'        => 'before_or_equal:end',
+            'end'          => 'after_or_equal:start',
+            'is_working'   => 'boolean',
+            'message'      => 'nullable|string|min:5|max:255',
         ]);
         // if it's not valid the code will stop here and throw the error with required fields
 

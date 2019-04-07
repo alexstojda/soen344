@@ -32,6 +32,8 @@ Route::apiResources([
     //etc
 ]);
 
+Route::get('/evan', 'AvailabilityController@possibleAppointments');
+
 Route::apiResource('/availabilities','AvailabilityController');
 Route::get('/availabilitiesByDate/{date}', 'AvailabilityController@selectDate');
 

@@ -33,6 +33,7 @@ use App\Concerns\FixesAvailabilityDates;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability ofDoctorId($doctor_id = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability ofClinicId($clinic_id = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability startAfter($start = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability startBefore($start = null)
@@ -142,7 +143,8 @@ class Availability extends Model
      */
     public function getIsAvailableAttribute(): bool
     {
-        return $this->is_working && !$this->is_booked && Room::availableBetween($this->start, $this->end)->count() > 0;
+        return $this->is_working && !$this->is_booked &&
+            $this->doctor->clinic->roomsBetween($this->start, $this->end)->count() > 0;
     }
 
     /**
@@ -220,6 +222,22 @@ class Availability extends Model
     {
         return $doctor_id === null ? $query :
             $query->where('doctor_id', '=', $doctor_id);
+    }
+
+    /**
+     * Scope a query to only include availabilities for a given clinic id
+     *
+     * @param  Builder $query
+     * @param  int|null $clinic_id
+     *
+     * @return Builder
+     */
+    public function scopeOfClinicId($query, $clinic_id = null): Builder
+    {
+        return $clinic_id === null ? $query :
+            $query->whereHas('doctor', function (Builder $query) use ($clinic_id) {
+                return $query->where('clinic_id', '=', $clinic_id);
+            });
     }
 
     /**

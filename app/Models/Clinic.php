@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\CarbonInterval;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -51,6 +52,18 @@ class Clinic extends Model
         'close' => 'timestamp:H:m:s',
     ];
 
+    public function getOpenTimeAttribute()
+    {
+        return explode(':', $this->attributes['open']);
+    }
+
+
+    public function getCloseTimeAttribute()
+    {
+        return explode(':', $this->attributes['close']);
+    }
+
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany|Room[]|Room
      */
@@ -65,5 +78,32 @@ class Clinic extends Model
     public function doctors()
     {
         return $this->hasMany(Doctor::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough|Availability[]|Availability
+     */
+    public function availabilities()
+    {
+        return $this->hasManyThrough(Availability::class, Doctor::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough|Appointment[]|Appointment
+     */
+    public function appointments()
+    {
+        return $this->hasManyThrough(Appointment::class, Doctor::class);
+    }
+
+    /**
+     * @param \Illuminate\Support\Carbon|string|null $from
+     * @param \Illuminate\Support\Carbon|string|null $to
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough|Room[]|Room
+     */
+    public function roomsBetween($from = null, $to = null)
+    {
+        return $this->rooms()->availableBetween($from, $to);
     }
 }
