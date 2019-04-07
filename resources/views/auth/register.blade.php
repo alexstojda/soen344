@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    <script src="{{ asset('js/18plus.js')}}"></script>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -71,7 +72,7 @@
                             <label for="birth_date" class="col-md-4 col-form-label text-md-right">{{ __('Birthdate') }}</label>
 
                             <div class="col-md-6">
-                            <input id="birth_date" type="date" min = "1900-01-01"  class="form-control{{ $errors->has('birth_date') ? ' is-invalid' : '' }}" name="birth_date" value="{{ old('birth_date') }}" required>
+                            <input id="birth_date" type="date" min = "1900-01-01"  max = "2001-04-07" class="form-control{{ $errors->has('birth_date') ? ' is-invalid' : '' }}" name="birth_date" value="{{ old('birth_date') }}" required>
 
                             @if ($errors->has('birth_date'))
                                 <span class="invalid-feedback" role="alert">
