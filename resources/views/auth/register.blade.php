@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
-@section('content')
+@push('scripts')
     <script src="{{ asset('js/18plus.js')}}"></script>
+@endpush
+
+@section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
