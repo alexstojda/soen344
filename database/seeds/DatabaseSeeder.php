@@ -13,8 +13,9 @@ class DatabaseSeeder extends Seeder
     {
         // Base system seeder
         $this->call([
+            ClinicsSeeder::class,
+            RoomsSeeder::class,
             SystemUsersSeeder::class,
-            RoomsSeeder::class
         ]);
 
         if (env('SEED_SCHEDULE', true)) {

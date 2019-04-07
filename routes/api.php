@@ -28,7 +28,7 @@ Route::apiResources([
     //other
     'room' => 'RoomController',
     //milestone #2
-    //office
+    'clinic' => 'ClinicController',
     //etc
 ]);
 

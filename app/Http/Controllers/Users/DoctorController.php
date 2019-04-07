@@ -42,16 +42,18 @@ class DoctorController extends Controller
         try {
             $data = $request->validate([
                 'permit_id' => 'required|int|max:11',
+                'clinic_id' =>'required|int|max:255',
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'speciality' => 'required|string',
                 'city' => 'required|string',
                 'email' => 'required|email',
-                'password' =>'required|string'
+                'password' =>'required|string',
             ]);
 
             $doctor = Doctor::create([
                 'permit_id' => $data['permit_id'],
+                'clinic_id' =>'required|int|max:255',
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
                 'speciality' => $data['speciality'],
@@ -98,6 +100,7 @@ class DoctorController extends Controller
     {
         $data = $request->validate([
             'permit_id' => 'required|int|max:11',
+            'clinic_id' =>'required|int|max:255',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'speciality' => 'required|string',
@@ -108,6 +111,7 @@ class DoctorController extends Controller
         // if it's not valid the code will stop here and throw the error with required fields
 
         !isset($data['permit_id']) ?: $doctor->permit_id = $data['permit_id'];
+        !isset($data['clinic_id']) ?: $doctor->clinic_id = $data['clinic_id'];
         !isset($data['first_name']) ?: $doctor->first_name = $data['first_name'];
         !isset($data['last_name']) ?: $doctor->last_name = $data['last_name'];
         !isset($data['speciality']) ?: $doctor->speciality = $data['speciality'];

@@ -24,12 +24,12 @@ use Illuminate\Support\Collection;
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string $has_checkup
+ * @property-read \App\Models\Appointment|null $last_appointment
+ * @property-read \App\Models\Appointment|null $next_appointment
+ * @property-read Collection|Appointment[] $appointments_this_year
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Appointment[] $appointments
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Appointment[] $unscheduled_appointments
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Appointment[] $appointments_this_year
- * @property-read \App\Models\Appointment $last_appointment
- * @property-read \App\Models\Appointment $next_appointment
- * @property-read boolean $has_checkup
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newQuery()

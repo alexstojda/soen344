@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Concerns\Model\BelongsToClinic;
 use App\Concerns\Model\HasAppointments;
 use App\Concerns\Model\HasAvailabilities;
 use App\Concerns\FixesAvailabilityDates;
@@ -29,15 +30,23 @@ use App\Notifications\DoctorResetPassword;
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $clinic_id
+ * @property-read string $name
+ * @property-read \App\Models\Clinic $clinic
+ * @property-read \App\Models\Appointment|null $last_appointment
+ * @property-read \App\Models\Appointment|null $next_appointment
+ * @property-read Collection|\App\Models\Appointment[] $appointments_this_year
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Appointment[] $appointments
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Availability[] $availabilities
- * @property-read string $name
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Availability[] $unavailabilities
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Appointment[] $unscheduled_appointments
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Doctor availableBetween($from = null, $to = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Doctor newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Doctor newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Doctor query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Doctor whereCity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Doctor whereClinicId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Doctor whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Doctor whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Doctor whereEmailVerifiedAt($value)
@@ -58,6 +67,7 @@ class Doctor extends Authenticatable
     use VerifiesWalkInHours;
     use HasAvailabilities;
     use HasAppointments;
+    use BelongsToClinic;
 
     /**
      * The attributes that aren't mass assignable.

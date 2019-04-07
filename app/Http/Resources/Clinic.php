@@ -5,14 +5,14 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * RoomResource
+ * ClinicResource
  *
- * @mixin \App\Models\Room
+ * @mixin \App\Models\Clinic
  */
-class Room extends JsonResource
+class Clinic extends JsonResource
 {
-    use Traits\BelongsToClinic;
-    use Traits\HasAppointments;
+    use Traits\HasRoom;
+    use Traits\HasDoctor;
 
     /**
      * Transform the resource into an array.
@@ -24,13 +24,16 @@ class Room extends JsonResource
     {
         return [
             'id' => $this->id,
-            'number' => $this->number,
             'name' => $this->name,
-            'clinic' => $this->clinicToArray(),
-            'appointments' => $this->appointmentsLinksArray(),
+            'address' => $this->address,
+            'phone' => $this->phone,
+            'open' => $this->open,
+            'close' => $this->close,
+            'rooms' => $this->roomsToArray(),
+            'doctors' => $this->doctorsToArray(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'path' => route('room.show', ['id' => $this->id]),
+            'path' => route('clinic.show', ['id' => $this->id]),
         ];
     }
 }

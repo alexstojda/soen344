@@ -46,14 +46,14 @@ class RoomController extends Controller
         try {
             $data = $request->validate([
                 'number' => 'required|string|max:255',
-                'name' => 'required|string|max:255',
-                //'office_id' => 'int|max:255',
+                'name'   => 'required|string|max:255',
+                'clinic_id' => 'required|int|max:255',
             ]);
 
             $room = Room::create([
                 'number' => $data['number'],
                 'name' => $data['name'],
-                //'office_id' => $data['office_id'],
+                'clinic_id' => $data['clinic_id'],
             ]);
             return new RoomResource($room);
         } catch (\Exception $e) {
@@ -92,15 +92,15 @@ class RoomController extends Controller
      */
     public function update(Request $request, Room $room)
     {
-        $validated = $request->validate([
-            'number' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            //'office_id' => 'int|max:255',
+        $data = $request->validate([
+            'number' => 'string|max:255',
+            'name'   => 'string|max:255',
+            'clinic_id' => 'int|max:255',
         ]);
 
-        !isset($validated['number']) ?: $room->number = $validated['number'];
-        !isset($validated['name']) ?: $room->name = $validated['name'];
-        //!isset($validated['office_id']) ?: $room->office->sync($validated['office_id']);
+        !isset($data['number']) ?: $room->number = $data['number'];
+        !isset($data['name']) ?: $room->name = $data['name'];
+        !isset($data['clinic_id']) ?: $room->clinic_id = $data['clinic_id'];
 
         $room->save();
         return new RoomResource($room);

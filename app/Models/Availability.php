@@ -20,12 +20,16 @@ use App\Concerns\FixesAvailabilityDates;
  * @property string|null $message
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Appointment[] $appointments
  * @property-read \App\Models\Doctor $doctor
- * @property-read bool $is_booked
+ * @property-read \App\Models\Appointment|null $appointment
  * @property-read bool $is_available
+ * @property-read bool $is_booked
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability available()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability between($from = null, $to = null, $available = true)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability consecutive($count = 3, $operator = '=')
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability endBefore($end = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability length($length = '60min', $operator = '>=')
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability ofDoctorId($doctor_id = null)
@@ -38,7 +42,7 @@ use App\Concerns\FixesAvailabilityDates;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability whereEnd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability whereIsWorking($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability whereReasonOfUnavailability($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability whereMessage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability whereStart($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability whereUpdatedAt($value)
  * @mixin \Eloquent
@@ -144,10 +148,10 @@ class Availability extends Model
     /**
      * Scope a query to only include records that start after given value
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Builder $query
      * @param  Carbon|string|null $start
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeStartAfter($query, $start = null): Builder
     {
@@ -158,10 +162,10 @@ class Availability extends Model
     /**
      * Scope a query to only include records that start before given value
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Builder $query
      * @param  Carbon|string|null $start
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeStartBefore($query, $start = null): Builder
     {
@@ -172,10 +176,10 @@ class Availability extends Model
     /**
      * Scope a query to only include records that start after given value
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Builder $query
      * @param  Carbon|string|null $end
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeEndBefore($query, $end = null): Builder
     {
@@ -186,12 +190,12 @@ class Availability extends Model
     /**
      * Scope a query to narrow availability dates
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Builder $query
      * @param  Carbon|string|null $from
      * @param  Carbon|string|null $to
      * @param  boolean $available
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeBetween($query, $from = null, $to = null, $available = true): Builder
     {
@@ -207,10 +211,10 @@ class Availability extends Model
     /**
      * Scope a query to only include availabilities for a given doctor id
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Builder $query
      * @param  int|null $doctor_id
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeOfDoctorId($query, $doctor_id = null): Builder
     {
@@ -221,8 +225,8 @@ class Availability extends Model
     /**
      * Scope a query to only include unavailable records
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  Builder $query
+     * @return Builder
      */
     public function scopeAvailable($query): Builder
     {
@@ -232,8 +236,8 @@ class Availability extends Model
     /**
      * Scope a query to only include available records
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  Builder $query
+     * @return Builder
      */
     public function scopeUnavailable($query): Builder
     {
@@ -242,7 +246,7 @@ class Availability extends Model
 
     /**
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      * @param string|int $count
      * @param string $operator
      *
@@ -255,7 +259,7 @@ class Availability extends Model
 
     /**
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      * @param string $length
      * @param string $operator
      *

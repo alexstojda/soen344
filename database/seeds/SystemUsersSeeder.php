@@ -11,7 +11,9 @@ class SystemUsersSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\Doctor::class, 7)->create();
+        factory(App\Models\Doctor::class, 7)->create([
+            'clinic_id' => \App\Models\Clinic::all()->first()->id,
+        ]);
         factory(App\Models\Nurse::class, 14)->create();
         factory(App\Models\User::class, 25)->create();
     }

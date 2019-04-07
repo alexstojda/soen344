@@ -11,6 +11,8 @@ class RoomsSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\Room::class, 5)->create();
+        factory(\App\Models\Room::class, 5)->create([
+            'clinic_id' => \App\Models\Clinic::all()->first()->id,
+        ]);
     }
 }

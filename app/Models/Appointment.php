@@ -14,34 +14,35 @@ use App\Http\Resources\Patient;
  * @property int $id
  * @property int $doctor_id
  * @property int $patient_id
- * @property int $room_id
- * @property-read int $consecutive_blocks
- * @property-read int $duration
- * @property-read \Illuminate\Support\Carbon $start
- * @property-read \Illuminate\Support\Carbon $end
+ * @property int|null $room_id
  * @property string $type
  * @property string $status
+ * @property int $paid
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Availability[] $availabilities
  * @property-read \App\Models\Doctor $doctor
+ * @property-read int $consecutive_blocks
+ * @property-read int $duration
+ * @property-read \Illuminate\Support\Carbon|string|null $end
+ * @property-read \Illuminate\Support\Carbon|string|null $start
  * @property-read \App\Models\User $patient
- * @property-read \App\Models\Room $room
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment between($at = null, $to = null)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment startAfter($start = null)
+ * @property-read \App\Models\Room|null $room
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment between($from = null, $to = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment endBefore($end = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment ofDoctorId($doctor_id = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment ofPatientId($patient_id = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment ofStatus($status = null)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment startAfter($start = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment whereDoctorId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment whereEnd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment wherePaid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment wherePatientId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment whereRoomId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment whereStart($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment whereUpdatedAt($value)
@@ -148,10 +149,10 @@ class Appointment extends Model
     /**
      * Scope a query to only include appointments for a given doctor id
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Builder $query
      * @param  int|null $doctor_id
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeOfDoctorId($query, $doctor_id = null): Builder
     {
@@ -162,10 +163,10 @@ class Appointment extends Model
     /**
      * Scope a query to only include appointments for a given patient id
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Builder $query
      * @param  int|null $patient_id
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeOfPatientId($query, $patient_id = null): Builder
     {
@@ -176,10 +177,10 @@ class Appointment extends Model
     /**
      * Scope a query to only include appointments of a given status
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Builder $query
      * @param  string|null $status
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeOfStatus($query, $status = null): Builder
     {
@@ -191,11 +192,11 @@ class Appointment extends Model
     /**
      * Scope a query to only include appointments between 2 dates.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Builder $query
      * @param  Carbon|string|null $from
      * @param  Carbon|string|null $to
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeBetween($query, $from = null, $to = null): Builder
     {
@@ -213,10 +214,10 @@ class Appointment extends Model
     /**
      * Scope a query to only include records that start after given value
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Builder $query
      * @param  Carbon|string|null $start
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeStartAfter($query, $start = null): Builder
     {
@@ -229,10 +230,10 @@ class Appointment extends Model
     /**
      * Scope a query to only include records that end before given value
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  Builder $query
      * @param  Carbon|string|null $end
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeEndBefore($query, $end = null): Builder
     {
