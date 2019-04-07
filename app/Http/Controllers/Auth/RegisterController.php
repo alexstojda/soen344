@@ -52,7 +52,7 @@ class RegisterController extends Controller
 
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'health_card_number' => ['required', 'string', 'max:255', 'unique:users', 'regex:/([A-Z]{4})\s([0-9]{4})\s([0-9]{4})/'],
+            'health_card_number' => ['required', 'string', 'max:255', 'unique:users', 'regex:/[A-Za-z0-9]{4}\s?[0-9]{4}\s?[0-9]{4}/'],
             'address' => ['required', 'string', 'max:255'],
             'phone_number' => ['required', 'string', 'max:255'],
             'birth_date' => ['required', 'date', 'after:120 years ago', 'before_or_equal:18 years ago'],
