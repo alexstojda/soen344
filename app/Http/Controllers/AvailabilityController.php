@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Availability;
 use App\Http\Resources\Availability as AvailabilityResource;
-use DateTime;
 use Illuminate\Http\Request;
 
 class AvailabilityController extends Controller
@@ -82,6 +81,7 @@ class AvailabilityController extends Controller
 
         // EXAMPLE
         // requested appointment type was checkup and a clinic was given
+        //Evan: "and date i hope?"
 
         // found: id, doc, start, end
         //         1   1    3:00   3:20
@@ -95,12 +95,46 @@ class AvailabilityController extends Controller
         // there are 4 rooms in that clinic
         // check with availableBetween scope gives you rooms 1 and 3 available between 3 & 5
 
+        //So this shit will work if This is just one set of availabilities. like they are all one after the other
+        //and if you want to do the sets of 3
+        //and have them sorted by start that would be GREEEEAAAAT
+        $displayable = array();
+        //if garantied in order
+        for ($i = 0;$i <= $availabilities->scopeLength()-3;$i++){
+            array_push($displayable,[[$availabilities->get(i)->get('id'),
+                $availabilities->get(i + 1)->get('id'),
+                $availabilities->get(i + 2)->get('id')],
+                $availabilities->get(i)->get('start')]);
+        }
+
+        return $displayable;
+
+        //if garantied in order & want for each room
+//        for ($i = 0;$i <= $availabilities->scopeLength()-3;$i++){
+//            //for each room
+//            for (/*get each room*/) {
+//                if(Room::availableBetween($availabilities->get(i)->get('start'),$availabilities->get(i+2)->get('end')
+//                array_push($displayable, [[$availabilities->get(i)->get('id'),
+//                        $availabilities->get(i + 1)->get('id'),
+//                        $availabilities->get(i + 2)->get('id')],
+//                    $availabilities->get(i)->get('start'),
+//                    "room"]);
+//            }
+//        }
+
         // return
         //  ids,    doc, start, end, room
         //   1,2,3   1    3:00  4:00  1
         //   1,2,3   1    4:00  5:00  1
         //   4,5,6   1    3:00  4:00  3
         //   4,5,6   1    4:00  5:00  3
+
+        //Evan's comment:
+//        shouldn't this return ids [1,2,3],[2,3,4],[3,4,5],[4,5,6],[5,6,7]
+//        also why do we need to show what room? we just need to give them whatever
+//        room WE decide at random as long as its available
+
+        //for singles we just for each in room go through the entire list. simple as that
 
         // theres a merge timeslots in the model, you might want to use that. just dont break it
     }
