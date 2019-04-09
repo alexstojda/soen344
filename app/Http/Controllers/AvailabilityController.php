@@ -75,18 +75,18 @@ class AvailabilityController extends Controller
         }
 
         if ($request->exists('type') && $request->type === 'checkup') {
-//            $availabilities = $availabilities->consecutive(3);
+            $availabilities = $availabilities->consecutive(3);
             $checkup = true;
 //            $arrayedvalued = $availabilities->toArray();
         } else {
             //this doens't return single things
-//            $availabilities = $availabilities->consecutive(1);
+            $availabilities = $availabilities->consecutive(3,'<=>');
             //and if i don't do it it only has groups of 3 or more.
             //so if there is a lone group or a group of 2 they don't exist
             $checkup = false;
 
         }
-        $arrayedvalued = $availabilities->length()->toArray();
+        $arrayedvalued = $availabilities->toArray();
         //TODO: EVAN
         // return all possible availabilities WITH all diff rooms
         // so duplicate availabilities if there's 1+ rooms that are free.
