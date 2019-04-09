@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Availability;
 use App\Http\Resources\Availability as AvailabilityResource;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
+use MongoDB\BSON\Timestamp;
 
 class AvailabilityController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:doctor,nurse')->only(['create','store','edit','update','destroy']);
+        $this->middleware('auth:doctor,nurse')->only(['create', 'store', 'edit', 'update', 'destroy']);
     }
 
     /**
@@ -72,9 +75,18 @@ class AvailabilityController extends Controller
         }
 
         if ($request->exists('type') && $request->type === 'checkup') {
-            $availabilities = $availabilities->consecutive(3);
-        }
+//            $availabilities = $availabilities->consecutive(3);
+            $checkup = true;
+//            $arrayedvalued = $availabilities->toArray();
+        } else {
+            //this doens't return single things
+//            $availabilities = $availabilities->consecutive(1);
+            //and if i don't do it it only has groups of 3 or more.
+            //so if there is a lone group or a group of 2 they don't exist
+            $checkup = false;
 
+        }
+        $arrayedvalued = $availabilities->length()->toArray();
         //TODO: EVAN
         // return all possible availabilities WITH all diff rooms
         // so duplicate availabilities if there's 1+ rooms that are free.
@@ -99,30 +111,33 @@ class AvailabilityController extends Controller
         //and if you want to do the sets of 3
         //and have them sorted by start that would be GREEEEAAAAT
         $displayable = array();
-        //if garantied in order
-        for ($i = 0;$i <= $availabilities->scopeLength()-3;$i++){
-            array_push($displayable,[[$availabilities->get(i)->get('id'),
-                $availabilities->get(i + 1)->get('id'),
-                $availabilities->get(i + 2)->get('id')],
-                $availabilities->get(i)->get('start')]);
+
+
+        for ($ii = 0; $ii < count($arrayedvalued); $ii = $ii + 1) {
+            $date = Carbon::parse($arrayedvalued[$ii]['start']);
+            $returnDate = Carbon::parse($date)->toString();
+            if ($checkup) {
+                for ($i = 0; $i <= count($arrayedvalued[$ii]['ids']) - 3; $i = $i + 1) {
+                    array_push($displayable, [[$arrayedvalued[$ii]['ids'][$i],
+                        $arrayedvalued[$ii]['ids'][$i + 1],
+                        $arrayedvalued[$ii]['ids'][$i + 2]],
+                        $returnDate,
+                        $arrayedvalued[$ii]['doctor_id']]);
+                    $returnDate = Carbon::parse($date->addMinutes(20))->toString();
+                }
+            } else {
+                for ($i = 0; $i < count($arrayedvalued[$ii]['ids']); $i = $i + 1) {
+                    array_push($displayable, [$arrayedvalued[$ii]['ids'][$i],
+                        $returnDate,
+                        $arrayedvalued[$ii]['doctor_id']]);
+                    $returnDate = Carbon::parse($date->addMinutes(20))->toString();
+                }
+            }
         }
+        dd($displayable);
 
-        return $displayable;
 
-        //if garantied in order & want for each room
-//        for ($i = 0;$i <= $availabilities->scopeLength()-3;$i++){
-//            //for each room
-//            for (/*get each room*/) {
-//                if(Room::availableBetween($availabilities->get(i)->get('start'),$availabilities->get(i+2)->get('end')
-//                array_push($displayable, [[$availabilities->get(i)->get('id'),
-//                        $availabilities->get(i + 1)->get('id'),
-//                        $availabilities->get(i + 2)->get('id')],
-//                    $availabilities->get(i)->get('start'),
-//                    "room"]);
-//            }
-//        }
 
-        // return
         //  ids,    doc, start, end, room
         //   1,2,3   1    3:00  4:00  1
         //   1,2,3   1    4:00  5:00  1
@@ -152,15 +167,15 @@ class AvailabilityController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return AvailabilityResource|\Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'doctor_id'    => auth('doctor')->check() ? 'nullable|int' : 'required|int',
-            'start'        => 'required|before_or_equal:end',
-            'end'          => 'required|after_or_equal:start',
+            'doctor_id' => auth('doctor')->check() ? 'nullable|int' : 'required|int',
+            'start' => 'required|before_or_equal:end',
+            'end' => 'required|after_or_equal:start',
             'is_working' => 'nullable|boolean',
             'message' => 'nullable|string|min:5|max:255',
         ]);
@@ -182,7 +197,7 @@ class AvailabilityController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Availability  $availability
+     * @param Availability $availability
      * @return AvailabilityResource
      */
     public function show(Availability $availability)
@@ -203,7 +218,7 @@ class AvailabilityController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Availability  $availability
+     * @param Availability $availability
      * @return \Illuminate\Http\Response
      */
     public function edit(Availability $availability)
@@ -214,18 +229,18 @@ class AvailabilityController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Availability  $availability
+     * @param \Illuminate\Http\Request $request
+     * @param Availability $availability
      * @return AvailabilityResource|\Illuminate\Http\Response
      */
     public function update(Request $request, Availability $availability)
     {
         $validated = $request->validate([
-            'doctor_id'    => 'nullable|int',
-            'start'        => 'before_or_equal:end',
-            'end'          => 'after_or_equal:start',
-            'is_working'   => 'boolean',
-            'message'      => 'nullable|string|min:5|max:255',
+            'doctor_id' => 'nullable|int',
+            'start' => 'before_or_equal:end',
+            'end' => 'after_or_equal:start',
+            'is_working' => 'boolean',
+            'message' => 'nullable|string|min:5|max:255',
         ]);
         // if it's not valid the code will stop here and throw the error with required fields
 
@@ -243,7 +258,7 @@ class AvailabilityController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Availability  $availability
+     * @param Availability $availability
      * @return \Illuminate\Http\Response
      */
     public function destroy(Availability $availability)
