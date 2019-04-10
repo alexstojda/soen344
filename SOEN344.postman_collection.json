@@ -21,13 +21,13 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{url}}/api/patients?per_page=10&page=1",
+									"raw": "{{url}}/api/patient?per_page=10&page=1",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"api",
-										"patients"
+										"patient"
 									],
 									"query": [
 										{
@@ -341,8 +341,7 @@
 										{
 											"key": "doctor_id",
 											"value": "4",
-											"type": "text",
-											"disabled": true
+											"type": "text"
 										},
 										{
 											"key": "start",
@@ -351,11 +350,11 @@
 										},
 										{
 											"key": "end",
-											"value": "2018-03-11 11:00:00",
+											"value": "2018-03-11 12:00:00",
 											"type": "text"
 										},
 										{
-											"key": "is_available",
+											"key": "is_working",
 											"value": "1",
 											"type": "text",
 											"disabled": true
@@ -370,6 +369,58 @@
 									"path": [
 										"api",
 										"availability"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UPDATE avalability",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "doctor_id",
+											"value": "4",
+											"type": "text"
+										},
+										{
+											"key": "start",
+											"value": "2018-03-11 12:00:00",
+											"type": "text"
+										},
+										{
+											"key": "end",
+											"value": "2018-03-11 12:40:00",
+											"type": "text"
+										},
+										{
+											"key": "is_working",
+											"value": "1",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/availability/327",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"availability",
+										"327"
 									]
 								}
 							},
@@ -462,14 +513,14 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{url}}/api/availability/1",
+									"raw": "{{url}}/api/appointment/2",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"api",
-										"availability",
-										"1"
+										"appointment",
+										"2"
 									]
 								}
 							},
@@ -479,10 +530,103 @@
 							"name": "CREATE  appointment",
 							"request": {
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
 								"body": {
-									"mode": "formdata",
-									"formdata": [
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "doctor_id",
+											"value": "4",
+											"type": "text"
+										},
+										{
+											"key": "patient_id",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "room_id",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "status",
+											"value": "active",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "type",
+											"value": "walk-in",
+											"type": "text"
+										},
+										{
+											"key": "start",
+											"value": "2018-03-10 10:00:00",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "end",
+											"value": "2018-03-10 11:00:00",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "availabilities[0]",
+											"value": "318",
+											"type": "text"
+										},
+										{
+											"key": "availabilities[1]",
+											"value": "319",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "availabilities[2]",
+											"value": "320",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/appointment",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"appointment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UPDATE  appointment",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
 										{
 											"key": "doctor_id",
 											"value": "4",
@@ -490,31 +634,68 @@
 											"disabled": true
 										},
 										{
+											"key": "patient_id",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "room_id",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "status",
+											"value": "active",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "type",
+											"value": "walk-in",
+											"type": "text"
+										},
+										{
 											"key": "start",
 											"value": "2018-03-10 10:00:00",
-											"type": "text"
+											"type": "text",
+											"disabled": true
 										},
 										{
 											"key": "end",
 											"value": "2018-03-10 11:00:00",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "availabilities[0]",
+											"value": "318",
 											"type": "text"
 										},
 										{
-											"key": "is_available",
-											"value": "1",
+											"key": "availabilities[1]",
+											"value": "319",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "availabilities[2]",
+											"value": "320",
 											"type": "text",
 											"disabled": true
 										}
 									]
 								},
 								"url": {
-									"raw": "{{url}}/api/availability",
+									"raw": "{{url}}/api/appointment/2",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"api",
-										"availability"
+										"appointment",
+										"2"
 									]
 								}
 							},
@@ -527,14 +708,14 @@
 								"header": [],
 								"body": {},
 								"url": {
-									"raw": "{{url}}/api/availability/49",
+									"raw": "{{url}}/api/appointment/1",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"api",
-										"availability",
-										"49"
+										"appointment",
+										"1"
 									]
 								}
 							},
@@ -813,7 +994,7 @@
 					"formdata": [
 						{
 							"key": "permit_id",
-							"value": "4014869",
+							"value": "8629093",
 							"description": "CHANGE ME",
 							"type": "text"
 						},
@@ -895,7 +1076,7 @@
 	],
 	"variable": [
 		{
-			"id": "80ed39de-92b5-4300-a066-ad0b3943e252",
+			"id": "89d9c897-9668-4912-a958-c1719cb3fce8",
 			"key": "url",
 			"value": "http://soen344.test",
 			"type": "string"

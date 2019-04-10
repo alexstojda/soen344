@@ -3,13 +3,11 @@
 namespace App\Observers;
 
 use App\Models\Availability;
-use App\Concerns\VerifiesWalkInHours;
 use Carbon\CarbonPeriod;
 use Log;
 
 class AvailabilityObserver
 {
-    use VerifiesWalkInHours;
 
     /**
      * Handle the appointment "saving" event.
@@ -26,25 +24,19 @@ class AvailabilityObserver
         $availability->start = $availability->start->startOfMinute();
         $availability->end = $availability->end->startOfMinute();
 
-        if (Availability::where('start', '=', $availability->start)
-            ->where('end', '=', $availability->end)
-            ->where('is_working', '=', $availability->is_working)->exists()) {
-
-            Log::warning('[' . __CLASS__ . '] New availability already exists in the database | '
-                . $availability->start->toDateTimeString() .' | '. $availability->end->toDateTimeString());
-            return false;
-        }
-
         $minute_interval = config('bonmatin.timeslot_interval');
         if ($availability->start->diffInMinutes($availability->end) > $minute_interval) {
-            Log::warning('['.__CLASS__."] New availability does not pass {$minute_interval}m interval rule | "
-                . $availability->start->toDateTimeString() .' | '. $availability->end->toDateTimeString());
+            $msg = '['.__CLASS__."] New availability does not pass {$minute_interval}m interval rule | "
+                . $availability->start->toDateTimeString() .' | '. $availability->end->toDateTimeString();
+            //dump($msg);
+            Log::warning($msg);
             foreach (CarbonPeriod::since($availability->start)->minutes($minute_interval)
                          ->end($availability->end, false) as $interval) {
-                Availability::create([
+                Availability::updateOrCreate([
                     'doctor_id' => $availability->doctor_id,
                     'start' => $interval,
                     'end' => $interval->copy()->addMinutes($minute_interval),
+                ], [
                     'is_working' => $availability->is_working,
                     'message' => $availability->message,
                 ]);
@@ -53,9 +45,9 @@ class AvailabilityObserver
         }
 
         // Check if appointment without walk-in hours
-        if (!$this->verifyWalkInHours($availability->start, $availability->end)) {
-            dump('availability rejected due to open hours rule | ' .
-                $availability->start->toDateTimeString() .' | '. $availability->end->toDateTimeString());
+        if (!$availability->clinic->isDuringWorkHours($availability->start, $availability->end)) {
+            abort(412, 'Availability rejected due to open hours rule | ' .
+                    $availability->start->toDateTimeString() .' | '. $availability->end->toDateTimeString());
             return false;
         }
 
@@ -66,11 +58,29 @@ class AvailabilityObserver
      * Handle the availability "creating" event.
      *
      * @param  Availability  $availability
-     * @return void
+     * @return bool
      */
     public function creating(Availability $availability)
     {
-        //
+        //dump("creating: $availability->doctor_id, $availability->start, $availability->end");
+
+        $col = Availability::whereDoctorId($availability->doctor_id)
+            ->whereStart($availability->start)
+            ->whereEnd($availability->end);
+
+        if ($col->count() > 0) {
+            $col->each(function (Availability $old) use ($availability) {
+                $msg = '['.__CLASS__.'] availability already exists... overwrite | ID:' . $old->id . ' | ' .
+                        $availability->start->toDateTimeString() .' | '. $availability->end->toDateTimeString();
+                //dump($msg);
+                Log::notice($msg);
+                $old->is_working = $availability->is_working;
+                $old->message = $availability->message;
+                $old->save();
+            });
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -81,7 +91,7 @@ class AvailabilityObserver
      */
     public function created(Availability $availability)
     {
-        //
+        //dump("created:  $availability->doctor_id, $availability->start, $availability->end, #$availability->id");
     }
 
     /**

@@ -20,50 +20,33 @@ class AppointmentObserver
      */
     public function saving(Appointment $appointment)
     {
+        if ($appointment->isDirty('type') && $appointment->type === 'checkup' && $appointment->patient->has_checkup) {
+            abort('412', 'Patient #' . $appointment->patient_id . ' already scheduled a checkup this year.');
+            //$appointment->delete();
+        }
+
+        if ($appointment->status === 'cancelled') {
+            $appointment->availabilities()->sync([]);
+            $appointment->delete();
+        }
+
         if ($appointment->availabilities()->exists()) {
-            // Check if appointment without walk-in hours
-            /*        if (!$this->verifyWalkInHours($appointment->start, $appointment->end)) {
-                        dump('rejected due to open hours rule | ' .
-                            $appointment->start->toDateTimeString() .' | '. $appointment->end->toDateTimeString());
-                        return false;
-                    }*/
-
-            /*        //Check if doctor is available
-                    if (!$appointment->doctor->isAvailableBetween($appointment->start, $appointment->end)) {
-                        dump('rejected due to doctor availability rule | ' . "Doc ID: {$appointment->doctor_id} | " .
-                            $appointment->start->toDateTimeString() .' | '. $appointment->end->toDateTimeString());
-                        return false;
-                    }*/
-
-            //Check if room is available
-            /*        if (!$appointment->room->isAvailableBetween($appointment->start, $appointment->end)) {
-                        dump('rejected due to  room availability rule | ' . "Room ID: {$appointment->room_id} | " .
-                            $appointment->start->toDateTimeString() .' | '. $appointment->end->toDateTimeString());
-                        return false;
-                    }*/
-
-            switch ($appointment->status) {
-                case 'cancelled':
-                    //$appointment->delete();
-                    break;
-                case 'rescheduled':
-                    //TODO: use rescheduled state to notify patient.
-                    //      set appointment to rescheduled if room, doctor or time changes
-                    $appointment->status = 'active'; // temporarily avoid rescheduled state
-                    break;
-                case 'active':
-                    if ($appointment->start->isPast() && $appointment->end->isPast()) {
-                        $appointment->status = 'complete';
-                    }
-                    break;
-                case 'complete':
-                    if ($appointment->start->isFuture() && $appointment->end->isFuture()) {
-                        $appointment->status = 'active';
-                    }
-                    break;
-
+            if ($appointment->status === 'rescheduled') {
+                //TODO: use rescheduled state to notify patient.
+                //      set appointment to rescheduled if room, doctor or time changes
+                $appointment->status = 'active'; // temporarily avoid rescheduled state
             }
-        } else {
+
+            if ($appointment->status !== 'cart' && $appointment->status !== 'cancelled') {
+                if ($appointment->start->isFuture() && $appointment->end->isFuture()) {
+                    $appointment->status = 'active';
+                }
+
+                if ($appointment->start->isPast() && $appointment->end->isPast()) {
+                    $appointment->status = 'complete';
+                }
+            }
+        } elseif ($appointment->status !== 'cancelled' || $appointment->status !== 'complete') {
             $appointment->status = 'unscheduled';
         }
 

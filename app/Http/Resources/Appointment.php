@@ -33,7 +33,12 @@ class Appointment extends JsonResource
             'type' => $this->type,
             'status' => $this->status,
             'duration' => $this->duration,
-            'consecutive_blocks' => $this->consecutive_blocks,
+            'times_linked' => $this->availabilities->map(function ($availability) {
+                return [
+                    'id' => $availability->id,
+                    'path' => route('availability.show', ['id' => $availability->id]),
+                ];
+            }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'path' => route('appointment.show', ['id' => $this->id]),

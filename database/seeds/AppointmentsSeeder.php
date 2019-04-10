@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\Clinic;
+use App\Models\Room;
 use App\Models\Doctor;
 use App\Models\Appointment;
 use App\Models\Availability;
@@ -14,14 +16,32 @@ class AppointmentsSeeder extends Seeder
      */
     public function run()
     {
-        /**
-         * @var \Illuminate\Support\Collection
-         */
+        // Create unscheduled appointments
         $collection = factory(Appointment::class, 50)->create();
 
         $collection->each(function (Appointment $appointment) {
-            // avail of doctor where not busy and length for appt type and room free
-            $appointment->doctor->availabilities()->length();
+            // only clinic #1 for now
+            $availabilities = Availability::available()->ofClinicId(Clinic::first()->id);
+
+            if ($appointment->patient->has_checkup) {
+                $appointment->type = 'urgent';
+            }
+
+            if ($appointment->type === 'checkup') {
+                if ($availabilities->length()->isEmpty()) {
+                    abort(412, 'No more 60m timeslots available');
+                }
+                $avail = $availabilities->length()->random();
+                $ids = $avail->ids;
+            } else {
+                $avail = $availabilities->get()->random();
+                $ids = $avail->id;
+            }
+
+            $appointment->doctor_id = $avail->doctor_id;
+            $appointment->room_id = Room::availableBetween($avail->start, $avail->end)->get()->random()->id;
+            $appointment->availabilities()->sync($ids);
+            $appointment->saveOrFail();
         });
 
     }

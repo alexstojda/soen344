@@ -28,6 +28,7 @@ use App\Http\Resources\Patient;
  * @property-read \Illuminate\Support\Carbon|string|null $start
  * @property-read \App\Models\User $patient
  * @property-read \App\Models\Room|null $room
+ * @property-read \App\Models\Clinic|null $clinic
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment between($from = null, $to = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment endBefore($end = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment newModelQuery()
@@ -72,6 +73,18 @@ class Appointment extends Model
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'start',
+        'end',
+        'duration',
+        'consecutive_blocks',
+    ];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|Doctor
      */
     public function doctor()
@@ -104,6 +117,17 @@ class Appointment extends Model
     }
 
     /**
+     * @return Clinic|null
+     */
+    public function getClinicAttribute(): Clinic
+    {
+        if ($this->room()->exists()) {
+            return $this->room->clinic;
+        }
+        return null;
+    }
+
+    /**
      * @return Carbon|string|null
      */
     public function getStartAttribute()
@@ -130,6 +154,9 @@ class Appointment extends Model
      */
     public function getConsecutiveBlocksAttribute(): int
     {
+        if ($this->availabilities()->exists()) {
+            return $this->availabilities()->count();
+        }
         switch ($this->type) {
             case 'checkup':
                 return 3;

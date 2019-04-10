@@ -55,36 +55,52 @@ class AppointmentController extends Controller
         $validated = $request->validate([
             'doctor_id'    => 'required|int',
             'patient_id'   => auth('web')->check() ? 'nullable|int' : 'required|int',
-            'room_id'      => 'nullable|int',
-            'start'        => 'required|before_or_equal:end',
-            'end'          => 'required|after_or_equal:start',
+            'start'        => 'required_with:end|before_or_equal:end',
+            'end'          => 'required_with:start|after_or_equal:start',
+            'availabilities' => 'required_unless:start|array',
             'type' => ['required', Rule::in(['walk-in','checkup'])],
-            'status' => ['required', Rule::in(['active','cart','cancelled','complete','cart'])]
+            'status' => ['required', Rule::in(['active','cart','cancelled','complete','cart'])],
         ]);
 
         try {
             $patient = Patient::findOrFail($validated['patient_id'] ?? Auth::guard('web')->id());
 
             if ($patient->has_checkup && $validated['type'] === 'checkup') {
-                return response()->json('Patient already booked a checkup this year', 412);
+                abort(412, 'Patient already booked a checkup this year');
             }
+
+            // 1. CREATE AN APPOINTMENT ENTRY
 
             $appointment = Appointment::create([
                     'doctor_id' => $validated['doctor_id'],
                     'patient_id' => $patient->id,
-                    'room_id' => $validated['room_id'] ?? Room::all()->random()->id, // or find available room
-                    'start' => $validated['start'],
-                    'end' => $validated['end'],
                     'type' => $validated['type'] ?? 'walk-in',
+                    'status' =>  $validated['status'] ?? 'cart',
                 ]);
 
-            $appointment->availabilities()->sync(Availability::between($validated['start'], $validated['end']));
-            $appointment->status = $validated['status'] ?? 'cart';
-            $appointment->save();
+            // 2. LINK DOCTOR AVAILABILITIES
+
+            if (isset($validated['availabilities'])) {
+                $appointment->availabilities()->sync($validated['availabilities']);
+            } elseif (isset($validated['start'], $validated['end'])) {
+                $appointment->availabilities()->sync($appointment->doctor
+                    ->availabilitiesBetween($validated['start'], $validated['end']));
+            }
+
+            // 3. FIND A ROOM
+
+            $available_rooms = $appointment->doctor->clinic->roomsBetween($appointment->start, $appointment->end)->get();
+            if ($available_rooms->isEmpty()) {
+                abort(412, "No available room in clinic #{$appointment->clinic->id} was found between "
+                    . "{$appointment->start->toDateTimeString()} and {$appointment->start->toDateTimeString()}");
+            } else {
+                $appointment->room_id = $available_rooms->random()->id;
+                $appointment->save();
+            }
 
             return new AppointmentResource($appointment);
         } catch (\Exception $e) {
-            return response()->json($e);
+            return response()->json($e, $e->getCode());
         }
     }
 
@@ -141,13 +157,14 @@ class AppointmentController extends Controller
     {
         $validated = $request->validate([
             //rules go here
-            'doctor_id' => 'required|int|max:10',
-            'patient_id' => 'required|int|max:10',
-            'room_id' => 'required|int|max:10',
+            'doctor_id' => 'int',
+            'patient_id' => 'int',
+            'room_id' => 'int',
             'start' => 'date',
             'end' => 'date',
-            'type' => ['required',Rule::in(['walk-in','annual checkup'])],
-            'status' => ['required',Rule::in(['active','cart','cancelled','complete','cart'])]
+            'availabilities' => 'array',
+            'type' => [Rule::in(['walk-in','checkup'])],
+            'status' => [Rule::in(['active','cart','cancelled','complete','cart'])],
         ]);
         // if it's not valid the code will stop here and throw the error with required fields
 
@@ -156,6 +173,13 @@ class AppointmentController extends Controller
         !isset($validated['room_id']) ?: $appointment->room_id = $validated['room_id'];
         !isset($validated['type']) ?: $appointment->type = $validated['type'];
         !isset($validated['status']) ?: $appointment->status = $validated['status'];
+
+        if (isset($validated['availabilities'])) {
+            $appointment->availabilities()->sync($validated['availabilities']);
+        } elseif (isset($validated['start'], $validated['end'])) {
+            $appointment->availabilities()->sync($appointment->doctor
+                ->availabilitiesBetween($validated['start'], $validated['end']));
+        }
 
         $appointment->save();
         return new AppointmentResource($appointment);
