@@ -32,7 +32,7 @@
             </div>
         </div>
         <br/>
-        <div class="row">
+        <div class="row mb-4">
             <div v-for="row in rows" class="card col-md-3">
                 <div class="card-body row">
                     <div class="col-6">
@@ -45,11 +45,26 @@
                         <span v-if="!row.is_working" class="badge badge-danger">Not Available</span>
                     </div>
                 </div>
-                <button v-on:click="deleteAvailability(row.id)" type="button" class="btn btn-danger">Delete
+                <button v-if="showDelete" v-on:click="deleteAvailability(row.id)" type="button"
+                        class="btn btn-danger mb-4">Delete
                 </button>
-                <br>
             </div>
         </div>
+        <nav v-if="lastPage > 1" aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li v-if="isValidPage(page-1)" class="page-item">
+                    <button class="page-link" @click="goToPage(page-1)" tabindex="-1">Previous</button>
+                </li>
+                <template v-for="pageNum in pageArray">
+                    <li :key="pageNum" v-if="pageNum" v-bind:class="{'page-item':true, 'active':(page === pageNum)}">
+                        <button class="page-link" @click="goToPage(pageNum)">{{pageNum}}</button>
+                    </li>
+                </template>
+                <li v-if="isValidPage(page+1)" class="page-item">
+                    <button @click="goToPage(page+1)" class="page-link">Next</button>
+                </li>
+            </ul>
+        </nav>
     </div>
 </template>
 
@@ -66,11 +81,14 @@
                 page: {},
                 start: {},
                 end: {},
+                lastPage: {},
+                pageArray: {},
             }
         },
         props: {
             doctorId: Number,
             clinicId: Number,
+            showDelete: Boolean,
         },
         methods: {
             getAvailabilities: function () {
@@ -89,6 +107,8 @@
                     if (response.status === 200 || response.status === 201) {
                         console.log(response);
                         this.rows = response.data.data;
+                        this.lastPage = response.data.meta.last_page;
+                        this.getPages()
                     } else {
                         console.log('Add availability: Response code ' + response.status);
                     }
@@ -108,13 +128,34 @@
                         console.log('Delete availability: Response code ' + response.status);
                     }
                 });
+            },
+            isValidPage: function (page) {
+                return (page >= 1 && page <= this.lastPage);
+            },
+            getPages: function () {
+                let pages = [];
+                if (this.isValidPage(this.page - 2))
+                    pages[0] = this.page - 2;
+                if (this.isValidPage(this.page - 1))
+                    pages[1] = this.page - 1;
+                if (this.isValidPage(this.page))
+                    pages[2] = this.page;
+                if (this.isValidPage(this.page + 1))
+                    pages[3] = this.page + 1;
+                if (this.isValidPage(this.page + 2))
+                    pages[4] = this.page + 2;
+                this.pageArray = pages;
+            },
+            goToPage: function (page) {
+                this.page = page;
+                this.getAvailabilities();
             }
         },
         created() {
             this.perPage = 50;
             this.page = 1;
             this.start = moment().format('YYYY-MM-DD');
-            this.end = moment().add(4, 'weeks').format('YYYY-MM-DD');
+            this.end = moment().add(1, 'years').format('YYYY-MM-DD');
         },
         mounted() {
             this.getAvailabilities();

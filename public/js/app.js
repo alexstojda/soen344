@@ -3960,6 +3960,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3970,12 +3985,15 @@ __webpack_require__.r(__webpack_exports__);
       perPage: {},
       page: {},
       start: {},
-      end: {}
+      end: {},
+      lastPage: {},
+      pageArray: {}
     };
   },
   props: {
     doctorId: Number,
-    clinicId: Number
+    clinicId: Number,
+    showDelete: Boolean
   },
   methods: {
     getAvailabilities: function getAvailabilities() {
@@ -3999,6 +4017,9 @@ __webpack_require__.r(__webpack_exports__);
         if (response.status === 200 || response.status === 201) {
           console.log(response);
           _this.rows = response.data.data;
+          _this.lastPage = response.data.meta.last_page;
+
+          _this.getPages();
         } else {
           console.log('Add availability: Response code ' + response.status);
         }
@@ -4022,13 +4043,29 @@ __webpack_require__.r(__webpack_exports__);
           console.log('Delete availability: Response code ' + response.status);
         }
       });
+    },
+    isValidPage: function isValidPage(page) {
+      return page >= 1 && page <= this.lastPage;
+    },
+    getPages: function getPages() {
+      var pages = [];
+      if (this.isValidPage(this.page - 2)) pages[0] = this.page - 2;
+      if (this.isValidPage(this.page - 1)) pages[1] = this.page - 1;
+      if (this.isValidPage(this.page)) pages[2] = this.page;
+      if (this.isValidPage(this.page + 1)) pages[3] = this.page + 1;
+      if (this.isValidPage(this.page + 2)) pages[4] = this.page + 2;
+      this.pageArray = pages;
+    },
+    goToPage: function goToPage(page) {
+      this.page = page;
+      this.getAvailabilities();
     }
   },
   created: function created() {
     this.perPage = 50;
     this.page = 1;
     this.start = moment__WEBPACK_IMPORTED_MODULE_1___default()().format('YYYY-MM-DD');
-    this.end = moment__WEBPACK_IMPORTED_MODULE_1___default()().add(4, 'weeks').format('YYYY-MM-DD');
+    this.end = moment__WEBPACK_IMPORTED_MODULE_1___default()().add(1, 'years').format('YYYY-MM-DD');
   },
   mounted: function mounted() {
     this.getAvailabilities();
@@ -109388,7 +109425,7 @@ var render = function() {
     _vm._v(" "),
     _c(
       "div",
-      { staticClass: "row" },
+      { staticClass: "row mb-4" },
       _vm._l(_vm.rows, function(row) {
         return _c("div", { staticClass: "card col-md-3" }, [
           _c("div", { staticClass: "card-body row" }, [
@@ -109422,25 +109459,102 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-danger",
-              attrs: { type: "button" },
-              on: {
-                click: function($event) {
-                  return _vm.deleteAvailability(row.id)
-                }
-              }
-            },
-            [_vm._v("Delete\n            ")]
-          ),
-          _vm._v(" "),
-          _c("br")
+          _vm.showDelete
+            ? _c(
+                "button",
+                {
+                  staticClass: "btn btn-danger mb-4",
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      return _vm.deleteAvailability(row.id)
+                    }
+                  }
+                },
+                [_vm._v("Delete\n            ")]
+              )
+            : _vm._e()
         ])
       }),
       0
-    )
+    ),
+    _vm._v(" "),
+    _vm.lastPage > 1
+      ? _c("nav", { attrs: { "aria-label": "Page navigation example" } }, [
+          _c(
+            "ul",
+            { staticClass: "pagination justify-content-center" },
+            [
+              _vm.isValidPage(_vm.page - 1)
+                ? _c("li", { staticClass: "page-item" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "page-link",
+                        attrs: { tabindex: "-1" },
+                        on: {
+                          click: function($event) {
+                            return _vm.goToPage(_vm.page - 1)
+                          }
+                        }
+                      },
+                      [_vm._v("Previous")]
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm._l(_vm.pageArray, function(pageNum) {
+                return [
+                  pageNum
+                    ? _c(
+                        "li",
+                        {
+                          key: pageNum,
+                          class: {
+                            "page-item": true,
+                            active: _vm.page === pageNum
+                          }
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "page-link",
+                              on: {
+                                click: function($event) {
+                                  return _vm.goToPage(pageNum)
+                                }
+                              }
+                            },
+                            [_vm._v(_vm._s(pageNum))]
+                          )
+                        ]
+                      )
+                    : _vm._e()
+                ]
+              }),
+              _vm._v(" "),
+              _vm.isValidPage(_vm.page + 1)
+                ? _c("li", { staticClass: "page-item" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "page-link",
+                        on: {
+                          click: function($event) {
+                            return _vm.goToPage(_vm.page + 1)
+                          }
+                        }
+                      },
+                      [_vm._v("Next")]
+                    )
+                  ])
+                : _vm._e()
+            ],
+            2
+          )
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = [

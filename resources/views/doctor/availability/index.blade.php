@@ -12,7 +12,7 @@
     <div class="card">
         <div class="card-body">
             <h2 class="card-title text-center">Your upcoming availabilities</h2>
-            <list-availabilities :doctor-id={{ Auth('doctor')->id() }}></list-availabilities>
+            <list-availabilities :show-delete="true" :doctor-id={{ Auth('doctor')->id() }}></list-availabilities>
         </div>
     </div>
 </div>
