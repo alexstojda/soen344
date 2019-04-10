@@ -28,14 +28,15 @@ class AvailabilityObserver
         if ($availability->start->diffInMinutes($availability->end) > $minute_interval) {
             $msg = '['.__CLASS__."] New availability does not pass {$minute_interval}m interval rule | "
                 . $availability->start->toDateTimeString() .' | '. $availability->end->toDateTimeString();
-            dump($msg);
+            //dump($msg);
             Log::warning($msg);
             foreach (CarbonPeriod::since($availability->start)->minutes($minute_interval)
                          ->end($availability->end, false) as $interval) {
-                Availability::create([
+                Availability::updateOrCreate([
                     'doctor_id' => $availability->doctor_id,
                     'start' => $interval,
                     'end' => $interval->copy()->addMinutes($minute_interval),
+                ], [
                     'is_working' => $availability->is_working,
                     'message' => $availability->message,
                 ]);
@@ -71,7 +72,7 @@ class AvailabilityObserver
             $col->each(function (Availability $old) use ($availability) {
                 $msg = '['.__CLASS__.'] availability already exists... overwrite | ID:' . $old->id . ' | ' .
                         $availability->start->toDateTimeString() .' | '. $availability->end->toDateTimeString();
-                dump($msg);
+                //dump($msg);
                 Log::notice($msg);
                 $old->is_working = $availability->is_working;
                 $old->message = $availability->message;

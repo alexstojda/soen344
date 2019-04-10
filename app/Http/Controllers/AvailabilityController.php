@@ -78,7 +78,6 @@ class AvailabilityController extends Controller
         } else {
             $availabilities = $availabilities->get();
             $checkup = false;
-
         }
         $arrayedvalued = $availabilities->toArray();
         $displayable = array();
@@ -97,7 +96,7 @@ class AvailabilityController extends Controller
                     $returnDate = Carbon::parse($date->addMinutes(20));
                 }
             } else {
-                    array_push($displayable, [$arrayedvalued[$ii]['id'],
+                array_push($displayable, [$arrayedvalued[$ii]['id'],
                         $returnDate,
                         $arrayedvalued[$ii]['doctor_id']]);
             }
@@ -132,10 +131,11 @@ class AvailabilityController extends Controller
         ]);
 
         try {
-            $availability = Availability::create([
+            $availability = Availability::updateOrCreate([
                 'doctor_id' => $validated['doctor_id'] ?? auth('doctor')->id(),
                 'start' => $validated['start'],
                 'end' => $validated['end'],
+            ], [
                 'is_working' => $validated['is_working'] ?? 1,
                 'message' => $validated['message'] ?? null
             ]);
@@ -166,7 +166,8 @@ class AvailabilityController extends Controller
         return view('doctor.availability.create');
     }
 
-    public function showAvailabilitiesPage() {
+    public function showAvailabilitiesPage()
+    {
         return view('doctor.availability.index');
     }
 

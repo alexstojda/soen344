@@ -28,6 +28,9 @@ class AppointmentsSeeder extends Seeder
             }
 
             if ($appointment->type === 'checkup') {
+                if ($availabilities->length()->isEmpty()) {
+                    abort(412, 'No more 60m timeslots available');
+                }
                 $avail = $availabilities->length()->random();
                 $ids = $avail->ids;
             } else {

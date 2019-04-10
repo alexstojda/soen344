@@ -154,6 +154,9 @@ class Appointment extends Model
      */
     public function getConsecutiveBlocksAttribute(): int
     {
+        if ($this->availabilities()->exists()) {
+            return $this->availabilities()->count();
+        }
         switch ($this->type) {
             case 'checkup':
                 return 3;

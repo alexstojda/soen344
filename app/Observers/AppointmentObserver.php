@@ -37,12 +37,14 @@ class AppointmentObserver
                 $appointment->status = 'active'; // temporarily avoid rescheduled state
             }
 
-            if ($appointment->start->isFuture() && $appointment->end->isFuture()) {
-                $appointment->status = 'active';
-            }
+            if ($appointment->status !== 'cart' && $appointment->status !== 'cancelled') {
+                if ($appointment->start->isFuture() && $appointment->end->isFuture()) {
+                    $appointment->status = 'active';
+                }
 
-            if ($appointment->start->isPast() && $appointment->end->isPast()) {
-                $appointment->status = 'complete';
+                if ($appointment->start->isPast() && $appointment->end->isPast()) {
+                    $appointment->status = 'complete';
+                }
             }
         } elseif ($appointment->status !== 'cancelled' || $appointment->status !== 'complete') {
             $appointment->status = 'unscheduled';
