@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\CarbonInterval;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Clinic
@@ -12,12 +13,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $address
  * @property string $phone
- * @property mixed $open
- * @property mixed $close
+ * @property string $open
+ * @property string $close
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Doctor[] $doctors
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Room[] $rooms
+ * @property-read array $open_time
+ * @property-read array $close_time
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Clinic newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Clinic newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Clinic query()
@@ -105,5 +108,25 @@ class Clinic extends Model
     public function roomsBetween($from = null, $to = null)
     {
         return $this->rooms()->availableBetween($from, $to);
+    }
+
+    /**
+     * @param Carbon|string $start
+     * @param Carbon|string $end
+     *
+     * @return bool
+     */
+    public function isDuringWorkHours($start, $end): bool
+    {
+        $from = Carbon::parse($start);
+        $to = Carbon::parse($end);
+        $start_day = $from->copy()->startOfDay()->setTimeFrom($this->open);
+        $end_day = $to->copy()->startOfDay()->setTimeFrom($this->close);
+        return (
+            $from->greaterThanOrEqualTo($start_day) &&
+            $to->greaterThanOrEqualTo($start_day) &&
+            $from->lessThanOrEqualTo($end_day) &&
+            $to->lessThanOrEqualTo($end_day)
+        );
     }
 }

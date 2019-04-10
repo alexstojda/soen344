@@ -22,6 +22,7 @@ use App\Concerns\FixesAvailabilityDates;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Appointment[] $appointments
  * @property-read \App\Models\Doctor $doctor
+ * @property-read \App\Models\Clinic $clinic
  * @property-read \App\Models\Appointment|null $appointment
  * @property-read bool $is_available
  * @property-read bool $is_booked

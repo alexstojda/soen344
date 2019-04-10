@@ -72,6 +72,18 @@ class Appointment extends Model
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'start',
+        'end',
+        'duration',
+        'consecutive_blocks',
+    ];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|Doctor
      */
     public function doctor()
