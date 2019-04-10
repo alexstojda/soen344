@@ -3926,26 +3926,72 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ListAvailabilities",
   data: function data() {
     return {
-      rows: {}
+      rows: {},
+      perPage: {},
+      page: {},
+      start: {},
+      end: {}
     };
   },
   props: {
-    doctorId: Number
+    doctorId: Number,
+    clinicId: Number
   },
   methods: {
     getAvailabilities: function getAvailabilities() {
       var _this = this;
 
-      var perPage = 100;
-      var today = moment__WEBPACK_IMPORTED_MODULE_1___default()().format('YYYY-MM-DD');
-      console.log('/api/availability?per_page=' + perPage + '&start=' + today + '&doctor_id=' + this.doctorId);
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/availability?per_page=' + perPage + '&start=' + today + '&doctor_id=' + this.doctorId).catch(function (error) {
+      console.debug('getAvail called');
+      var params = {};
+      params.per_page = this.perPage;
+      params.page = this.page;
+      params.start = this.start;
+      params.end = this.end;
+      if (this.doctorId) params.doctor_id = this.doctorId;
+      if (this.clinicId) params.clinic_id = this.clinicId;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/availability', {
+        params: params
+      }).catch(function (error) {
         console.log(error.response.data, {
           type: 'error'
         });
@@ -3964,6 +4010,7 @@ __webpack_require__.r(__webpack_exports__);
     deleteAvailability: function deleteAvailability(id) {
       var _this2 = this;
 
+      console.debug('deleteAvail called');
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.delete('/api/availability/' + id).catch(function (error) {
         console.log(error.response.data, {
           type: 'error'
@@ -3976,6 +4023,12 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     }
+  },
+  created: function created() {
+    this.perPage = 50;
+    this.page = 1;
+    this.start = moment__WEBPACK_IMPORTED_MODULE_1___default()().format('YYYY-MM-DD');
+    this.end = moment__WEBPACK_IMPORTED_MODULE_1___default()().add(4, 'weeks').format('YYYY-MM-DD');
   },
   mounted: function mounted() {
     this.getAvailabilities();
@@ -109239,63 +109292,191 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "row" },
-    _vm._l(_vm.rows, function(row) {
-      return _c("div", { staticClass: "card col-md-3" }, [
-        _c("div", { staticClass: "card-body row" }, [
-          _c("div", { staticClass: "col-6" }, [
-            _c("b", [_vm._v("Start")]),
-            _vm._v(": " + _vm._s(_vm.getTime(row.start))),
-            _c("br"),
-            _vm._v(" "),
-            _c("b", [_vm._v("End")]),
-            _vm._v(": " + _vm._s(_vm.getTime(row.end)) + "\n            ")
-          ]),
+  return _c("div", [
+    _c("div", { staticClass: "form-inline" }, [
+      _c(
+        "div",
+        { staticClass: "input-group col" },
+        [
+          _vm._m(0),
           _vm._v(" "),
-          _c("div", { staticClass: "col-6" }, [
-            row.is_available
-              ? _c("span", { staticClass: "badge badge-success" }, [
-                  _vm._v("Available")
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            row.is_booked
-              ? _c("span", { staticClass: "badge badge-warning" }, [
-                  _vm._v("Booked")
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            !row.is_working
-              ? _c("span", { staticClass: "badge badge-danger" }, [
-                  _vm._v("Not Available")
-                ])
-              : _vm._e()
-          ])
-        ]),
+          _c("el-date-picker", {
+            attrs: {
+              type: "date",
+              placeholder: "Start date",
+              "default-value": "2019-01-01"
+            },
+            model: {
+              value: _vm.start,
+              callback: function($$v) {
+                _vm.start = $$v
+              },
+              expression: "start"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "input-group col" },
+        [
+          _vm._m(1),
+          _vm._v(" "),
+          _c("el-date-picker", {
+            attrs: {
+              type: "date",
+              placeholder: "End date",
+              "default-value": "2019-01-01"
+            },
+            model: {
+              value: _vm.end,
+              callback: function($$v) {
+                _vm.end = $$v
+              },
+              expression: "end"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "input-group col" }, [
+        _vm._m(2),
         _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.perPage,
+              expression: "perPage"
+            }
+          ],
+          staticClass: "form-control",
+          attrs: { id: "perPage", name: "perPage", type: "number" },
+          domProps: { value: _vm.perPage },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.perPage = $event.target.value
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "input-group col-1" }, [
         _c(
           "button",
           {
-            staticClass: "btn btn-danger",
-            attrs: { type: "button" },
+            staticClass: "btn btn-primary",
             on: {
               click: function($event) {
-                return _vm.deleteAvailability(row.id)
+                return _vm.getAvailabilities()
               }
             }
           },
-          [_vm._v("Delete\n        ")]
-        ),
-        _vm._v(" "),
-        _c("br")
+          [_vm._v("Update")]
+        )
       ])
-    }),
-    0
-  )
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "row" },
+      _vm._l(_vm.rows, function(row) {
+        return _c("div", { staticClass: "card col-md-3" }, [
+          _c("div", { staticClass: "card-body row" }, [
+            _c("div", { staticClass: "col-6" }, [
+              _c("b", [_vm._v("Start")]),
+              _vm._v(": " + _vm._s(_vm.getTime(row.start))),
+              _c("br"),
+              _vm._v(" "),
+              _c("b", [_vm._v("End")]),
+              _vm._v(": " + _vm._s(_vm.getTime(row.end)) + "\n                ")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-6" }, [
+              row.is_available
+                ? _c("span", { staticClass: "badge badge-success" }, [
+                    _vm._v("Available")
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              row.is_booked
+                ? _c("span", { staticClass: "badge badge-warning" }, [
+                    _vm._v("Booked")
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              !row.is_working
+                ? _c("span", { staticClass: "badge badge-danger" }, [
+                    _vm._v("Not Available")
+                  ])
+                : _vm._e()
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-danger",
+              attrs: { type: "button" },
+              on: {
+                click: function($event) {
+                  return _vm.deleteAvailability(row.id)
+                }
+              }
+            },
+            [_vm._v("Delete\n            ")]
+          ),
+          _vm._v(" "),
+          _c("br")
+        ])
+      }),
+      0
+    )
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("div", { staticClass: "input-group-text" }, [
+        _vm._v("\n                    Start Date\n                ")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("div", { staticClass: "input-group-text" }, [
+        _vm._v("\n                    End Date\n                ")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c(
+        "label",
+        { staticClass: "input-group-text", attrs: { for: "perPage" } },
+        [_vm._v("\n                    Results per page:\n                ")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 
