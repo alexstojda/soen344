@@ -109427,54 +109427,60 @@ var render = function() {
       "div",
       { staticClass: "row mb-4" },
       _vm._l(_vm.rows, function(row) {
-        return _c("div", { staticClass: "card col-md-3" }, [
-          _c("div", { staticClass: "card-body row" }, [
-            _c("div", { staticClass: "col-6" }, [
-              _c("b", [_vm._v("Start")]),
-              _vm._v(": " + _vm._s(_vm.getTime(row.start))),
-              _c("br"),
+        return _c(
+          "div",
+          { key: row.id, staticClass: "col-md-3 card mx-auto" },
+          [
+            _c("div", { staticClass: "card-body row" }, [
+              _c("div", { staticClass: "col-6" }, [
+                _c("b", [_vm._v("Start")]),
+                _vm._v(": " + _vm._s(_vm.getTime(row.start))),
+                _c("br"),
+                _vm._v(" "),
+                _c("b", [_vm._v("End")]),
+                _vm._v(
+                  ": " + _vm._s(_vm.getTime(row.end)) + "\n                "
+                )
+              ]),
               _vm._v(" "),
-              _c("b", [_vm._v("End")]),
-              _vm._v(": " + _vm._s(_vm.getTime(row.end)) + "\n                ")
+              _c("div", { staticClass: "col-6" }, [
+                row.is_available
+                  ? _c("span", { staticClass: "badge badge-success" }, [
+                      _vm._v("Available")
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                row.is_booked
+                  ? _c("span", { staticClass: "badge badge-warning" }, [
+                      _vm._v("Booked")
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                !row.is_working
+                  ? _c("span", { staticClass: "badge badge-danger" }, [
+                      _vm._v("Not Available")
+                    ])
+                  : _vm._e()
+              ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-6" }, [
-              row.is_available
-                ? _c("span", { staticClass: "badge badge-success" }, [
-                    _vm._v("Available")
-                  ])
-                : _vm._e(),
-              _vm._v(" "),
-              row.is_booked
-                ? _c("span", { staticClass: "badge badge-warning" }, [
-                    _vm._v("Booked")
-                  ])
-                : _vm._e(),
-              _vm._v(" "),
-              !row.is_working
-                ? _c("span", { staticClass: "badge badge-danger" }, [
-                    _vm._v("Not Available")
-                  ])
-                : _vm._e()
-            ])
-          ]),
-          _vm._v(" "),
-          _vm.showDelete
-            ? _c(
-                "button",
-                {
-                  staticClass: "btn btn-danger mb-4",
-                  attrs: { type: "button" },
-                  on: {
-                    click: function($event) {
-                      return _vm.deleteAvailability(row.id)
+            _vm.showDelete
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-danger mb-4",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.deleteAvailability(row.id)
+                      }
                     }
-                  }
-                },
-                [_vm._v("Delete\n            ")]
-              )
-            : _vm._e()
-        ])
+                  },
+                  [_vm._v("Delete\n            ")]
+                )
+              : _vm._e()
+          ]
+        )
       }),
       0
     ),

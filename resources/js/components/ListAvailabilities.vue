@@ -33,7 +33,7 @@
         </div>
         <br/>
         <div class="row mb-4">
-            <div v-for="row in rows" class="card col-md-3">
+            <div v-for="row in rows" :key="row.id" class="col-md-3 card mx-auto">
                 <div class="card-body row">
                     <div class="col-6">
                         <b>Start</b>: {{ getTime(row.start) }}<br/>
