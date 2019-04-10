@@ -152,7 +152,7 @@
             }
         },
         created() {
-            this.perPage = 50;
+            this.perPage = 25;
             this.page = 1;
             this.start = moment().format('YYYY-MM-DD');
             this.end = moment().add(1, 'years').format('YYYY-MM-DD');
