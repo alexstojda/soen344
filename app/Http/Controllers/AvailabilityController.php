@@ -200,6 +200,10 @@ class AvailabilityController extends Controller
         return view('doctor.availability.create');
     }
 
+    public function showAvailabilitiesPage() {
+        return view('doctor.availability.index');
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

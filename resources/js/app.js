@@ -53,6 +53,7 @@ Vue.component("add-appointment", require("./components/AddAppointment.vue").defa
 Vue.component("add-availability", require("./components/AddAvailability.vue").default);
 Vue.component("modify-appointment-modal", require("./components/ModifyAppointmentModal.vue").default);
 Vue.component("login-component", require("./components/LoginComponent.vue").default);
+Vue.component('list-availabilities', require("./components/ListAvailabilities.vue").default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
