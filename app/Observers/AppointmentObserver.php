@@ -20,11 +20,6 @@ class AppointmentObserver
      */
     public function saving(Appointment $appointment)
     {
-        if ($appointment->type === 'checkup' && $appointment->patient->has_checkup) {
-            abort('412', 'Patient #' . $appointment->patient_id . ' already scheduled a checkup this year.');
-            //$appointment->delete();
-        }
-
         if ($appointment->status === 'cancelled') {
             $appointment->availabilities()->sync([]);
             $appointment->delete();
@@ -49,6 +44,23 @@ class AppointmentObserver
         }
 
         return true;
+    }
+
+    /**
+     * Handle the appointment "creating" event.
+     *
+     * @param  Appointment  $appointment
+     *
+     * @return void
+     *
+     * @throws \Exception
+     */
+    public function creating(Appointment $appointment)
+    {
+        if ($appointment->type === 'checkup' && $appointment->patient->has_checkup) {
+            abort('412', 'Patient #' . $appointment->patient_id . ' already scheduled a checkup this year.');
+            //$appointment->delete();
+        }
     }
 
     /**
