@@ -61,7 +61,7 @@ class AvailabilityObserver
      */
     public function creating(Availability $availability)
     {
-        dump("creating: $availability->doctor_id, $availability->start, $availability->end");
+        //dump("creating: $availability->doctor_id, $availability->start, $availability->end");
 
         $col = Availability::whereDoctorId($availability->doctor_id)
             ->whereStart($availability->start)
@@ -90,7 +90,7 @@ class AvailabilityObserver
      */
     public function created(Availability $availability)
     {
-        dump("created:  $availability->doctor_id, $availability->start, $availability->end, #$availability->id");
+        //dump("created:  $availability->doctor_id, $availability->start, $availability->end, #$availability->id");
     }
 
     /**

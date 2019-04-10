@@ -14,7 +14,7 @@ trait FixesAvailabilityDates
     {
         // if time isn't specified push end to the end of day.
         if ($end->isBefore($start) || $end->isStartOfDay()) {
-            $endOfDay ? $end->endOfDay() : $end->startOfDay()->addHours(config('bonmatin.office_hours.close'));
+            $endOfDay ? $end->endOfDay() : $end->setTimeFromTimeString($this->clinic->close);
         }
         // if difference less than one timeslot interval, reset and add one time interval.
         if ($start->diffInMinutes($end) < config('bonmatin.timeslot_interval')) {

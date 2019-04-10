@@ -28,6 +28,7 @@ use App\Http\Resources\Patient;
  * @property-read \Illuminate\Support\Carbon|string|null $start
  * @property-read \App\Models\User $patient
  * @property-read \App\Models\Room|null $room
+ * @property-read \App\Models\Clinic|null $clinic
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment between($from = null, $to = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment endBefore($end = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Appointment newModelQuery()
@@ -113,6 +114,17 @@ class Appointment extends Model
     public function availabilities()
     {
         return $this->belongsToMany(Availability::class);
+    }
+
+    /**
+     * @return Clinic|null
+     */
+    public function getClinicAttribute(): Clinic
+    {
+        if ($this->room()->exists()) {
+            return $this->room->clinic;
+        }
+        return null;
     }
 
     /**

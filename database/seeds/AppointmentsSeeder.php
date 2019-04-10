@@ -16,9 +16,11 @@ class AppointmentsSeeder extends Seeder
      */
     public function run()
     {
+        // Create unscheduled appointments
         $collection = factory(Appointment::class, 50)->create();
 
         $collection->each(function (Appointment $appointment) {
+            // only clinic #1 for now
             $availabilities = Availability::available()->ofClinicId(Clinic::first()->id);
 
             if ($appointment->patient->has_checkup) {

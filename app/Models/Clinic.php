@@ -120,8 +120,8 @@ class Clinic extends Model
     {
         $from = Carbon::parse($start);
         $to = Carbon::parse($end);
-        $start_day = $from->copy()->startOfDay()->setTimeFrom($this->open);
-        $end_day = $to->copy()->startOfDay()->setTimeFrom($this->close);
+        $start_day = $from->copy()->setTimeFromTimeString($this->open);
+        $end_day = $to->copy()->setTimeFromTimeString($this->close);
         return (
             $from->greaterThanOrEqualTo($start_day) &&
             $to->greaterThanOrEqualTo($start_day) &&
