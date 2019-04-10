@@ -9,12 +9,8 @@
             <el-time-select placeholder="End time" v-model="endTime"
                             :picker-options="{ start: '08:00', step: '00:20', end: '20:00', minTime: startTime}">
             </el-time-select>
-        </div>
-        <div class="row">
-            <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1 text-right">
-                <button v-on:click="addAvailability()" type="button" class="btn btn-success btn-lg">Add Availability
-                </button>
-            </div>
+            <button v-on:click="addAvailability()" type="button" class="btn btn-success btn-lg">Add Availability
+            </button>
         </div>
     </div>
 </template>

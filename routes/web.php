@@ -28,6 +28,7 @@ Route::get('/createAppointment', 'AppointmentController@showCreateAppointmentPag
 Route::get('/viewAppointments', 'AppointmentController@showViewAppointmentsPage');
 
 Route::group(['prefix' => 'doctor'], function () {
+    Route::get('/availabilities', 'AvailabilityController@showAvailabilitiesPage')->middleware('auth:doctor');
     Route::get('/addAvailability', 'AvailabilityController@showAddAvailabilityPage')->middleware('auth:doctor');
     Route::post('/api/addAvailability', 'AvailabilityController@store');
     Route::get('/viewAppointments', 'AppointmentController@showViewAppointmentsPage')->middleware('auth:doctor');
