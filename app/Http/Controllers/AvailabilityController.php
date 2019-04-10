@@ -75,41 +75,14 @@ class AvailabilityController extends Controller
         }
 
         if ($request->exists('type') && $request->type === 'checkup') {
-            $availabilities = $availabilities->consecutive(3);
+            $availabilities = $availabilities->consecutive(3, '>=');
             $checkup = true;
-//            $arrayedvalued = $availabilities->toArray();
         } else {
-            //this doens't return single things
-            $availabilities = $availabilities->consecutive(3,'<=>');
-            //and if i don't do it it only has groups of 3 or more.
-            //so if there is a lone group or a group of 2 they don't exist
+            $availabilities = $availabilities->get();
             $checkup = false;
 
         }
         $arrayedvalued = $availabilities->toArray();
-        //TODO: EVAN
-        // return all possible availabilities WITH all diff rooms
-        // so duplicate availabilities if there's 1+ rooms that are free.
-
-        // EXAMPLE
-        // requested appointment type was checkup and a clinic was given
-        //Evan: "and date i hope?"
-
-        // found: id, doc, start, end
-        //         1   1    3:00   3:20
-        //         2   1    3:20   3:40
-        //         3   1    3:40   4:00
-        //         4   1    4:00   4:20
-        //         5   1    4:20   4:40
-        //         6   1    4:40   5:00
-        //         7   1    5:00   5:20
-
-        // there are 4 rooms in that clinic
-        // check with availableBetween scope gives you rooms 1 and 3 available between 3 & 5
-
-        //So this shit will work if This is just one set of availabilities. like they are all one after the other
-        //and if you want to do the sets of 3
-        //and have them sorted by start that would be GREEEEAAAAT
         $displayable = array();
 
 
@@ -123,35 +96,15 @@ class AvailabilityController extends Controller
                         $arrayedvalued[$ii]['ids'][$i + 2]],
                         $returnDate,
                         $arrayedvalued[$ii]['doctor_id']]);
-                    $returnDate = Carbon::parse($date->addMinutes(20))->toString();
+                    $returnDate = Carbon::parse($date->addMinutes(20));
                 }
             } else {
-                for ($i = 0; $i < count($arrayedvalued[$ii]['ids']); $i = $i + 1) {
-                    array_push($displayable, [$arrayedvalued[$ii]['ids'][$i],
+                    array_push($displayable, [$arrayedvalued[$ii]['id'],
                         $returnDate,
                         $arrayedvalued[$ii]['doctor_id']]);
-                    $returnDate = Carbon::parse($date->addMinutes(20))->toString();
-                }
             }
         }
         dd($displayable);
-
-
-
-        //  ids,    doc, start, end, room
-        //   1,2,3   1    3:00  4:00  1
-        //   1,2,3   1    4:00  5:00  1
-        //   4,5,6   1    3:00  4:00  3
-        //   4,5,6   1    4:00  5:00  3
-
-        //Evan's comment:
-//        shouldn't this return ids [1,2,3],[2,3,4],[3,4,5],[4,5,6],[5,6,7]
-//        also why do we need to show what room? we just need to give them whatever
-//        room WE decide at random as long as its available
-
-        //for singles we just for each in room go through the entire list. simple as that
-
-        // theres a merge timeslots in the model, you might want to use that. just dont break it
     }
 
     /**
