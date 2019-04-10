@@ -21,7 +21,17 @@ trait HasAppointments
      */
     public function getAppointmentsThisYearAttribute()
     {
-        return $this->appointmentsBetween(Carbon::now()->startOfYear(), Carbon::now()->endOfYear());
+        return $this->appointmentsInYear(Carbon::now()->year);
+    }
+
+    /**
+     * @param int|null $year
+     *
+     * @return Collection|Appointment[]
+     */
+    public function appointmentsInYear($year = null)
+    {
+        return $this->appointmentsBetween(Carbon::create($year), Carbon::create($year)->endOfYear());
     }
 
     /**

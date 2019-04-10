@@ -27,9 +27,9 @@ use App\Concerns\FixesAvailabilityDates;
  * @property-read bool $is_booked
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability available()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability between($from = null, $to = null, $available = true)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability consecutive($count = 3, $operator = '=')
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability endBefore($end = null)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability length($length = '60min', $operator = '>=')
+ * @method static \App\Models\Availability[]|Collection length($length = '60min', $operator = '>=')
+ * @method static \App\Models\Availability[]|Collection consecutive($count = 3, $operator = '=')
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Availability ofDoctorId($doctor_id = null)
@@ -129,6 +129,19 @@ class Availability extends Model
     {
         return $this->appointment();
     }
+
+    /**
+     * @return Clinic|null
+     */
+    public function getClinicAttribute()
+    {
+        if ($this->doctor()->exists()) {
+            return $this->doctor->clinic;
+        }
+        return null;
+    }
+
+
 
     /**
      * @return bool

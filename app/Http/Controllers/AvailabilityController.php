@@ -48,8 +48,6 @@ class AvailabilityController extends Controller
             $availabilities = $availabilities->length($request->length . 'min', $request->operator);
         }
 
-        //TODO: add clinic id filter
-
         return AvailabilityResource::collection($availabilities->paginate($request->per_page ?? 50));
     }
 
@@ -201,8 +199,7 @@ class AvailabilityController extends Controller
         !isset($validated['start']) ?: $availability->start = $validated['start'];
         !isset($validated['end']) ?: $availability->end = $validated['end'];
         !isset($validated['is_working']) ?: $availability->is_working = $validated['is_working'];
-        !isset($validated['message']) ?:
-            $availability->message = $validated['message'];
+        !isset($validated['message']) ?: $availability->message = $validated['message'];
 
         $availability->save();
         return new AvailabilityResource($availability);
