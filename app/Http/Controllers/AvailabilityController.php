@@ -85,23 +85,40 @@ class AvailabilityController extends Controller
 
         for ($ii = 0; $ii < count($arrayedvalued); $ii = $ii + 1) {
             $date = Carbon::parse($arrayedvalued[$ii]['start']);
-            $returnDate = Carbon::parse($date)->toString();
+            $returnDate = Carbon::parse($date);
             if ($checkup) {
                 for ($i = 0; $i <= count($arrayedvalued[$ii]['ids']) - 3; $i = $i + 1) {
-                    array_push($displayable, [[$arrayedvalued[$ii]['ids'][$i],
-                        $arrayedvalued[$ii]['ids'][$i + 1],
-                        $arrayedvalued[$ii]['ids'][$i + 2]],
-                        $returnDate,
-                        $arrayedvalued[$ii]['doctor_id']]);
+                    $name = $arrayedvalued[$ii]['doctor']['first_name']." ".$arrayedvalued[$ii]['doctor']['last_name'];
+                    array_push($displayable, array(
+                        "ids" => [$arrayedvalued[$ii]['ids'][$i],
+                            $arrayedvalued[$ii]['ids'][$i + 1],
+                            $arrayedvalued[$ii]['ids'][$i + 2]
+                        ],
+                        "start" => $returnDate->toString(),
+                        "end" => Carbon::parse($returnDate->addMinutes(60))->toString(),
+                        "doctor_id" => $arrayedvalued[$ii]['doctor_id'],
+                        "name" => $name,
+                        "type" => "checkup"
+                    ));
                     $returnDate = Carbon::parse($date->addMinutes(20));
                 }
             } else {
-                array_push($displayable, [$arrayedvalued[$ii]['id'],
-                        $returnDate,
-                        $arrayedvalued[$ii]['doctor_id']]);
+                $name = $arrayedvalued[$ii]['doctor']['first_name']." ".$arrayedvalued[$ii]['doctor']['last_name'];
+                array_push($displayable, array(
+                        "id" => $arrayedvalued[$ii]['id'],
+                        "start" => $returnDate,
+                        "end" => Carbon::parse($arrayedvalued[$ii]['end']),
+                        "doctor_id" => $arrayedvalued[$ii]['doctor_id'],
+                        "name" =>$name,
+                        "type" => "walk-in"
+                    )
+                );
             }
         }
-        dd($displayable);
+//        dd($displayable);
+        return response()->JSON(['data'=>$displayable]);
+//        $test = PossibleApointmentResource::collection($availabilities->toArray());
+//        return $test;
     }
 
     /**
