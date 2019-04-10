@@ -27,6 +27,7 @@ trait HasDoctor
         return [
             'id' => $doctor->id,
             'name' => $doctor->name,
+            'clinic' => $doctor->clinic->name,
             'path' => route('doctor.show', ['id' => $doctor->id]),
             'filter_by_doctor' => request()->fullUrlWithQuery(['doctor_id' => $doctor->id]),
         ];
