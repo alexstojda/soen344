@@ -155,13 +155,13 @@
                             Start:
                         </th>
                         <td>
-                            {{newAppointment.details.start}}
+                            {{this.getTime(newAppointment.details.start)}}
                         </td>
                         <th>
                             End:
                         </th>
                         <td>
-                            {{newAppointment.details.end}}
+                            {{this.getTime(newAppointment.details.end)}}
                         </td>
                     </tr>
                     <tr>
@@ -255,12 +255,12 @@
                 axios.get('/api/availability', {params: params})
                     .catch(error => {
                         console.log(error.response.data, {type: 'error'});
-                        this.throwDialogModal('Error', error.response);
+                        this.throwDialogModal('Error', '<pre>'+JSON.stringify(error.response, null, 2)+'</pre>');
                     }).then(response => {
                     if (response.status === 200 || response.status === 201) {
                         this.rows = response.data.data;
                         this.lastPage = response.data.meta.last_page;
-                        this.getPages()
+                        this.getPages();
                     } else {
                         console.log('Add availability: Response code ' + response.status);
                     }
@@ -272,7 +272,7 @@
             deleteAvailability: function (id) {
                 axios.delete('/api/availability/' + id).catch(error => {
                     console.log(error.response.data, {type: 'error'});
-                    this.throwDialogModal('Error', error.response);
+                    this.throwDialogModal('Error', '<pre>'+JSON.stringify(error.response, null, 2)+'</pre>');
                 }).then(response => {
                     if (response.status === 200 || response.status === 201) {
                         this.getAvailabilities();
@@ -313,7 +313,7 @@
                 axios.get('/api/doctor')
                     .catch(error => {
                         console.log(error.response.data, {type: 'error'});
-                        this.throwDialogModal('Error', error.response);
+                        this.throwDialogModal('Error', '<pre>'+JSON.stringify(error.response, null, 2)+'</pre>');
                     }).then(response => {
                     if (response.status === 200 || response.status === 201) {
                         this.doctorsList = response.data.data;
@@ -339,7 +339,7 @@
                 axios.get('/api/patient')
                     .catch(error => {
                         console.log(error.response.data, {type: 'error'});
-                        this.throwDialogModal('Error', error.response);
+                        this.throwDialogModal('Error', '<pre>'+JSON.stringify(error.response, null, 2)+'</pre>');
                     }).then(response => {
                     if (response.status === 200 || response.status === 201) {
                         this.patientsList = response.data.data;
@@ -359,7 +359,7 @@
                     status: 'complete'
                 }).catch(error => {
                     console.log(error.response.data, {type: error});
-                    this.throwDialogModal('Error', error.response);
+                    this.throwDialogModal('Error', '<pre>'+JSON.stringify(error.response, null, 2)+'</pre>');
                 }).then(response => {
                     if (response.status === 200 || response.status === 201) {
                         this.getAvailabilities();
@@ -379,7 +379,7 @@
             throwDialogModal: function (title, text) {
                 this.$modal.show('dialog', {
                     title: title,
-                    text: '<pre>'+JSON.stringify(text, null, 2)+'</pre>',
+                    text: text,
                     buttons: [
                         {
                             title: 'Close'
