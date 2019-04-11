@@ -5,11 +5,11 @@
             <br>
             <table width="50%" class="table">
                 <thead>
-                    <tr>
-                        <th scope="col">Appointment Time</th>
-                        <th scope="col">Doctor</th>
-                        <th scope="col">Location</th>
-                    </tr>
+                <tr>
+                    <th scope="col">Appointment Time</th>
+                    <th scope="col">Doctor</th>
+                    <th scope="col">Location</th>
+                </tr>
                 </thead>
                 <tr v-for="cartItem in cart" v-bind:cart-line="cartItem">
                     <td>{{ dateFormatter(cartItem.start) }}</td>
@@ -43,7 +43,8 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1 text-right">
-                        <button v-on:click="checkoutCart()" type="button" class="btn btn-success btn-lg">Checkout</button>
+                        <button v-on:click="checkoutCart()" type="button" class="btn btn-success btn-lg">Checkout
+                        </button>
                     </div>
                 </div>
             </div>
@@ -54,9 +55,10 @@
 <script>
     import axios from 'axios';
     import moment from "moment";
+
     export default {
         name: 'Checkout',
-        data () {
+        data() {
             return {
                 cart: [],
                 empty: false,
@@ -65,43 +67,45 @@
         props: {
             userId: Number,
         },
-        mounted () {
+        mounted() {
             this.getCart()
         },
         methods: {
-            getCart () {
-                axios.get('/cart/'  + this.userId)
+            getCart() {
+                axios.get('/cart/' + this.userId)
                     .then(result => {
-                        this.cart = result.data.data
-                        if(this.cart.length == 0)
-                        {
-                            this.empty = true;
-                        }
-                        else
-                        {
-                            this.empty = false;
-                        }
+                        this.cart = result.data.data;
+                        this.empty = this.cart.length === 0;
                     }, error => {
                         console.error(error)
                     })
                     .catch(error => {
                         console.log(error.response)
-                })
+                    })
             },
-            checkoutCart () {
-                axios.post('/processAppointments/' + this.userId,{
-                   cart: this.cart
-                }).then(response => {
-                    if(response.status == 200) {
-                        console.log("Added appointments")
-                        window.location.href = '/home';
-                    } else {
-                        console.log("Add appointments failed: Response code " + response.status)
-                    }
-                }).catch(error => {
-                    console.log(error.response)
-                })
-            },            dateFormatter: function(date) {
+            checkoutCart() {
+                for (let i = 0; i < this.cart.length; i++) {
+                    let doBreak = false;
+                    axios.put('/api/appointment/' + this.cart[i].id, {
+                        paid: true,
+                    })
+                        .then(response => {
+                            console.log(response);
+                            if (response.status === 200) {
+                                delete this.cart[i];
+                            } else {
+                                doBreak = true;
+                                console.log("Add appointments failed: Response code " + response.status);
+                            }
+                        }).catch(error => {
+                        console.log(error.response)
+                    });
+                    if (doBreak) break;
+                }
+                this.cart = [];
+                // window.location = '/home';
+            },
+            dateFormatter: function (date) {
                 return moment(date).format("YYYY-MM-DD");
             }
         }
