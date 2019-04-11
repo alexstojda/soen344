@@ -26,6 +26,12 @@ trait HasRoom
 
         return [
             'id' => $room->id,
+            'clinic' => [
+                'id' => $room->clinic->id,
+                'name' => $room->clinic->name,
+                'address' => $room->clinic->address,
+                'path' => route('clinic.show', ['id' => $room->clinic->id]),
+            ],
             'path' => route('room.show', ['id' => $room->id]),
             'filter_by_room' => request()->fullUrlWithQuery(['room_id' => $room->id]),
         ];

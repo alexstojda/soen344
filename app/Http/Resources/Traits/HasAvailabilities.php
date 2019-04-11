@@ -36,7 +36,7 @@ trait HasAvailabilities
      */
     private function availabilitiesLinksArray()
     {
-        return $this->availabilities()->available()->get()->map(function (Availability $availability) {
+        return $this->availabilities()->get()->map(function (Availability $availability) {
             return [
                 'id'     => $availability->id,
                 'start'  => $availability->start,

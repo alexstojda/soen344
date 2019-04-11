@@ -17,7 +17,7 @@ use App\Http\Resources\Patient;
  * @property int|null $room_id
  * @property string $type
  * @property string $status
- * @property int $paid
+ * @property boolean $paid
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Availability[] $availabilities
@@ -60,6 +60,15 @@ class Appointment extends Model
      */
     protected $guarded = [
         'id',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'paid' => 'boolean'
     ];
 
     /**

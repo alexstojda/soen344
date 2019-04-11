@@ -14,6 +14,7 @@ class Appointment extends JsonResource
     use Traits\HasPatient;
     use Traits\HasDoctor;
     use Traits\HasRoom;
+    use Traits\HasAvailabilities;
 
     /**
      * Transform the resource into an array.
@@ -32,13 +33,9 @@ class Appointment extends JsonResource
             'end' => $this->end,
             'type' => $this->type,
             'status' => $this->status,
+            'paid' => $this->paid,
             'duration' => $this->duration,
-            'times_linked' => $this->availabilities->map(function ($availability) {
-                return [
-                    'id' => $availability->id,
-                    'path' => route('availability.show', ['id' => $availability->id]),
-                ];
-            }),
+            'times_linked' => $this->availabilitiesLinksArray(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'path' => route('appointment.show', ['id' => $this->id]),

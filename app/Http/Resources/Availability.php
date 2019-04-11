@@ -12,6 +12,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class Availability extends JsonResource
 {
     use Traits\HasDoctor;
+    use Traits\HasAppointments;
 
     /**
      * Transform the resource into an array.
@@ -31,6 +32,7 @@ class Availability extends JsonResource
             'is_available' => $this->is_available,
             'message' => $this->message ??
                 __('Doctor is '. ($this->is_working ? 'available' : 'unavailable') .' at this time'),
+            'appointments' => $this->appointmentsLinksArray(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'path' => $this->getPath(),

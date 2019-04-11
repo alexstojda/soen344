@@ -2,9 +2,8 @@
 
 namespace App\Concerns\Model;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use App\Models\Clinic;
 
 /**
@@ -22,4 +21,19 @@ trait BelongsToClinic
     {
         return $this->belongsTo(Clinic::class);
     }
+
+    /**
+     * Scope a query to only include availabilities for a given doctor id
+     *
+     * @param  Builder $query
+     * @param  int|null $doctor_id
+     *
+     * @return Builder
+     */
+    public function scopeOfClinicId($query, $doctor_id = null): Builder
+    {
+        return $doctor_id === null ? $query :
+            $query->where('clinic_id', '=', $doctor_id);
+    }
+
 }
