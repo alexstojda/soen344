@@ -27,6 +27,10 @@ class AppointmentController extends Controller
             ->ofPatientId($request->patient_id ?? auth('web')->id())
             ->ofStatus($request->status);
 
+        if (auth('nurse')->check()) {
+            $appointments->whereIn('doctor_id', auth('nurse')->user()->clinic->doctors->pluck('id'));
+        }
+
         if ($request->exists('start') || $request->exists('end')) {
             $appointments = $appointments->between($request->start, $request->end);
         }
@@ -57,7 +61,7 @@ class AppointmentController extends Controller
             'patient_id'   => auth('web')->check() ? 'nullable|int' : 'required|int',
             'start'        => 'required_with:end|before_or_equal:end',
             'end'          => 'required_with:start|after_or_equal:start',
-            'availabilities' => 'required_unless:start|array',
+            'availabilities' => 'array',
             'type' => ['required', Rule::in(['walk-in','checkup'])],
             'status' => ['required', Rule::in(['active','cart','cancelled','complete','cart'])],
         ]);
