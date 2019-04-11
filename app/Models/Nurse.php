@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\Model\BelongsToClinic;
 use App\Notifications\NurseResetPassword;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -16,8 +17,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $remember_token
+ * @property int $clinic_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Clinic $clinic
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Nurse newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Nurse newQuery()
@@ -36,6 +39,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class Nurse extends Authenticatable
 {
     use Notifiable;
+    use BelongsToClinic;
 
     /**
      * The attributes that aren't mass assignable.

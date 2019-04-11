@@ -27,26 +27,20 @@ class AppointmentObserver
 
         if ($appointment->status === 'cancelled') {
             $appointment->availabilities()->sync([]);
-            $appointment->delete();
+            //$appointment->delete();
         }
 
-        if ($appointment->availabilities()->exists()) {
-            if ($appointment->status === 'rescheduled') {
-                //TODO: use rescheduled state to notify patient.
-                //      set appointment to rescheduled if room, doctor or time changes
-                $appointment->status = 'active'; // temporarily avoid rescheduled state
+        if (($appointment->status !== 'cancelled' || $appointment->status !== 'cart')
+            && $appointment->availabilities()->exists() && $appointment->room()->exists()) {
+
+            if ($appointment->start->isFuture() && $appointment->end->isFuture()) {
+                $appointment->status = 'active';
             }
 
-            if ($appointment->status !== 'cart' && $appointment->status !== 'cancelled') {
-                if ($appointment->start->isFuture() && $appointment->end->isFuture()) {
-                    $appointment->status = 'active';
-                }
-
-                if ($appointment->start->isPast() && $appointment->end->isPast()) {
-                    $appointment->status = 'complete';
-                }
+            if ($appointment->start->isPast() && $appointment->end->isPast()) {
+                $appointment->status = 'complete';
             }
-        } elseif ($appointment->status !== 'cancelled' || $appointment->status !== 'complete') {
+        } elseif ($appointment->status !== 'cancelled' && $appointment->status !== 'complete') {
             $appointment->status = 'unscheduled';
         }
 

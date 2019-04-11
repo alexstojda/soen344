@@ -19,9 +19,9 @@ class AppointmentsSeeder extends Seeder
         // Create unscheduled appointments
         $collection = factory(Appointment::class, 50)->create();
 
+        // Attempt to schedule patient appointments
         $collection->each(function (Appointment $appointment) {
-            // only clinic #1 for now
-            $availabilities = Availability::available()->ofClinicId(Clinic::first()->id);
+            $availabilities = Availability::available();
 
             if ($appointment->patient->has_checkup) {
                 $appointment->type = 'urgent';
@@ -39,8 +39,15 @@ class AppointmentsSeeder extends Seeder
             }
 
             $appointment->doctor_id = $avail->doctor_id;
-            $appointment->room_id = Room::availableBetween($avail->start, $avail->end)->get()->random()->id;
-            $appointment->availabilities()->sync($ids);
+
+            $rooms = Doctor::findOrFail($avail->doctor_id)->clinic->roomsBetween($avail->start, $avail->end)->get();
+            if ($rooms->isNotEmpty()) {
+                $appointment->room_id = $rooms->random()->id;
+                $appointment->availabilities()->sync($ids);
+            } else {
+                $appointment->room_id = null;
+                $appointment->status = 'cancelled';
+            }
             $appointment->saveOrFail();
         });
 

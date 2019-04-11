@@ -53,7 +53,7 @@ class DoctorController extends Controller
 
             $doctor = Doctor::create([
                 'permit_id' => $data['permit_id'],
-                'clinic_id' =>'required|int|max:255',
+                'clinic_id' => $data['clinic_id'],
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
                 'speciality' => $data['speciality'],
@@ -99,14 +99,14 @@ class DoctorController extends Controller
     public function update(Request $request, Doctor $doctor)
     {
         $data = $request->validate([
-            'permit_id' => 'required|int|max:11',
-            'clinic_id' =>'required|int|max:255',
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'speciality' => 'required|string',
-            'city' => 'required|string',
-            'email' => 'required|email',
-            'password' =>'required|string'
+            'permit_id' => 'int|max:11',
+            'clinic_id' =>'int|max:255',
+            'first_name' => 'string',
+            'last_name' => 'string',
+            'speciality' => 'string',
+            'city' => 'string',
+            'email' => 'email',
+            'password' =>'string'
         ]);
         // if it's not valid the code will stop here and throw the error with required fields
 
