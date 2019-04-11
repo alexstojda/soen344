@@ -20,27 +20,30 @@ class AppointmentObserver
      */
     public function saving(Appointment $appointment)
     {
-        if ($appointment->isDirty('type') && $appointment->type === 'checkup' && $appointment->patient->has_checkup) {
+        if ($appointment->type === 'checkup' && $appointment->isDirty('type') && $appointment->patient->has_checkup) {
             abort('412', 'Patient #' . $appointment->patient_id . ' already scheduled a checkup this year.');
             //$appointment->delete();
         }
 
+        // Update status column
         if ($appointment->status === 'cancelled') {
             $appointment->availabilities()->sync([]);
-            //$appointment->delete();
-        }
-
-        if (($appointment->status !== 'cancelled' || $appointment->status !== 'cart')
-            && $appointment->availabilities()->exists() && $appointment->room()->exists()) {
-
-            if ($appointment->start->isFuture() && $appointment->end->isFuture()) {
-                $appointment->status = 'active';
+        //  $appointment->delete();
+        } elseif ($appointment->status !== 'cancelled'
+            && $appointment->availabilities()->exists()
+            && $appointment->room()->exists())
+        {
+            if ($appointment->paid) {
+                if ($appointment->start->isFuture() && $appointment->end->isFuture()) {
+                    $appointment->status = 'active';
+                }
+                if ($appointment->start->isPast() && $appointment->end->isPast()) {
+                    $appointment->status = 'complete';
+                }
+            } elseif (!$appointment->paid) {
+                $appointment->status = 'cart';
             }
-
-            if ($appointment->start->isPast() && $appointment->end->isPast()) {
-                $appointment->status = 'complete';
-            }
-        } elseif ($appointment->status !== 'cancelled' && $appointment->status !== 'complete') {
+        } elseif ($appointment->status !== 'complete') {
             $appointment->status = 'unscheduled';
         }
 

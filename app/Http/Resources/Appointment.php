@@ -33,6 +33,7 @@ class Appointment extends JsonResource
             'end' => $this->end,
             'type' => $this->type,
             'status' => $this->status,
+            'paid' => $this->paid,
             'duration' => $this->duration,
             'times_linked' => $this->availabilitiesLinksArray(),
             'created_at' => $this->created_at,

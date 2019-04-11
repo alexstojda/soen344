@@ -57,13 +57,14 @@ class AppointmentController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'doctor_id'    => 'required|int',
-            'patient_id'   => auth('web')->check() ? 'nullable|int' : 'required|int',
-            'start'        => 'required_with:end|before_or_equal:end',
-            'end'          => 'required_with:start|after_or_equal:start',
-            'availabilities' => 'array',
-            'type' => ['required', Rule::in(['walk-in','checkup'])],
-            'status' => ['required', Rule::in(['active','cart','cancelled','complete','cart'])],
+            'doctor_id'     => 'required|int',
+            'patient_id'    => auth('web')->check() ? 'nullable|int' : 'required|int',
+            'start'         => 'required_with:end|before_or_equal:end',
+            'end'           => 'required_with:start|after_or_equal:start',
+            'availabilities'=> 'array',
+            'paid'          => 'boolean',
+            'type'          => [Rule::in(['walk-in','checkup'])],
+            'status'        => [Rule::in(['active','cart','cancelled','complete','cart'])],
         ]);
 
         try {
@@ -79,6 +80,7 @@ class AppointmentController extends Controller
                     'doctor_id' => $validated['doctor_id'],
                     'patient_id' => $patient->id,
                     'type' => $validated['type'] ?? 'walk-in',
+                    'paid' =>  $validated['paid'] ?? 0,
                     'status' =>  $validated['status'] ?? 'cart',
                 ]);
 
@@ -161,14 +163,15 @@ class AppointmentController extends Controller
     {
         $validated = $request->validate([
             //rules go here
-            'doctor_id' => 'int',
-            'patient_id' => 'int',
-            'room_id' => 'int',
-            'start' => 'date',
-            'end' => 'date',
-            'availabilities' => 'array',
-            'type' => [Rule::in(['walk-in','checkup'])],
-            'status' => [Rule::in(['active','cart','cancelled','complete','cart'])],
+            'doctor_id'     => 'int',
+            'patient_id'    => 'int',
+            'room_id'       => 'int',
+            'start'         => 'date',
+            'end'           => 'date',
+            'availabilities'=> 'array',
+            'paid'          => 'boolean',
+            'type'          => [Rule::in(['walk-in','checkup'])],
+            'status'        => [Rule::in(['active','cart','cancelled','complete','cart'])],
         ]);
         // if it's not valid the code will stop here and throw the error with required fields
 
