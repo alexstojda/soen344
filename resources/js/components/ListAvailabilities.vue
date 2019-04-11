@@ -34,8 +34,8 @@
                     </label>
                 </div>
                 <model-select class="col-9" :options="doctorsSelectList"
-                              v-model="selectedPatient"
-                              placeholder="Select Patient">
+                              v-model="selectedDoctor"
+                              placeholder="Select Doctor">
                 </model-select>
             </div>
             <div class="input-group col-1">
@@ -83,7 +83,7 @@
             </ul>
         </nav>
         <modal name="newAppointment"
-               @before-open="beforeOpen"
+               @before-open="beforeOpenNewAppointment"
                :height="'auto'">
             <div class="p-4">
                 <h3>New Appointment</h3>
@@ -127,6 +127,58 @@
                 </div>
             </div>
         </modal>
+        <modal name="createdAppointment"
+               @before-open="beforeOpenCreatedAppointment"
+               :height="'auto'"
+               @close="afterClosedCreatedAppointment">
+            <div class="p-4">
+                <h3>Appointment Details</h3>
+                <table>
+                    <tr>
+                        <th>
+                            Patient:
+                        </th>
+                        <td>
+                            {{newAppointment.details.patient.name}}
+                        </td>
+                        <th>
+                            Doctor:
+                        </th>
+                        <td>
+                            {{newAppointment.details.doctor.name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Start:
+                        </th>
+                        <td>
+                            {{newAppointment.details.start}}
+                        </td>
+                        <th>
+                            End:
+                        </th>
+                        <td>
+                            {{newAppointment.details.end}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Type:
+                        </th>
+                        <td>
+                            {{newAppointment.details.type}}
+                        </td>
+                        <th>
+                            Status:
+                        </th>
+                        <td>
+                            {{newAppointment.details.status}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </modal>
     </div>
 </template>
 
@@ -154,6 +206,25 @@
                         doctor: {},
                     },
                     type: {},
+                    details: {
+                        doctor: {
+                            id: {},
+                            name: {},
+                        },
+                        duration: {},
+                        end: {},
+                        id: {},
+                        patient: {
+                            id: {},
+                            name: {},
+                        },
+                        room: {
+                            id: {},
+                        },
+                        start: {},
+                        status: {},
+                        type: {},
+                    }
                 },
                 time: {},
                 patientsList: [],
@@ -250,7 +321,7 @@
             openAppointmentModal: function (row) {
                 this.$modal.show('newAppointment', {row: row})
             },
-            beforeOpen: function (event) {
+            beforeOpenNewAppointment: function (event) {
                 this.newAppointment.row = event.params.row;
             },
             preparePatientSelect: function () {
@@ -286,10 +357,17 @@
                     if (response.status === 200 || response.status === 201) {
                         this.getAvailabilities();
                         this.$modal.hide('newAppointment');
+                        this.$modal.show('createdAppointment', {details: response.data.data})
                     } else {
                         console.log('get patients: Response code ' + response.status);
                     }
                 })
+            },
+            beforeOpenCreatedAppointment: function (event) {
+                this.newAppointment.details = event.params.details;
+            },
+            afterClosedCreatedAppointment: function (event) {
+                this.newAppointment = {};
             }
         },
         created() {

@@ -100,7 +100,7 @@ class AppointmentController extends Controller
 
             return new AppointmentResource($appointment);
         } catch (\Exception $e) {
-            return response()->json($e, $e->getCode());
+            return response()->json($e, 400);
         }
     }
 
