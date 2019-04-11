@@ -37,3 +37,7 @@ Route::group(['prefix' => 'doctor'], function () {
 Route::group(['prefix' => 'nurse'], function () {
     Route::get('/book', 'AppointmentController@showNurseCreateAppointmentPage')->middleware('auth:nurse');
 });
+
+Route::group(['prefix' => 'patient'], function () {
+    Route::get('/book', 'AppointmentController@showPatientCreateAppointmentPage')->middleware('auth:web');
+});

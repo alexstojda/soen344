@@ -92,7 +92,7 @@
                 <div class="form-group row">
                     <label for="staticName" class="col-sm-2 col-form-label">Doctor</label>
                     <div class="col-sm-10">
-                        <input type="text" disabled class="form-control-plaintext" id="staticName"
+                        <input type="text" readonly class="form-control-plaintext" id="staticName"
                                :value="newAppointment.row.doctor.name">
                     </div>
                 </div>
@@ -101,10 +101,13 @@
                         Patient:
                     </label>
                     <div class="col-sm-10">
-                        <model-select :options="patientSelectList"
+                        <model-select v-if="!patientId"
+                                      :options="patientSelectList"
                                       v-model="selectedPatient"
                                       placeholder="Select patient">
                         </model-select>
+                        <input type="text" readonly class="form-control-plaintext"
+                               :value="selectedPatient.name">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -241,6 +244,7 @@
             showDelete: Boolean,
             showCreateAppointment: Boolean,
             showDoctorFilter: Boolean,
+            patientId: Number,
         },
         methods: {
             getAvailabilities: function () {
@@ -324,6 +328,19 @@
                 });
             },
             openAppointmentModal: function (row) {
+                if(this.patientId)
+                    axios.get('/api/patient/'+this.patientId)
+                        .catch(error => {
+                            console.log(error.response.data, {type: 'error'});
+                            this.throwDialogModal('Error', '<pre>'+JSON.stringify(error.response, null, 2)+'</pre>');
+                        }).then(response => {
+                        if (response.status === 200 || response.status === 201) {
+                            this.selectedPatient = response.data.data;
+                        } else {
+                            this.throwDialogModal('Error', 'Response code: ' + response.status);
+                            console.log('get patient: Response code ' + response.status);
+                        }
+                    });
                 this.$modal.show('newAppointment', {row: row})
             },
             beforeOpenNewAppointment: function (event) {
@@ -356,7 +373,8 @@
                     patient_id: this.selectedPatient.value,
                     type: this.newAppointment.type,
                     availabilities: [this.newAppointment.row.id],
-                    status: 'complete'
+                    status: 'cart',
+                    paid: false
                 }).catch(error => {
                     console.log(error.response.data, {type: error});
                     this.throwDialogModal('Error', '<pre>'+JSON.stringify(error.response, null, 2)+'</pre>');
@@ -398,7 +416,8 @@
             this.getAvailabilities();
             if (this.showCreateAppointment) {
                 this.getDoctors();
-                this.getPatients();
+                if (!this.patientId)
+                    this.getPatients();
             }
         },
         components: {

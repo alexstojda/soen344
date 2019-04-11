@@ -135,6 +135,10 @@ class AppointmentController extends Controller
         return view('nurse.newAppointment');
     }
 
+    public function showPatientCreateAppointmentPage() {
+        return view('patient.newAppointment');
+    }
+
     /**
      * Redirect to appointment page.
      *

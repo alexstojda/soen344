@@ -39,7 +39,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/createAppointment">Schedule an Appointment</a>
+                        <a class="nav-link" href="/patient/book">Schedule an Appointment</a>
                     </li>
 
                     <li class="nav-item">
