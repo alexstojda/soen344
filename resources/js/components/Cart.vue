@@ -39,6 +39,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <button class="btn btn-primary" @click="getCart">Refresh</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <a class="btn btn-success" href="/checkout" type="button">Checkout</a>
                     </div>

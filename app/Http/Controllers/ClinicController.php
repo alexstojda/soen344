@@ -11,11 +11,15 @@ class ClinicController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection|\Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return ClinicResource::collection(Clinic::paginate($request->per_page ?? 5));
+        if ($request->per_page)
+            return ClinicResource::collection(Clinic::paginate($request->per_page ?? 5));
+        else
+            return ClinicResource::collection(Clinic::all());
     }
 
     /**

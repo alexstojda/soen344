@@ -40,6 +40,31 @@
                     </model-select>
                 </div>
             </div>
+            <div class="input-group col-4 mt-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text">
+                        Clinic:
+                    </label>
+                </div>
+                <div>
+                    <model-select class="m-0" :options="clinicSelectList"
+                                  v-model="selectedClinic"
+                                  placeholder="Select Clinic">
+                    </model-select>
+                </div>
+            </div>
+            <div class="input-group col-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text">
+                        Appointment Type:
+                    </label>
+                </div>
+                <select v-model="type" class="form-control">
+                    <option selected value="">All Types</option>
+                    <option value="20">Walk-In</option>
+                    <option value="60">Annual Checkup</option>
+                </select>
+            </div>
             <div class="input-group col-1">
                 <button @click="getAvailabilities()" class="btn btn-primary">Update</button>
             </div>
@@ -204,6 +229,7 @@
                 end: {},
                 lastPage: {},
                 pageArray: {},
+                type: {},
                 doctorsList: {},
                 doctorsSelectList: [],
                 selectedDoctor: {},
@@ -234,8 +260,11 @@
                 },
                 time: {},
                 patientsList: [],
-                patientSelectList: {},
+                patientSelectList: [],
                 selectedPatient: {},
+                clinicList: [],
+                clinicSelectList:[],
+                selectedClinic: {}
             }
         },
         props: {
@@ -254,8 +283,9 @@
                 params.page = this.page;
                 params.start = this.start;
                 params.end = this.end;
+                if (this.type) params.length = this.type;
                 if (this.doctorId || this.selectedDoctor.value) params.doctor_id = this.doctorId ? this.doctorId : this.selectedDoctor.value;
-                if (this.clinicId) params.clinic_id = this.clinicId;
+                if (this.clinicId || this.selectedClinic.value) params.clinic_id = this.clinicId ? this.clinicId : this.selectedClinic.value;
                 axios.get('/api/availability', {params: params})
                     .catch(error => {
                         console.log(error.response.data, {type: 'error'});
@@ -404,16 +434,40 @@
                         }
                     ]
                 })
-            }
+            },
+            getClinics: function() {
+                axios.get('/api/clinic')
+                    .catch(error => {
+                        console.log(error.response.data, {type: 'error'});
+                        this.throwDialogModal('Error', '<pre>'+JSON.stringify(error.response, null, 2)+'</pre>');
+                    }).then(response => {
+                    if (response.status === 200 || response.status === 201) {
+                        this.clinicList = response.data.data;
+                        this.prepareClinicSelect();
+                    } else {
+                        this.throwDialogModal('Error', 'Response code: ' + response.status);
+                        console.log('get patients: Response code ' + response.status);
+                    }
+                });
+            },
+            prepareClinicSelect: function () {
+                this.clinicSelectList = [];
+                this.clinicSelectList.push({value: "", text: "All Clinics"});
+                for (let i = 0; i < this.clinicList.length; i++) {
+                    this.clinicSelectList.push({value: this.clinicList[i].id, text: this.clinicList[i].name})
+                }
+            },
         },
         created() {
             this.perPage = 25;
             this.page = 1;
+            this.type = "";
             this.start = moment().format('YYYY-MM-DD');
             this.end = moment().add(1, 'years').format('YYYY-MM-DD');
         },
         mounted() {
             this.getAvailabilities();
+            this.getClinics();
             if (this.showCreateAppointment) {
                 this.getDoctors();
                 if (!this.patientId)
