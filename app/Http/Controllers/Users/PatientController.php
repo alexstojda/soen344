@@ -13,11 +13,15 @@ class PatientController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return PatientResource::collection(Patient::paginate($request->per_page ?? 5));
+        if ($request->per_page)
+            return PatientResource::collection(Patient::paginate($request->per_page ?? 5));
+        else
+            return PatientResource::collection(Patient::all());
     }
 
     /**

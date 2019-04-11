@@ -33,3 +33,7 @@ Route::group(['prefix' => 'doctor'], function () {
     Route::post('/api/addAvailability', 'AvailabilityController@store');
     Route::get('/viewAppointments', 'AppointmentController@showViewAppointmentsPage')->middleware('auth:doctor');
 });
+
+Route::group(['prefix' => 'nurse'], function () {
+    Route::get('/book', 'AppointmentController@showNurseCreateAppointmentPage')->middleware('auth:nurse');
+});

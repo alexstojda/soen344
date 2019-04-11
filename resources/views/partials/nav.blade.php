@@ -31,7 +31,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/createAppointment">Schedule an Appointment</a>
+                        <a class="nav-link" href="/nurse/book">Schedule an Appointment</a>
                     </li>
                 @elseauth('web')
                     <li class="nav-item">

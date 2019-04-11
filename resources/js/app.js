@@ -3,6 +3,7 @@ import Vue from 'vue';
 import 'element-ui/lib/theme-chalk/index.css';
 import lang from 'element-ui/lib/locale/lang/en';
 import locale from 'element-ui/lib/locale';
+import VModal from 'vue-js-modal';
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -31,6 +32,7 @@ if (process.env.NODE_ENV !== "production") {
  */
 
 Vue.use(ElementUI);
+Vue.use(VModal);
 // configure language
 locale.use(lang);
 

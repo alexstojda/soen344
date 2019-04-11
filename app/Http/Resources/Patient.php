@@ -24,6 +24,7 @@ class Patient extends JsonResource
         return [
             'id' => $this->id,
             'email' => $this->email,
+            'name' => $this->name,
             'appointments' => $this->appointmentsLinksArray(),
             'recent_appointments' => $this->recentAppointmentsLinksArray(),
             'created_at' => $this->created_at,

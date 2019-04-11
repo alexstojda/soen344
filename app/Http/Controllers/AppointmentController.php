@@ -57,7 +57,7 @@ class AppointmentController extends Controller
             'patient_id'   => auth('web')->check() ? 'nullable|int' : 'required|int',
             'start'        => 'required_with:end|before_or_equal:end',
             'end'          => 'required_with:start|after_or_equal:start',
-            'availabilities' => 'required_unless:start|array',
+            'availabilities' => 'required_without:start|array',
             'type' => ['required', Rule::in(['walk-in','checkup'])],
             'status' => ['required', Rule::in(['active','cart','cancelled','complete','cart'])],
         ]);
@@ -123,6 +123,10 @@ class AppointmentController extends Controller
     public function showCreateAppointmentPage()
     {
         return view('appointment.appointment');
+    }
+
+    public function showNurseCreateAppointmentPage() {
+        return view('nurse.newAppointment');
     }
 
     /**
