@@ -28,15 +28,17 @@
                 <input id="perPage" name="perPage" v-model="perPage" type="number" class="form-control"/>
             </div>
             <div class="input-group col-4 mt-3">
-                <div class="input-group-prepend col-3">
+                <div class="input-group-prepend">
                     <label class="input-group-text">
                         Doctor:
                     </label>
                 </div>
-                <model-select class="col-9" :options="doctorsSelectList"
-                              v-model="selectedDoctor"
-                              placeholder="Select Doctor">
-                </model-select>
+                <div>
+                    <model-select class="m-0" :options="doctorsSelectList"
+                                  v-model="selectedDoctor"
+                                  placeholder="Select Doctor">
+                    </model-select>
+                </div>
             </div>
             <div class="input-group col-1">
                 <button @click="getAvailabilities()" class="btn btn-primary">Update</button>
@@ -179,6 +181,7 @@
                 </table>
             </div>
         </modal>
+        <v-dialog :height="'auto'" />
     </div>
 </template>
 
@@ -252,9 +255,9 @@
                 axios.get('/api/availability', {params: params})
                     .catch(error => {
                         console.log(error.response.data, {type: 'error'});
+                        this.throwDialogModal('Error', error.response);
                     }).then(response => {
                     if (response.status === 200 || response.status === 201) {
-                        console.log(response);
                         this.rows = response.data.data;
                         this.lastPage = response.data.meta.last_page;
                         this.getPages()
@@ -269,6 +272,7 @@
             deleteAvailability: function (id) {
                 axios.delete('/api/availability/' + id).catch(error => {
                     console.log(error.response.data, {type: 'error'});
+                    this.throwDialogModal('Error', error.response);
                 }).then(response => {
                     if (response.status === 200 || response.status === 201) {
                         this.getAvailabilities();
@@ -309,6 +313,7 @@
                 axios.get('/api/doctor')
                     .catch(error => {
                         console.log(error.response.data, {type: 'error'});
+                        this.throwDialogModal('Error', error.response);
                     }).then(response => {
                     if (response.status === 200 || response.status === 201) {
                         this.doctorsList = response.data.data;
@@ -334,11 +339,13 @@
                 axios.get('/api/patient')
                     .catch(error => {
                         console.log(error.response.data, {type: 'error'});
+                        this.throwDialogModal('Error', error.response);
                     }).then(response => {
                     if (response.status === 200 || response.status === 201) {
                         this.patientsList = response.data.data;
                         this.preparePatientSelect();
                     } else {
+                        this.throwDialogModal('Error', 'Response code: ' + response.status);
                         console.log('get patients: Response code ' + response.status);
                     }
                 });
@@ -352,8 +359,8 @@
                     status: 'complete'
                 }).catch(error => {
                     console.log(error.response.data, {type: error});
+                    this.throwDialogModal('Error', error.response);
                 }).then(response => {
-                    console.log(response);
                     if (response.status === 200 || response.status === 201) {
                         this.getAvailabilities();
                         this.$modal.hide('newAppointment');
@@ -368,6 +375,17 @@
             },
             afterClosedCreatedAppointment: function (event) {
                 this.newAppointment = {};
+            },
+            throwDialogModal: function (title, text) {
+                this.$modal.show('dialog', {
+                    title: title,
+                    text: '<pre>'+JSON.stringify(text, null, 2)+'</pre>',
+                    buttons: [
+                        {
+                            title: 'Close'
+                        }
+                    ]
+                })
             }
         },
         created() {

@@ -32,7 +32,7 @@ if (process.env.NODE_ENV !== "production") {
  */
 
 Vue.use(ElementUI);
-Vue.use(VModal);
+Vue.use(VModal, { dialog: true });
 // configure language
 locale.use(lang);
 
