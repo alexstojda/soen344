@@ -32,17 +32,6 @@ Route::apiResources([
     //etc
 ]);
 
+// Fancy route that builds all possible appointment start times based on given filter
 Route::get('/evan', 'AvailabilityController@possibleAppointments');
-
-Route::apiResource('/availabilities','AvailabilityController');
-Route::get('/availabilitiesByDate/{date}', 'AvailabilityController@selectDate');
-
-Route::apiResource('/cart','CartController');
-Route::post('/removeFromCart', 'CartController@destroy');
-
-
-Route::apiResource('/appointments','AppointmentController');
-Route::group(['prefix' => 'appointments'], function () {
-    Route::get('/{from}/{to}');
-    Route::get('/{scope}');
-});
+Route::get('/appointment/available', 'AvailabilityController@possibleAppointments');

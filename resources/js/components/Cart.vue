@@ -68,23 +68,17 @@
         },
         methods: {
             getCart(){
-                axios({ method: "GET", "url": "/cart/" + this.userId })
-                    .then(result => {
-                        console.log(result)
-                        this.cart = result.data.data;
-                        if(this.cart.length == 0)
-                        {
-                            this.empty = true;
-                        }
-                        else
-                        {
-                            this.empty = false;
-                        }
-                        console.log(this.cart);
-                    }, error => {
-                        console.error(error);
-                    })
-                    .catch(error => {
+                axios.get('/api/appointment/', {
+                    patient_id: this.userId,
+                    status: 'cart'
+                }).then(result => {
+                    console.log(result);
+                    this.cart = result.data.data;
+                    this.empty = (this.cart.length === 0);
+                    console.log(this.cart);
+                }, error => {
+                    console.error(error);
+                }).catch(error => {
                     console.log(error.response)
                 })
             },
@@ -99,14 +93,7 @@
                 axios.delete('/api/appointment/' + appointment.id).then(response => {
                     if(response.status === 200) {
                         console.log("Removed appointment from the cart");
-                        if(this.cart.length == 0)
-                        {
-                            this.empty = true;
-                        }
-                        else
-                        {
-                            this.empty = false;
-                        }
+                        this.empty = (this.cart.length === 0);
                     } else {
                         console.log(appointment);
                         console.log("Removing appointment from cart failed: " + response.status)

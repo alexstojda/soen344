@@ -72,16 +72,18 @@
         },
         methods: {
             getCart() {
-                axios.get('/cart/' + this.userId)
-                    .then(result => {
-                        this.cart = result.data.data;
-                        this.empty = this.cart.length === 0;
-                    }, error => {
-                        console.error(error)
-                    })
-                    .catch(error => {
-                        console.log(error.response)
-                    })
+                axios.get('/api/appointment/', {
+                  patient_id: this.userId,
+                  status: 'cart',
+                }).then(result => {
+                    this.cart = result.data.data;
+                    this.empty = this.cart.length === 0;
+                }, error => {
+                    console.error(error)
+                })
+                .catch(error => {
+                    console.log(error.response)
+                })
             },
             checkoutCart() {
                 for (let i = 0; i < this.cart.length; i++) {

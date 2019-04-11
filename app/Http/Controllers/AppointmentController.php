@@ -186,6 +186,7 @@ class AppointmentController extends Controller
         !isset($validated['doctor_id']) ?: $appointment->doctor_id = $validated['doctor_id'];
         !isset($validated['patient_id']) ?: $appointment->patient_id = $validated['patient_id'];
         !isset($validated['room_id']) ?: $appointment->room_id = $validated['room_id'];
+        !isset($validated['paid']) ?: $appointment->paid = $validated['paid'];
         !isset($validated['type']) ?: $appointment->type = $validated['type'];
         !isset($validated['status']) ?: $appointment->status = $validated['status'];
 
