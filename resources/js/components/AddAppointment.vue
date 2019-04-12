@@ -44,14 +44,14 @@
                 <select v-model="type" class="form-control">
                     <option value="" disabled selected>Select Type</option>
                     <option value="walk-in">Walk-in</option>
-                    <option value="annual checkup">Annual Checkup</option>
+                    <option value="checkup">Annual Checkup</option>
                 </select>
             </div>
         </div>
 
         <div class="form-group row">
             <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1 text-right">
-                <button v-on:click="addAppointment()" type="button" class="btn btn-success btn-lg">Add Appointment</button>
+                <button v-on:click="addAppointment()" type="button" class="btn btn-success btn-lg">Update Appointment</button>
             </div>
         </div>
     </div>
@@ -64,11 +64,12 @@
         name: "AddAppointment",
         data () {
             return {
+                id: this.apmt == null ? "" : this.apmt.id,
                 patient_id: this.apmt == null ?  "" : this.apmt.patient["id"],
                 doctor_id: this.apmt == null ?  "" : this.apmt.doctor["id"],
                 room_id: this.apmt == null ?  "" : this.apmt.room["id"],
-                date: this.apmt == null ?  "" : moment(this.apmt.date).format("YYYY-MM-DD"),
-                time: "",
+                date: this.apmt == null ?  "" : moment(this.apmt.start).format("YYYY-MM-DD"),
+                time: this.apmt == null ? "" : moment(this.apmt.start).format("h:mm"),
                 type: this.apmt == null ?  "" : this.apmt.type,
                 status: this.apmt == null ?  "" : this.apmt.status,
             }
@@ -84,7 +85,7 @@
             addAppointment: function() {
                 if (this.apmt == null)
                 {
-                    axios.post('/api/appointment', {
+                    axios.put('/api/appointment', {
                         patient_id: this.patient_id,
                         doctor_id: this.doctor_id,
                         room_id: this.room_id,
@@ -121,7 +122,7 @@
                                 console.log("Add appointment failed: Response code " + response.status)
                             }
                         }).catch(error => {
-                            console.log(error.response)
+                            console.log(error.response);
                             console.log(this.isNurse);
                         })
                     }
