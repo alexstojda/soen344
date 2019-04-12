@@ -402,7 +402,7 @@
                     doctor_id: this.newAppointment.row.doctor.id,
                     patient_id: this.selectedPatient.value,
                     type: this.newAppointment.type,
-                    availabilities: [this.newAppointment.row.id],
+                    availabilities: this.newAppointment.row.id instanceof Array ? this.newAppointment.row.id : [this.newAppointment.row.id],
                     status: 'cart',
                     paid: false
                 }).catch(error => {
