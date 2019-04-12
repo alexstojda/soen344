@@ -72,10 +72,9 @@
         },
         methods: {
             getCart() {
-                axios.get('/api/appointment/', {
-                  patient_id: this.userId,
-                  status: 'cart',
-                }).then(result => {
+                axios.get('/api/appointment?patient_id=' +
+                    this.userId + '&status=cart'
+                ).then(result => {
                     this.cart = result.data.data;
                     this.empty = this.cart.length === 0;
                 }, error => {
