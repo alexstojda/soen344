@@ -27,7 +27,7 @@
                 </div>
                 <input id="perPage" name="perPage" v-model="perPage" type="number" class="form-control"/>
             </div>
-            <div class="input-group col-4 mt-3">
+            <div v-if="showDoctorFilter" class="input-group col-4 mt-3">
                 <div class="input-group-prepend">
                     <label class="input-group-text">
                         Doctor:
@@ -40,7 +40,7 @@
                     </model-select>
                 </div>
             </div>
-            <div class="input-group col-4 mt-3">
+            <div v-if="showClinicFilter" class="input-group col-4 mt-3">
                 <div class="input-group-prepend">
                     <label class="input-group-text">
                         Clinic:
@@ -209,7 +209,7 @@
                 </table>
             </div>
         </modal>
-        <v-dialog :height="'auto'" />
+        <v-dialog :height="'auto'"/>
     </div>
 </template>
 
@@ -263,8 +263,8 @@
                 patientSelectList: [],
                 selectedPatient: {},
                 clinicList: [],
-                clinicSelectList:[],
-                selectedClinic: {}
+                clinicSelectList: [],
+                selectedClinic: {},
             }
         },
         props: {
@@ -273,6 +273,7 @@
             showDelete: Boolean,
             showCreateAppointment: Boolean,
             showDoctorFilter: Boolean,
+            showClinicFilter: Boolean,
             patientId: Number,
         },
         methods: {
@@ -289,7 +290,7 @@
                 axios.get('/api/availability', {params: params})
                     .catch(error => {
                         console.log(error.response.data, {type: 'error'});
-                        this.throwDialogModal('Error', '<pre>'+JSON.stringify(error.response, null, 2)+'</pre>');
+                        this.throwDialogModal('Error', '<pre>' + JSON.stringify(error.response, null, 2) + '</pre>');
                     }).then(response => {
                     if (response.status === 200 || response.status === 201) {
                         this.rows = response.data.data;
@@ -306,7 +307,7 @@
             deleteAvailability: function (id) {
                 axios.delete('/api/availability/' + id).catch(error => {
                     console.log(error.response.data, {type: 'error'});
-                    this.throwDialogModal('Error', '<pre>'+JSON.stringify(error.response, null, 2)+'</pre>');
+                    this.throwDialogModal('Error', '<pre>' + JSON.stringify(error.response, null, 2) + '</pre>');
                 }).then(response => {
                     if (response.status === 200 || response.status === 201) {
                         this.getAvailabilities();
@@ -347,7 +348,7 @@
                 axios.get('/api/doctor')
                     .catch(error => {
                         console.log(error.response.data, {type: 'error'});
-                        this.throwDialogModal('Error', '<pre>'+JSON.stringify(error.response, null, 2)+'</pre>');
+                        this.throwDialogModal('Error', '<pre>' + JSON.stringify(error.response, null, 2) + '</pre>');
                     }).then(response => {
                     if (response.status === 200 || response.status === 201) {
                         this.doctorsList = response.data.data;
@@ -358,11 +359,11 @@
                 });
             },
             openAppointmentModal: function (row) {
-                if(this.patientId)
-                    axios.get('/api/patient/'+this.patientId)
+                if (this.patientId)
+                    axios.get('/api/patient/' + this.patientId)
                         .catch(error => {
                             console.log(error.response.data, {type: 'error'});
-                            this.throwDialogModal('Error', '<pre>'+JSON.stringify(error.response, null, 2)+'</pre>');
+                            this.throwDialogModal('Error', '<pre>' + JSON.stringify(error.response, null, 2) + '</pre>');
                         }).then(response => {
                         if (response.status === 200 || response.status === 201) {
                             this.selectedPatient = response.data.data;
@@ -386,7 +387,7 @@
                 axios.get('/api/patient')
                     .catch(error => {
                         console.log(error.response.data, {type: 'error'});
-                        this.throwDialogModal('Error', '<pre>'+JSON.stringify(error.response, null, 2)+'</pre>');
+                        this.throwDialogModal('Error', '<pre>' + JSON.stringify(error.response, null, 2) + '</pre>');
                     }).then(response => {
                     if (response.status === 200 || response.status === 201) {
                         this.patientsList = response.data.data;
@@ -407,7 +408,7 @@
                     paid: false
                 }).catch(error => {
                     console.log(error.response.data, {type: error});
-                    this.throwDialogModal('Error', '<pre>'+JSON.stringify(error.response, null, 2)+'</pre>');
+                    this.throwDialogModal('Error', '<pre>' + JSON.stringify(error.response, null, 2) + '</pre>');
                 }).then(response => {
                     if (response.status === 200 || response.status === 201) {
                         this.getAvailabilities();
@@ -435,11 +436,11 @@
                     ]
                 })
             },
-            getClinics: function() {
+            getClinics: function () {
                 axios.get('/api/clinic')
                     .catch(error => {
                         console.log(error.response.data, {type: 'error'});
-                        this.throwDialogModal('Error', '<pre>'+JSON.stringify(error.response, null, 2)+'</pre>');
+                        this.throwDialogModal('Error', '<pre>' + JSON.stringify(error.response, null, 2) + '</pre>');
                     }).then(response => {
                     if (response.status === 200 || response.status === 201) {
                         this.clinicList = response.data.data;
@@ -467,9 +468,11 @@
         },
         mounted() {
             this.getAvailabilities();
-            this.getClinics();
+            if (this.showClinicFilter)
+                this.getClinics();
             if (this.showCreateAppointment) {
-                this.getDoctors();
+                if (this.showDoctorFilter)
+                    this.getDoctors();
                 if (!this.patientId)
                     this.getPatients();
             }
