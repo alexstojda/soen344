@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Doctor;
+use App\Models\Doctor;
 use App\Http\Resources\Doctor as DoctorResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -39,20 +39,21 @@ class DoctorController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        try {
             $data = $request->validate([
                 'permit_id' => 'required|int|max:11',
+                'clinic_id' =>'required|int|max:255',
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'speciality' => 'required|string',
                 'city' => 'required|string',
                 'email' => 'required|email',
-                'password' =>'required|string'
-
+                'password' =>'required|string',
             ]);
 
             $doctor = Doctor::create([
                 'permit_id' => $data['permit_id'],
+                'clinic_id' => $data['clinic_id'],
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
                 'speciality' => $data['speciality'],
@@ -61,7 +62,7 @@ class DoctorController extends Controller
                 'password' => Hash::make($data['password']),
             ]);
             return new DoctorResource($doctor);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return response()->json($e);
         }
     }
@@ -69,7 +70,7 @@ class DoctorController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Doctor  $doctor
+     * @param  Doctor  $doctor
      * @return \Illuminate\Http\Response|\App\Http\Resources\Doctor
      */
     public function show(Doctor $doctor)
@@ -80,7 +81,7 @@ class DoctorController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Doctor  $doctor
+     * @param  Doctor  $doctor
      * @return \Illuminate\Http\Response
      */
     public function edit(Doctor $doctor)
@@ -92,23 +93,25 @@ class DoctorController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Doctor  $doctor
+     * @param  Doctor  $doctor
      * @return \Illuminate\Http\Response|\App\Http\Resources\Doctor
      */
     public function update(Request $request, Doctor $doctor)
     {
         $data = $request->validate([
-            'permit_id' => 'required|int|max:11',
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'speciality' => 'required|string',
-            'city' => 'required|string',
-            'email' => 'required|email',
-            'password' =>'required|string'
+            'permit_id' => 'int|max:11',
+            'clinic_id' =>'int|max:255',
+            'first_name' => 'string',
+            'last_name' => 'string',
+            'speciality' => 'string',
+            'city' => 'string',
+            'email' => 'email',
+            'password' =>'string'
         ]);
         // if it's not valid the code will stop here and throw the error with required fields
 
         !isset($data['permit_id']) ?: $doctor->permit_id = $data['permit_id'];
+        !isset($data['clinic_id']) ?: $doctor->clinic_id = $data['clinic_id'];
         !isset($data['first_name']) ?: $doctor->first_name = $data['first_name'];
         !isset($data['last_name']) ?: $doctor->last_name = $data['last_name'];
         !isset($data['speciality']) ?: $doctor->speciality = $data['speciality'];
@@ -123,7 +126,7 @@ class DoctorController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Doctor  $doctor
+     * @param  Doctor  $doctor
      * @return \Illuminate\Http\Response
      */
     public function destroy(Doctor $doctor)

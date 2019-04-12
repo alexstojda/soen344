@@ -14,13 +14,14 @@ class CreateAvailabilitiesTable extends Migration
     public function up()
     {
         Schema::create('availabilities', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->integer('doctor_id')->unsigned()->index();
             $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');
             $table->dateTime('start');
             $table->dateTime('end');
-            $table->boolean('is_available');
-            $table->string('reason_of_unavailability')->nullable();
+            $table->boolean('is_working');
+            $table->string('message')->nullable();
+            $table->unique(['doctor_id','start','end','is_working']);
             $table->timestamps();
         });
     }

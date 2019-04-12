@@ -9,6 +9,9 @@
                 <th scope="col">
                     <SortLink name="patient">Patient ID</SortLink>
                 </th>
+                <th scope="col">
+                    <SortLink name="clinic">Clinic</SortLink>
+                </th>
                 <th scope="col" >
                     <SortLink name="room">Room ID</SortLink>
                 </th>
@@ -25,6 +28,11 @@
             <tr v-for="appointment in sort.values" :key="appointment.id">
                 <td>{{ appointment.doctor["name"] }}</td>
                 <td>{{ appointment.patient["id"] }}</td>
+                <td>
+                    Name: {{ appointment.doctor["clinic"]["name"] }}
+                    <br><br>
+                    Address: {{ appointment.doctor["clinic"]["address"] }}
+                </td>
                 <td>{{ appointment.room["id"] }}</td>
                 <td>{{ appointment.status }}</td>
                 <td>{{ dateFormatter(appointment.start) }}</td>
@@ -57,7 +65,7 @@
         },
         methods: {
             getAppointments: function() {
-                axios.get('/api/appointments')
+                axios.get('/api/appointment')
                     .then(response => {
                         if(response.status == 200) {
                             this.appointments = response.data.data;
@@ -68,9 +76,9 @@
                     })
             },
             cancelAppointment: function(id) {
-                axios.delete('/deleteAppointment/' + id).then(response => {
+                axios.delete('/api/appointment/' + id).then(response => {
                     if(response.status == 200) {
-                        console.log("Cancelled appointment : " + id)
+                        console.log("Cancelled appointment : " + id);
                         this.getAppointments();
                     } else {
                         console.log("Cancel appointment failed: Response code " + response.status)

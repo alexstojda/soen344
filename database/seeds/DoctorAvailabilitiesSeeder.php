@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\Availability;
+use App\Models\Clinic;
+use App\Models\Doctor;
 
 class DoctorAvailabilitiesSeeder extends Seeder
 {
@@ -11,6 +14,6 @@ class DoctorAvailabilitiesSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Availability::class, 50)->create();
+        factory(Availability::class, 100)->create();
     }
 }

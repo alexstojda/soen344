@@ -13,8 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:web,nurse,doctor')->get('/user', function (Request $request) {
+    return $request->user(); // wrap in resource and spit out user schedule
 });
 
 Route::apiResources([
@@ -28,19 +28,10 @@ Route::apiResources([
     //other
     'room' => 'RoomController',
     //milestone #2
-    //office
+    'clinic' => 'ClinicController',
     //etc
 ]);
 
-Route::apiResource('/availabilities','AvailabilityController');
-Route::get('/availabilitiesByDate/{date}', 'AvailabilityController@selectDate');
-
-Route::apiResource('/cart','CartController');
-Route::post('/removeFromCart', 'CartController@destroy');
-
-
-Route::apiResource('/appointments','AppointmentController');
-Route::group(['prefix' => 'appointments'], function () {
-    Route::get('/{from}/{to}');
-    Route::get('/{scope}');
-});
+// Fancy route that builds all possible appointment start times based on given filter
+Route::get('/evan', 'AvailabilityController@possibleAppointments');
+Route::get('/appointment/available', 'AvailabilityController@possibleAppointments');

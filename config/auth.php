@@ -78,17 +78,17 @@ return [
     'providers' => [
         'doctors' => [
             'driver' => 'eloquent',
-            'model' => App\Doctor::class,
+            'model' => App\Models\Doctor::class,
         ],
 
         'nurses' => [
             'driver' => 'eloquent',
-            'model' => App\Nurse::class,
+            'model' => App\Models\Nurse::class,
         ],
 
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            'model' => App\Models\User::class,
         ],
 
         // 'users' => [

@@ -7,10 +7,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * RoomResource
  *
- * @mixin \App\Room
+ * @mixin \App\Models\Room
  */
 class Room extends JsonResource
 {
+    use Traits\BelongsToClinic;
     use Traits\HasAppointments;
 
     /**
@@ -25,6 +26,7 @@ class Room extends JsonResource
             'id' => $this->id,
             'number' => $this->number,
             'name' => $this->name,
+            'clinic' => $this->clinicToArray(),
             'appointments' => $this->appointmentsLinksArray(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

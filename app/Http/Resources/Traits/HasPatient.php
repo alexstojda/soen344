@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Traits;
 
-use App\User;
+use App\Models\User;
 
 /**
  * Trait HasDoctor

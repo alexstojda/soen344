@@ -1,0 +1,1085 @@
+{
+	"info": {
+		"_postman_id": "799933f4-88d5-4409-9bb1-9fd3b9489c9b",
+		"name": "SOEN344",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "API",
+			"item": [
+				{
+					"name": "Patient",
+					"item": [
+						{
+							"name": "GET all patients",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/patient?per_page=10&page=1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"patient"
+									],
+									"query": [
+										{
+											"key": "per_page",
+											"value": "10"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET patient",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/patient/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"patient",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "5edf406b-6341-4559-8684-29edc96671a5",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "0001fb94-f837-4c08-bead-08418fe225b0",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Nurse",
+					"item": [
+						{
+							"name": "GET all nurses",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/nurse?per_page=10&page=1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"nurse"
+									],
+									"query": [
+										{
+											"key": "per_page",
+											"value": "10"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET nurse",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/nurse/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"nurse",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8fa61994-b5bd-4af8-a5c5-11b0a9309980",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "8e8117fa-ea95-43f5-aa6e-e7f9cdd572f4",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Doctor",
+					"item": [
+						{
+							"name": "GET all doctors",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/doctor",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"doctor"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET doctor",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/doctor/4",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"doctor",
+										"4"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Availability",
+					"item": [
+						{
+							"name": "GET all availabilities",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/availability?per_page=100&date=2019-11-03&clinic_id=1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"availability"
+									],
+									"query": [
+										{
+											"key": "per_page",
+											"value": "100"
+										},
+										{
+											"key": "page",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "date",
+											"value": "2019-11-03",
+											"description": "only show avail on this day"
+										},
+										{
+											"key": "start",
+											"value": "2019-11-03",
+											"description": "show avail starting after",
+											"disabled": true
+										},
+										{
+											"key": "end",
+											"value": "2020-03-06 23:59:59",
+											"description": "show avail ending before",
+											"disabled": true
+										},
+										{
+											"key": "clinic_id",
+											"value": "1",
+											"description": "filter by clinic"
+										},
+										{
+											"key": "doctor_id",
+											"value": "4",
+											"description": "filter by doctor",
+											"disabled": true
+										},
+										{
+											"key": "consecutive",
+											"value": "3",
+											"description": "consecutive availabilities needed",
+											"disabled": true
+										},
+										{
+											"key": "length",
+											"value": "60",
+											"description": "total duration of consecutive availabilities",
+											"disabled": true
+										},
+										{
+											"key": "operator",
+											"value": ">=",
+											"description": "for consecutive availabilities to grab only needed ones or greater depending on context",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET avalability",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/availability/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"availability",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CREATE avalability",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "doctor_id",
+											"value": "4",
+											"type": "text"
+										},
+										{
+											"key": "start",
+											"value": "2018-03-11 10:00:00",
+											"type": "text"
+										},
+										{
+											"key": "end",
+											"value": "2018-03-11 12:00:00",
+											"type": "text"
+										},
+										{
+											"key": "is_working",
+											"value": "1",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/availability",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"availability"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UPDATE avalability",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "doctor_id",
+											"value": "4",
+											"type": "text"
+										},
+										{
+											"key": "start",
+											"value": "2018-03-11 12:00:00",
+											"type": "text"
+										},
+										{
+											"key": "end",
+											"value": "2018-03-11 12:40:00",
+											"type": "text"
+										},
+										{
+											"key": "is_working",
+											"value": "1",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/availability/327",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"availability",
+										"327"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DELETE availability",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{url}}/api/availability/49",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"availability",
+										"49"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Appointment",
+					"item": [
+						{
+							"name": "GET all appointments",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/appointment?per_page=50&page=1&doctor_id=4",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"appointment"
+									],
+									"query": [
+										{
+											"key": "per_page",
+											"value": "50"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "start",
+											"value": "2019-03-12",
+											"disabled": true
+										},
+										{
+											"key": "status",
+											"value": "cart",
+											"disabled": true
+										},
+										{
+											"key": "end",
+											"value": "2019-03-07",
+											"disabled": true
+										},
+										{
+											"key": "doctor_id",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET appointment",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/appointment/2",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"appointment",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CREATE  appointment",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "doctor_id",
+											"value": "4",
+											"type": "text"
+										},
+										{
+											"key": "patient_id",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "room_id",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "status",
+											"value": "active",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "type",
+											"value": "walk-in",
+											"type": "text"
+										},
+										{
+											"key": "start",
+											"value": "2018-03-10 10:00:00",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "end",
+											"value": "2018-03-10 11:00:00",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "availabilities[0]",
+											"value": "318",
+											"type": "text"
+										},
+										{
+											"key": "availabilities[1]",
+											"value": "319",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "availabilities[2]",
+											"value": "320",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/appointment",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"appointment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UPDATE  appointment",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "doctor_id",
+											"value": "4",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "patient_id",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "room_id",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "status",
+											"value": "active",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "type",
+											"value": "walk-in",
+											"type": "text"
+										},
+										{
+											"key": "start",
+											"value": "2018-03-10 10:00:00",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "end",
+											"value": "2018-03-10 11:00:00",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "availabilities[0]",
+											"value": "318",
+											"type": "text"
+										},
+										{
+											"key": "availabilities[1]",
+											"value": "319",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "availabilities[2]",
+											"value": "320",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/appointment/2",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"appointment",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DELETE  appointment",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{url}}/api/appointment/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"appointment",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Room",
+					"item": [
+						{
+							"name": "GET all rooms",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/room?per_page=5&page=1&clinic_id=1&start=2019-03-24 18:00:00&end=2019-03-24 19:00:00",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"room"
+									],
+									"query": [
+										{
+											"key": "per_page",
+											"value": "5"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "clinic_id",
+											"value": "1"
+										},
+										{
+											"key": "start",
+											"value": "2019-03-24 18:00:00",
+											"description": "room available starting from"
+										},
+										{
+											"key": "end",
+											"value": "2019-03-24 19:00:00",
+											"description": "room available ending before (set to end of start day if not given)"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET room",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/room/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"room",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Clinic",
+					"item": [
+						{
+							"name": "GET all clinics",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/clinic?per_page=5&page=1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"clinic"
+									],
+									"query": [
+										{
+											"key": "per_page",
+											"value": "5"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET clinic",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/clinic/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"clinic",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "73f17bfa-041c-43fa-a61b-1b21c896b7f0",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "ee93a590-7c02-4724-becb-dd7a34f017d3",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "GET Current User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login Patient",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "thea18@example.org",
+							"description": "CHANGE ME",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "user_type",
+							"value": "patient",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Nurse",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "access_id",
+							"value": "BGV83550",
+							"description": "CHANGE ME",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "user_type",
+							"value": "nurse",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Doctor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "permit_id",
+							"value": "8629093",
+							"description": "CHANGE ME",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "user_type",
+							"value": "nurse",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "user_type",
+							"value": "nurse",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/logout",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "66b9d21f-671a-4c8d-a092-8eb834bc8446",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "61bde7c9-b9db-495c-bf0a-cbd6bc2d36f4",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "89d9c897-9668-4912-a958-c1719cb3fce8",
+			"key": "url",
+			"value": "http://soen344.test",
+			"type": "string"
+		}
+	]
+}

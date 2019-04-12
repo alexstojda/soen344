@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@push('scripts')
+    <script src="{{ asset('js/18plus.js')}}"></script>
+@endpush
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -29,7 +33,7 @@
                             <label for="health_card_number" class="col-md-4 col-form-label text-md-right">{{ __('Health Card Number') }}</label>
 
                             <div class="col-md-6">
-                                <input id="health_card_number"  pattern="[A-Z]{4}\s[0-9]{4}\s[0-9]{4}" type="text" class="form-control{{ $errors->has('health_card_number') ? ' is-invalid' : '' }}" name="health_card_number" value="{{ old('health_card_number') }}" required>
+                                <input id="health_card_number"  pattern="[A-Za-z0-9]{4}\s?[0-9]{4}\s?[0-9]{4}" type="text" class="form-control{{ $errors->has('health_card_number') ? ' is-invalid' : '' }}" name="health_card_number" value="{{ old('health_card_number') }}" required>
 
                                 @if ($errors->has('health_card_number'))
                                     <span class="invalid-feedback" role="alert">
@@ -57,7 +61,7 @@
                             <label for="phone_number" class="col-md-4 col-form-label text-md-right">{{ __('Phone Number') }}</label>
 
                             <div class="col-md-6">
-                            <input id="phone_number" type="text" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control{{ $errors->has('phone_number') ? ' is-invalid' : '' }}" name="phone_number" value="{{ old('phone_number') }}" required>
+                            <input id="phone_number" type="text" pattern="[0-9]{3}[-\s]?[0-9]{3}[-\s]?[0-9]{4}" class="form-control{{ $errors->has('phone_number') ? ' is-invalid' : '' }}" name="phone_number" value="{{ old('phone_number') }}" required>
 
                             @if ($errors->has('phone_number'))
                                 <span class="invalid-feedback" role="alert">
@@ -71,7 +75,7 @@
                             <label for="birth_date" class="col-md-4 col-form-label text-md-right">{{ __('Birthdate') }}</label>
 
                             <div class="col-md-6">
-                            <input id="birth_date" type="date" min = "1900-01-01" class="form-control{{ $errors->has('birth_date') ? ' is-invalid' : '' }}" name="birth_date" value="{{ old('birth_date') }}" required>
+                            <input id="birth_date" type="date" min = "1900-01-01"  max = "2001-04-07" class="form-control{{ $errors->has('birth_date') ? ' is-invalid' : '' }}" name="birth_date" value="{{ old('birth_date') }}" required>
 
                             @if ($errors->has('birth_date'))
                                 <span class="invalid-feedback" role="alert">
@@ -86,9 +90,9 @@
 
                             <div class="col-md-6">
                             <select name="gender"required>
-                                <option value="MALE" selected>Male</option>
-                                <option value="FEMALE">Female</option>
-                                <option value="OTHER">Other</option>
+                                <option value="male" selected>Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
                             </select> <br>
 
                             @if ($errors->has('gender'))

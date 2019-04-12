@@ -1,13 +1,14 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use App\Concerns\Model\BelongsToClinic;
 use App\Notifications\NurseResetPassword;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
- * App\Nurse
+ * App\Models\Nurse
  *
  * @property int $id
  * @property string $access_id
@@ -16,26 +17,29 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $remember_token
+ * @property int $clinic_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Clinic $clinic
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Nurse newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Nurse newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Nurse query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Nurse whereAccessId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Nurse whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Nurse whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Nurse whereEmailVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Nurse whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Nurse whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Nurse wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Nurse whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Nurse whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Nurse newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Nurse newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Nurse query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Nurse whereAccessId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Nurse whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Nurse whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Nurse whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Nurse whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Nurse whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Nurse wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Nurse whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Nurse whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class Nurse extends Authenticatable
 {
     use Notifiable;
+    use BelongsToClinic;
 
     /**
      * The attributes that aren't mass assignable.

@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\Controller;
-use App\Doctor;
-use App\Nurse;
-use App\User;
+use App\Models\Doctor;
+use App\Models\Nurse;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -54,7 +54,7 @@ class LoginController extends Controller
             return '/doctor/dashboard';
         }
 
-        if($authenticatable instanceof Nurse) {
+        if ($authenticatable instanceof Nurse) {
             return '/nurse/dashboard';
         }
 
@@ -82,10 +82,10 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         // Infer the user_type if it is not set
-        if(!$request->exists('user_type')) {
+        if (!$request->exists('user_type')) {
             if ($request->exists('permit_id')) {
                 $request->request->add(['user_type' => 'doctor']);
-            } else if ($request->exists('access_id')) {
+            } elseif ($request->exists('access_id')) {
                 $request->request->add(['user_type' => 'nurse']);
             } else {
                 $request->request->add(['user_type' => 'patient']);
@@ -141,8 +141,9 @@ class LoginController extends Controller
      */
     protected function attemptLogin(Request $request)
     {
-        return $this->guard($request->get('user_type','patient'))->attempt(
-            $this->credentials($request), $request->filled('remember')
+        return $this->guard($request->get('user_type', 'patient'))->attempt(
+            $this->credentials($request),
+            $request->filled('remember')
         );
     }
 
@@ -169,7 +170,7 @@ class LoginController extends Controller
 
         $this->clearLoginAttempts($request);
 
-        return $this->authenticated($request, $this->guard($request->get('user_type','patient'))->user())
+        return $this->authenticated($request, $this->guard($request->get('user_type', 'patient'))->user())
             ?: redirect()->intended($this->redirectPath());
     }
 
@@ -228,7 +229,7 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        $this->guard($request->get('user_type','patient'))->logout();
+        $this->guard($request->get('user_type', 'patient'))->logout();
 
         $request->session()->invalidate();
 
@@ -254,7 +255,7 @@ class LoginController extends Controller
      */
     protected function guard($type = null)
     {
-        if($type !== null) {
+        if ($type !== null) {
             $type !== 'patient' ?: $type = 'web';
             $this->guard = Auth::guard($type);
         } else {

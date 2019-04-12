@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Observers\Concerns;
+namespace App\Concerns;
 
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 
 trait VerifiesWalkInHours
 {
@@ -14,12 +14,11 @@ trait VerifiesWalkInHours
      *
      * @return bool
      */
-    protected function verifyWalkInHours(Carbon $start, Carbon $end, $start_hour = null, $end_hour = null)
+    protected function verifyWalkInHours(Carbon $start, Carbon $end, $start_hour = null, $end_hour = null): bool
     {
         //Walk-in hours : 8am - 8pm
         $start_day = $start->copy()->startOfDay()->addHours($start_hour ?? config('bonmatin.office_hours.open'));
         $end_day = $start->copy()->startOfDay()->addHours($end_hour ?? config('bonmatin.office_hours.close'));
-        // Check if appointment without walk-in hours
         return (
             $start->greaterThanOrEqualTo($start_day) &&
             $end->greaterThanOrEqualTo($start_day) &&

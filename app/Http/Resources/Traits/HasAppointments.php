@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Traits;
 
-use App\Appointment;
+use App\Models\Appointment;
 use Illuminate\Support\Collection;
 
 /**
@@ -43,5 +43,31 @@ trait HasAppointments
                 'path'   => route('appointment.show', ['id' => $appointment->id]),
             ];
         });
+    }
+
+    /**
+     * @return Collection|Appointment[]
+     */
+    private function recentAppointmentsLinksArray()
+    {
+        $array = [
+            'prev' => null,
+            'next' => null,
+        ];
+        if ($this->last_appointment !== null) {
+            $array['prev'] = [
+                'id'     => $this->last_appointment->id,
+                'status' => $this->last_appointment->status,
+                'path'   => route('appointment.show', ['id' => $this->last_appointment->id]),
+            ];
+        }
+        if ($this->next_appointment !== null) {
+            $array['next'] = [
+                'id'     => $this->next_appointment->id,
+                'status' => $this->next_appointment->status,
+                'path'   => route('appointment.show', ['id' => $this->next_appointment->id]),
+            ];
+        }
+        return $array;
     }
 }

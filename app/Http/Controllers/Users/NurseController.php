@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Nurse;
+use App\Models\Nurse;
 use App\Http\Resources\Nurse as NurseResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -42,6 +42,7 @@ class NurseController extends Controller
         try{
             $data = $request->validate([
                 'access_id' => 'required|string|max:255',
+                'clinic_id' => 'required|int|max:255',
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
                 'password' =>'required|string|max:255'
@@ -49,6 +50,7 @@ class NurseController extends Controller
 
             $nurse = Nurse::create([
                 'access_id' => $data['access_id'],
+                'clinic_id' => $data['clinic_id'],
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
@@ -62,7 +64,7 @@ class NurseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Nurse  $nurse
+     * @param  Nurse  $nurse
      * @return \Illuminate\Http\Response|\App\Http\Resources\Nurse
      */
     public function show(Nurse $nurse)
@@ -73,7 +75,7 @@ class NurseController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Nurse  $nurse
+     * @param  Nurse  $nurse
      * @return \Illuminate\Http\Response
      */
     public function edit(Nurse $nurse)
@@ -85,20 +87,22 @@ class NurseController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Nurse  $nurse
+     * @param  Nurse  $nurse
      * @return \Illuminate\Http\Response|\App\Http\Resources\Nurse
      */
     public function update(Request $request, Nurse $nurse)
     {
         $data = $request->validate([
-            'access_id' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'password' =>'required|string|max:255'
+            'access_id' => 'string|max:255',
+            'clinic_id' => 'int|max:255',
+            'name' => 'string|max:255',
+            'email' => 'email|max:255',
+            'password' =>'string|max:255'
         ]);
         // if it's not valid the code will stop here and throw the error with required fields
 
         !isset($data['access_id']) ?: $nurse->access_id = $data['access_id'];
+        !isset($data['clinic_id']) ?: $nurse->clinic_id = $data['clinic_id'];
         !isset($data['name']) ?: $nurse->name = $data['name'];
         !isset($data['email']) ?: $nurse->email = $data['email'];
         !isset($data['password']) ?: $nurse->password = Hash::make($data['password']);
@@ -110,7 +114,7 @@ class NurseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Nurse  $nurse
+     * @param  Nurse  $nurse
      * @return \Illuminate\Http\Response
      */
     public function destroy(Nurse $nurse)

@@ -3,6 +3,7 @@ import Vue from 'vue';
 import 'element-ui/lib/theme-chalk/index.css';
 import lang from 'element-ui/lib/locale/lang/en';
 import locale from 'element-ui/lib/locale';
+import VModal from 'vue-js-modal';
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -31,6 +32,7 @@ if (process.env.NODE_ENV !== "production") {
  */
 
 Vue.use(ElementUI);
+Vue.use(VModal, { dialog: true });
 // configure language
 locale.use(lang);
 
@@ -53,6 +55,7 @@ Vue.component("add-appointment", require("./components/AddAppointment.vue").defa
 Vue.component("add-availability", require("./components/AddAvailability.vue").default);
 Vue.component("modify-appointment-modal", require("./components/ModifyAppointmentModal.vue").default);
 Vue.component("login-component", require("./components/LoginComponent.vue").default);
+Vue.component('list-availabilities', require("./components/ListAvailabilities.vue").default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

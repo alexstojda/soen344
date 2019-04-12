@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\Clinic;
+use App\Models\Room;
 
 class RoomsSeeder extends Seeder
 {
@@ -11,6 +13,10 @@ class RoomsSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Room::class, 5)->create();
+        Clinic::each(function (Clinic $clinic) {
+            factory(Room::class, 5)->create([
+                'clinic_id' => $clinic->id,
+            ]);
+        });
     }
 }

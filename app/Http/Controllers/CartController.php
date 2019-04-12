@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Appointment;
+use App\Models\Appointment;
 use App\Http\Resources\Appointment as AppointmentResource;
 use Illuminate\Http\Request;
 

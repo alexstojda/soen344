@@ -7,7 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * DoctorResource
  *
- * @mixin \App\User
+ * @mixin \App\Models\User
  */
 class Patient extends JsonResource
 {
@@ -24,10 +24,12 @@ class Patient extends JsonResource
         return [
             'id' => $this->id,
             'email' => $this->email,
+            'name' => $this->name,
             'appointments' => $this->appointmentsLinksArray(),
+            'recent_appointments' => $this->recentAppointmentsLinksArray(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'updated_at' => $this->has_annual_checkup,
+            'has_checkup' => $this->has_checkup,
             'path' => route('patient.show', ['id' => $this->id]),
         ];
     }

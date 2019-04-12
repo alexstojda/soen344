@@ -7,4 +7,6 @@ return [
         'close' => env('END_HOUR', 20),
     ],
 
+    'timeslot_interval' => 20,
+
 ];

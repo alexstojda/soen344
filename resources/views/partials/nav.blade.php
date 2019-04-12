@@ -19,7 +19,7 @@
                 <!-- Authentication Links -->
                 @auth('doctor')
                     <li class="nav-item">
-                        <a class="nav-link" href="/doctor/addAvailability">Add Availability <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="/doctor/availabilities">Availabilities <span class="sr-only">(current)</span></a>
                     </li>
 
                     <li class="nav-item">
@@ -31,7 +31,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/createAppointment">Schedule an Appointment</a>
+                        <a class="nav-link" href="/nurse/book">Schedule an Appointment</a>
                     </li>
                 @elseauth('web')
                     <li class="nav-item">
@@ -39,7 +39,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/createAppointment">Schedule an Appointment</a>
+                        <a class="nav-link" href="/patient/book">Schedule an Appointment</a>
                     </li>
 
                     <li class="nav-item">

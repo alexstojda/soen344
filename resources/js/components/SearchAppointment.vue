@@ -124,7 +124,7 @@
                 return moment(date).format("YYYY-MM-DD HH:mm");
             },
             doctorAvalabilities: function(date) {
-                axios.get('/api/appointments?start=' + moment(date).format("YYYY-MM-DD"))
+                axios.get('/api/appointment?start=' + moment(date).format("YYYY-MM-DD"))
                     .then(response => {
                     if (response.status == 200) {
                         console.log("Appointments for : " + date)
