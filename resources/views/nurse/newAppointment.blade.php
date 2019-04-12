@@ -5,7 +5,7 @@
     <div class="card">
         <div class="card-body">
             <h2 class="card-title text-center">Create an appointment</h2>
-            <list-availabilities show-create-appointment >
+            <list-availabilities show-clinic-filter show-doctor-filter show-create-appointment >
             </list-availabilities>
         </div>
     </div>
